@@ -1,0 +1,86 @@
+! Base16 Unikitty Dark
+! Scheme: Josh W Lewis (@joshwlewis)
+
+#define base00 #2e2a31
+#define base01 #4a464d
+#define base02 #666369
+#define base03 #838085
+#define base04 #9f9da2
+#define base05 #bcbabe
+#define base06 #d8d7da
+#define base07 #f5f4f7
+#define base08 #d8137f
+#define base09 #d65407
+#define base0A #dc8a0e
+#define base0B #17ad98
+#define base0C #149bda
+#define base0D #796af5
+#define base0E #bb60ea
+#define base0F #c720ca
+
+! font rendering
+Xft.antialias: 1
+Xft.autohint: 0
+Xft.dpi: 160
+Xft.hinting: 1
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcddefault
+Xft.rgba: rgb
+
+Emacs.antialias: 1
+Emacs.autohint: 0
+Emacs.dpi: 160
+Emacs.hinting: 1
+Emacs.hintstyle: hintfull
+Emacs.lcdfilter: lcddefault
+Emacs.rgba: rgb
+
+! cursor
+Xcursor.theme: Breeze_Amber
+Xcursor.size: 200
+
+*.foreground:   base05
+*.background:   base00
+*.cursorColor:  base05
+*.color0:       base00
+*.color1:       base08
+*.color2:       base0B
+*.color3:       base0A
+*.color4:       base0D
+*.color5:       base0E
+*.color6:       base0C
+*.color7:       base05
+
+*.color8:       base03
+*.color9:       base08
+*.color10:      base0B
+*.color11:      base0A
+*.color12:      base0D
+*.color13:      base0E
+*.color14:      base0C
+*.color15:      base07
+
+! Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
+! use 'shell' template to set these if necessary
+*.color16:      base09
+*.color17:      base0F
+*.color18:      base01
+*.color19:      base02
+*.color20:      base04
+*.color21:      base06
+
+
+! per app settings below!
+URxvt*scrollBar: false
+URxvt*font: xft:Inconsolata:size=10
+URxvt.perl-ext-common: default,matcher,selection-to-clipboard
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
+
+rofi.color-enabled: true
+rofi.color-window: #0039ff, #0039ff, #4F80FF
+rofi.color-normal: #0039ff, #4f80ff, #0039ff, #4f80ff, #ffffff
+rofi.color-active: #0039ff, #68ba50, #0039ff, #4f80ff, #68ba50
+rofi.color-urgent: #0039ff, #ff7047, #0039ff, #4f80ff, #ff7047
+
+

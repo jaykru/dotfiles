@@ -1,0 +1,25 @@
+#+TITLE: dotfiles
+Here are some of my dotfiles. Do with them what you will. 
+* What's here
+** bspwm
+ A fairly minimal config for my favorite window manager.
+** sxhkd
+ bspwm's better half. I have a minimal config with some rather specific settings for my laptop's media keys.
+ If you have an X1 Yoga (early 2016) and need some help setting up your media keys, take a look.
+** polybar
+ Again, relatively minimal; based on the default "example" config. I've been having issues with Polybar lately, so this probably won't be around for very long.
+** emacs
+ This one is pretty interesting. I use emacs for just about everything, so this configuration is quite extensive. 
+ I also use org-mode with babel to organize my init.el.
+ You can generate an init.el file from init.org yourself with ~M-x org-babel-tangle <RET>~, but I'll try to keep it up to date as I edit init.org.
+** offlineimap
+This is pretty unique to me. It's in this repo for my convenience, but if you go to Reed, or belong to another organization that uses Google Apps and want to read your mail in the console this should be of use to you!
+** xmodmap
+X1 Yoga keybindings.
+** xresources
+Spacemacs URxvt theme from Base16.
+** dunst
+Colorful desktop notifications.
+* Installing
+First install GNU Stow. Then you can install each "system" with ~stow <sysdir>~.
+Each "system" directory has the home directory structure preserved to enable this.

@@ -73,7 +73,9 @@ Xcursor.size: 200
 ! per app settings below!
 URxvt*scrollBar: false
 URxvt*font: xft:Inconsolata:size=10
-URxvt.perl-ext-common: default,matcher,selection-to-clipboard
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.iso14755: False
+URxvt.perl-ext-common: default,matcher,clipboard
 URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1
 

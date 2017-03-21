@@ -45,13 +45,13 @@
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
 (setq default-frame-alist
-      '((font . "Liberation Mono")
-	(vertical-scroll-bars . nil)
-	(horizontal-scroll-bars . nil)
-	(tool-bar-lines . 0)
-	(menu-bar-lines . 0)
-	(left-fringe . 0)
-	(right-fringe . 0)))
+      '((font . "Courier")
+        (vertical-scroll-bars . nil)
+        (horizontal-scroll-bars . nil)
+        (tool-bar-lines . 0)
+        (menu-bar-lines . 0)
+        (left-fringe . 0)
+        (right-fringe . 0)))
 
 (set-face-attribute 'default nil :height 110)
 
@@ -86,43 +86,41 @@
 (setq eshell-review-quick-commands nil)
 (setq eshell-smart-space-goes-to-end t)
 
-(exec-path-from-shell-initialize)
-
 (add-hook 'prog-mode-hook
-	  (lambda ()
-	    (progn
-	      (rainbow-delimiters-mode t))))
+          (lambda ()
+            (progn
+              (rainbow-delimiters-mode t))))
 
 ;; cl mode
 (require 'paredit)
 (add-hook 'lisp-mode-hook
-	  (lambda ()
-	    (progn
-	      (paredit-mode t)
-	      (slime-mode))))
+          (lambda ()
+            (progn
+              (paredit-mode t)
+              (slime-mode))))
 
 ;; SLIME
 (require 'slime)
 (setq slime-contribs '(slime-fancy))
 (add-hook 'slime-repl-mode-hook 
-	  (lambda () (progn
-		       (rainbow-delimiters-mode t)
-		       (paredit-mode t))))
-(setq inferior-lisp-program "sbcl")
+          (lambda () (progn
+                       (rainbow-delimiters-mode t)
+                       (paredit-mode t))))
+(setq inferior-lisp-program "sbcl.exe")
 (slime-setup '(slime-fancy))
 
 (add-hook 'emacs-lisp-mode-hook
-	  (lambda ()
-	    (paredit-mode t)))
+          (lambda ()
+            (paredit-mode t)))
 
 (require 'go-autocomplete)
 (setenv "GOPATH" "/home/jaykru/go")
 (add-hook 'go-mode-hook
-	  (lambda ()
-	    (progn
-	      (flycheck-mode)
-	      (add-hook 'before-save-hook 'gofmt-before-save)
-	      (auto-complete-mode 1))))
+          (lambda ()
+            (progn
+              (flycheck-mode)
+              (add-hook 'before-save-hook 'gofmt-before-save)
+              (auto-complete-mode 1))))
 
 (defun my-asm-mode-hook ()
   ;; you can use `comment-dwim' (M-;) for this kind of behaviour anyway
@@ -133,63 +131,3 @@
 (add-hook 'asm-mode-hook #'my-asm-mode-hook)
 
 (setq pdf-latex-command "pdflatex")
-
-(require 'mu4e)
-
-;; default
-(setq mu4e-maildir (expand-file-name "~/Maildir"))
-
-(setq mu4e-drafts-folder "/[Gmail].Drafts")
-(setq mu4e-sent-folder   "/[Gmail].Sent Mail")
-(setq mu4e-trash-folder  "/[Gmail].Trash")
-
-;; don't save message to Sent Messages, GMail/IMAP will take care of this
-(setq mu4e-sent-messages-behavior 'delete)
-
-;; setup some handy shortcuts
-(setq mu4e-maildir-shortcuts
-      '(("/INBOX"             . ?i)
-        ("/[Gmail].Sent Mail" . ?s)
-        ("/[Gmail].Trash"     . ?t)))
-
-;; allow for updating mail using 'U' in the main view:
-(setq mu4e-get-mail-command "offlineimap")
-
-(setq
- user-mail-address "kruerj@reed.edu"
- user-full-name  "Jay Kruer"
- message-signature
- (concat
-  "\n"
-  "- Jay")
-)
-
-(require 'smtpmail)
-
-(setq message-send-mail-function 'smtpmail-send-it
-      starttls-use-gnutls t
-      smtpmail-starttls-credentials
-      '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials
-      (expand-file-name "~/.authinfo.gpg")
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587
-      smtpmail-debug-info t)
-
-(require 'gnus-dired)
-;; make the `gnus-dired-mail-buffers' function also work on
-;; message-mode derived modes, such as mu4e-compose-mode
-(defun gnus-dired-mail-buffers ()
-  "Return a list of active message buffers."
-  (let (buffers)
-    (save-current-buffer
-      (dolist (buffer (buffer-list t))
-        (set-buffer buffer)
-        (when (and (derived-mode-p 'message-mode)
-                (null message-sent-message-via))
-          (push (buffer-name buffer) buffers))))
-    (nreverse buffers)))
-
-(setq gnus-dired-mail-mode 'mu4e-user-agent)
-(add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)

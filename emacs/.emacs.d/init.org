@@ -7,6 +7,7 @@
 ;; enable MELPA
 (require 'package)
 (add-to-list 'load-path "~/.emacs.d/elpa")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
@@ -30,12 +31,6 @@
 ;; quiet, you.
 (setq ring-bell-function 'ignore)
 
-;; no backups
-(setq backup-inhibited t)
-
-;; no autosaving
-(setq auto-save-default nil)
-
 ;; ido-mode
 (ido-mode t)
 (ido-everywhere t)
@@ -57,7 +52,7 @@
 ** GUI
 #+begin_src emacs-lisp :tangle yes
 (setq default-frame-alist
-      '((font . "Liberation Mono")
+      '((font . "Menlo")
 	(vertical-scroll-bars . nil)
 	(horizontal-scroll-bars . nil)
 	(tool-bar-lines . 0)
@@ -171,7 +166,7 @@
 * Emacs as an OS
 ** Mail 
 *** Receiving mail
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (require 'mu4e)
 
 ;; default
@@ -194,7 +189,7 @@
 (setq mu4e-get-mail-command "offlineimap")
 #+end_src
 *** Sending mail
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq
  user-mail-address "kruerj@reed.edu"
  user-full-name  "Jay Kruer"
@@ -218,7 +213,7 @@
       smtpmail-debug-info t)
 #+end_src
 *** Dired attachments
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (require 'gnus-dired)
 ;; make the `gnus-dired-mail-buffers' function also work on
 ;; message-mode derived modes, such as mu4e-compose-mode

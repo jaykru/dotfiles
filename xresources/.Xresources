@@ -21,7 +21,7 @@
 ! font rendering
 Xft.antialias: 1
 Xft.autohint: 0
-Xft.dpi: 160
+Xft.dpi: 140
 Xft.hinting: 1
 Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
@@ -29,14 +29,14 @@ Xft.rgba: rgb
 
 Emacs.antialias: 1
 Emacs.autohint: 0
-Emacs.dpi: 160
+Emacs.dpi: 140
 Emacs.hinting: 1
 Emacs.hintstyle: hintfull
 Emacs.lcdfilter: lcddefault
 Emacs.rgba: rgb
 
 ! cursor
-Xcursor.theme: Breeze_Amber
+! Xcursor.theme: left_arrow
 Xcursor.size: 200
 
 *.foreground:   base05
@@ -72,7 +72,7 @@ Xcursor.size: 200
 
 ! per app settings below!
 URxvt*scrollBar: false
-URxvt*font: xft:Inconsolata:size=10
+URxvt*font: xft:Inconsolata:size=12
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 URxvt.iso14755: False
 URxvt.perl-ext-common: default,matcher,clipboard

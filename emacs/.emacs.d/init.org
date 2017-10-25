@@ -52,7 +52,7 @@
 ** GUI
 #+begin_src emacs-lisp :tangle yes
 (setq default-frame-alist
-      '((font . "Menlo")
+x      '((font . "Inconsolata")
 	(vertical-scroll-bars . nil)
 	(horizontal-scroll-bars . nil)
 	(tool-bar-lines . 0)
@@ -100,7 +100,7 @@
 (setq eshell-smart-space-goes-to-end t)
 #+end_src
 ** Misc.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (exec-path-from-shell-initialize)
 #+end_src
 * Editing modes
@@ -138,7 +138,7 @@
 	    (paredit-mode t)))
 #+end_src
 ** Go
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (require 'go-autocomplete)
 (setenv "GOPATH" "/home/jaykru/go")
 (add-hook 'go-mode-hook
@@ -159,9 +159,9 @@
 (add-hook 'asm-mode-hook #'my-asm-mode-hook)
 #+end_src
 
-** LaTeX
+** TeX
 #+begin_src emacs-lisp :tangle yes
-(setq pdf-latex-command "pdflatex")
+(setq pdf-latex-command "pdftex") ; ad fontes!
 #+end_src
 * Emacs as an OS
 ** Mail 

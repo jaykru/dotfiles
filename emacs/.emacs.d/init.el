@@ -12,6 +12,12 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-unset-key (kbd "C-z"))
 
+;; org stuff
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+
 ;; highlight delims
 (setq show-paren-delay 0)
 (show-paren-mode 1)
@@ -22,23 +28,14 @@
 ;; quiet, you.
 (setq ring-bell-function 'ignore)
 
-;; ido-mode
-(ido-mode t)
-(ido-everywhere t)
-(setq ido-enable-prefix nil
-      ido-enable-flex-matching t
-      ido-create-new-buffer 'always
-      ido-use-filename-at-point 'guess
-      ido-max-prospects 10
-      ido-default-file-method 'selected-window)
+;; ivy
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t) (setq ivy-count-format "(%d/%d) ")
+(global-set-key (kbd "C-s") 'swiper) (global-set-key (kbd "M-x") 'counsel-M-x) (global-set-key (kbd "C-x C-f") 'counsel-find-file) (global-set-key (kbd "<f1> f") 'counsel-describe-function) (global-set-key (kbd "<f1> v") 'counsel-describe-variable) (global-set-key (kbd "<f1> l") 'counsel-find-library) (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol) (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
 
-;; auto-completion in minibuffer
-(icomplete-mode +1)
-(set-default 'imenu-auto-rescan t)
-
-;; smex
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; fuzzy matching
+;(setq ivy-re-builders-alist
+;      '((t . ivy--regex-fuzzy)))
 
 (setq default-frame-alist
       '((font . "Inconsolata")
@@ -53,18 +50,12 @@
 
 ;; mark theme as safe
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("2cf7f9d1d8e4d735ba53facdc3c6f3271086b6906c4165b12e4fd8e3865469a6" "086970da368bb95e42fd4ddac3149e84ce5f165e90dfc6ce6baceae30cf581ef" "23ccf46b0d05ae80ee0661b91a083427a6c61e7a260227d37e36833d862ccffc" default)))
- '(package-selected-packages
-   (quote
-    (ix wolfram w3m w3 undo-tree typing-game twittering-mode turing-machine threes tao-theme solidity-mode sml-mode smex slime scratches rainbow-delimiters plan9-theme paredit nixos-options nix-sandbox nix-mode moe-theme mingus math-symbol-lists magit-annex latex-preview-pane latex-pretty-symbols japanlaw heroku-theme haskell-mode hacker-typer golden-ratio go-guru go-eldoc go-complete go-autocomplete go gnugo fireplace figlet expand-region deft ciel chess buffer-sets buffer-move basic-mode autotetris-mode auto-complete-auctex auctex 0xc))))
+  '(org-agenda-files (quote ("~/life.org")))
+  '(custom-safe-themes
+    (quote
+     ("d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "2cf7f9d1d8e4d735ba53facdc3c6f3271086b6906c4165b12e4fd8e3865469a6" default))))
 ;; load it
-(load-theme 'tao-yang)
+(load-theme 'plan9)
 
 ;; tramp for sudo access
 (require 'tramp)
@@ -88,6 +79,10 @@
 (setq eshell-where-to-jump 'begin)
 (setq eshell-review-quick-commands nil)
 (setq eshell-smart-space-goes-to-end t)
+
+;(exec-path-from-shell-initialize)
+(setq epa-pinentry-mode 'loopback)
+(pinentry-start)
 
 (add-hook 'prog-mode-hook
           (lambda ()
@@ -124,10 +119,67 @@
 
 (add-hook 'asm-mode-hook #'my-asm-mode-hook)
 
-(setq pdf-latex-command "pdftex") ; ad fontes!
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;(setq pdf-latex-command "lualatex") ; ab fontes :'(
+
+(add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+
+;; default
+(setq mu4e-maildir (expand-file-name "~/Maildir"))
+
+(setq mu4e-maildir-shortcuts
+   '(("/Reed/INBOX" . ?r)
+     ("/iCloud/INBOX" . ?i)))
+
+(setq mu4e-get-mail-command "offlineimap")
+
+(require 'smtpmail)
+
+(setq message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials
+      '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials
+      (expand-file-name "~/.authinfo.gpg")
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-debug-info t)
+
+(setq mu4e-contexts
+ `( ,(make-mu4e-context
+     :name "Reed"
+     :match-func (lambda (msg) (when msg
+       (string-prefix-p "/Reed" (mu4e-message-field msg :maildir))))
+     :vars '(
+       (mu4e-sent-folder . "/Reed/[Gmail].Sent Mail")
+       (mu4e-drafts-folder . "/Reed/[Gmail].Drafts")
+       (mu4e-trash-folder . "/Reed/[Gmail].Trash")
+       (mu4e-refile-folder . "/Gmail/[Gmail].Archive")
+       ( user-mail-address      . "kruerj@reed.edu"  )
+       ( user-full-name         . "Jay Kruer" )
+       ( mu4e-compose-signature .
+              (concat
+                 "\n"
+                 "-jay"))
+       ))
+   ,(make-mu4e-context
+     :name "iCloud"
+     :match-func (lambda (msg) (when msg
+       (string-prefix-p "/iCloud" (mu4e-message-field msg :maildir))))
+     :vars '(
+       (mu4e-sent-folder . "/iCloud/Sent")
+       (mu4e-drafts-folder . "/iCloud/Drafts")
+       (mu4e-trash-folder . "/iCloud/Deleted Messages")
+       (mu4e-refile-folder . "/iCloud/Archive")
+       (user-mail-address      . "jaykru@me.com"  )
+                   ( user-full-name         . "Jay Kruer" )
+                   ( mu4e-compose-signature .
+                     (concat
+                       "\n"
+                       "-jay"))
+       ))
+   ))

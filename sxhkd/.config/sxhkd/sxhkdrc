@@ -2,39 +2,41 @@
 # media keys
 # 
 XF86AudioMute
-	pactl set-sink-mute @DEFAULT_SINK@ toggle
+	pactl set-sink-mute 0 toggle
 
 XF86AudioLowerVolume
-	pactl set-sink-mute @DEFAULT_SINK@ false; pactl set-sink-volume @DEFAULT_SINK@ -5%
+	pactl set-sink-mute 0 false; pactl set-sink-volume 0 -5%
 
 XF86AudioRaiseVolume
-	pactl set-sink-mute @DEFAULT_SINK@ false; pactl set-sink-volume @DEFAULT_SINK@ +5%
+	pactl set-sink-mute 0 false; pactl set-sink-volume 0 +5%
 
 XF86MonBrightnessDown
-	xbacklight -dec 10
+	/home/j/bin/oled-brightness.sh down
 
 XF86MonBrightnessUp
-	xbacklight -inc 10
-
+	/home/j/bin/oled-brightness.sh up
+	
 #
 # wm independent hotkeys
 #
 
 # terminal emulator
 super + Return
-	urxvt
+	termite -c .config/termite/termite.black
 
 # program launcher
 super + space
 	rofi -show run
 
+alt + Tab
+	rofi -show window
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -USR1 -x sxhkd
 
 # take a screenshot
-print
-	scrot -s
+ctrl + shift + 4
+	sleep 0.2; scrot -s
 
 #
 # bspwm hotkeys

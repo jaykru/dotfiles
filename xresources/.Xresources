@@ -1,7 +1,8 @@
 ! Base16 Unikitty Dark
 ! Scheme: Josh W Lewis (@joshwlewis)
 
-#define base00 #2e2a31
+!#define base00 #2e2a31
+#define base00 #000000
 #define base01 #4a464d
 #define base02 #666369
 #define base03 #838085
@@ -36,8 +37,8 @@ Emacs.lcdfilter: lcddefault
 Emacs.rgba: rgb
 
 ! cursor
-! Xcursor.theme: left_arrow
-Xcursor.size: 200
+Xcursor.theme: Breeze_Amber
+Xcursor.size: 180
 
 *.foreground:   base05
 *.background:   base00
@@ -72,7 +73,7 @@ Xcursor.size: 200
 
 ! per app settings below!
 URxvt*scrollBar: false
-URxvt*font: xft:Inconsolata:size=12
+URxvt*font: xft:Inconsolata:size=11
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 URxvt.iso14755: False
 URxvt.perl-ext-common: default,matcher,clipboard

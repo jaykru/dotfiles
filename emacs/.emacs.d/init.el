@@ -83,6 +83,29 @@
 ;(exec-path-from-shell-initialize)
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(TeX-view-program-list (quote (("Zathura" "zathura %o"))))
+ '(TeX-view-program-selection
+   (quote
+    (((output-dvi has-no-display-manager)
+      "dvi2tty")
+     ((output-dvi style-pstricks)
+      "dvips and gv")
+     (output-dvi "xdvi")
+     (output-pdf "Zathura")
+     (output-html "xdg-open"))))
+ '(custom-safe-themes
+   (quote
+    ("ef1e992ef341e86397b39ee6b41c1368e1b33d45b0848feac6a8e8d5753daa67" "4f2ede02b3324c2f788f4e0bad77f7ebc1874eff7971d2a2c9b9724a50fb3f65" "d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "2cf7f9d1d8e4d735ba53facdc3c6f3271086b6906c4165b12e4fd8e3865469a6" default)))
+ '(org-agenda-files (quote ("~/life.org")))
+ '(package-selected-packages
+   (quote
+    (rust-mode multi-term hledger-mode org-alert visual-regexp znc wolfram w3m w3 undo-tree typing-game twittering-mode turing-machine threes tao-theme solidity-mode sml-mode smex slime scratches rainbow-mode rainbow-delimiters plan9-theme paredit org-bullets nixos-options nix-sandbox nix-mode moe-theme mingus memoize math-symbol-lists magit-annex latex-pretty-symbols japanlaw ix heroku-theme haskell-mode hacker-typer golden-ratio go-guru go-eldoc go-complete go-autocomplete go gnugo flx fireplace find-file-in-project figlet expand-region deft cyberpunk-theme counsel ciel chess buffer-sets buffer-move basic-mode autotetris-mode auctex 0xc)))
+ '(preview-TeX-style-dir "/home/j/.emacs.d/elpa/auctex-12.1.0/latex" t))
 
 (add-hook 'prog-mode-hook
           (lambda ()
@@ -119,10 +142,34 @@
 
 (add-hook 'asm-mode-hook #'my-asm-mode-hook)
 
+;; unicode bullets
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
+;; todo keywords
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "|" "DONE(d)")
+        (sequence "|" "CANCELED(c)")
+        (sequence "WAIT(w)" "|")))
+
+;; todo keyword faces
+(setq org-todo-keyword-faces
+       '(("TODO". (:foreground "red" :background "#fedfe1" :box '(:line-width 1 :style released-button)))
+        ("DONE". (:foreground "#40883f" :background "#A8D8B9" :box '(:line-width 1 :style released-button)))
+        ("WAIT" . (:foreground "orange" :background "#FFF689" :box '(:line-width 1 :style released-button)))
+        ("CANCELED" . (:foreground "black" :strike-through t :background "#d8d7da" :box '(:line-width 1 :style released-button)))))
+
+;; alerts
+(require 'org-alert)
+(require 'alert)
+(setq alert-default-style 'notifications)
+(org-alert-enable)
+
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
 ;(setq pdf-latex-command "lualatex") ; ab fontes :'(
+
+(load "~/.emacs.d/lisp/PG/generic/proof-site")
 
 (add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e")
 (require 'mu4e)
@@ -148,6 +195,11 @@
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
       smtpmail-debug-info t)
+
+(add-hook 'mu4e-compose-mode-hook
+          (defun cpb-compose-setup ()
+            "Use hard newlines, so outgoing mails will have format=flowed."
+            (use-hard-newlines t 'guess)))
 
 (setq mu4e-contexts
  `( ,(make-mu4e-context
@@ -183,3 +235,10 @@
                        "-jay"))
        ))
    ))
+
+(setq twittering-use-master-password t)
+
+(setq multi-term-program "/run/current-system/sw/bin/bash")
+
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "chromium-browser")

@@ -3,6 +3,7 @@
 sxhkd &
 polybar example &
 dunst &
+nm-applet &
 xsetroot -cursor_name left_ptr
 $HOME/.fehbg
 
@@ -21,3 +22,5 @@ bspc rule -a Gimp desktop='^8' state=floating follow=on
 bspc rule -a mpv state=floating
 bspc rule -a wenlin.exe state=floating
 bspc rule -a simplescreenrecorder state=floating
+bspc rule -a .emacs-wrapped@kushiel state=tiled
+bpsc rule -a pinentry state=floating

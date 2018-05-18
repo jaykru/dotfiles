@@ -1,0 +1,278 @@
+#+TITLE: init.org
+#+AUTHOR: Jay Kruer
+#+EMAIL: kruerj@reed.edu
+* Editor
+** Package
+#+begin_src emacs-lisp :tangle yes
+;; enable MELPA
+(require 'package)
+(add-to-list 'load-path "~/.emacs.d/elpa")
+(add-to-list 'load-path "~/.emacs.d/lisp")
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
+#+end_src
+** Keybindings
+#+begin_src emacs-lisp :tangle yes
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-unset-key (kbd "C-z"))
+
+;; org stuff
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+#+end_src
+** Line editing
+#+begin_src emacs-lisp :tangle yes
+;; highlight delims
+(setq show-paren-delay 0)
+(show-paren-mode 1)
+
+;; autocomplete
+(global-auto-complete-mode t)
+
+;; quiet, you.
+(setq ring-bell-function 'ignore)
+
+;; ivy
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t) (setq ivy-count-format "(%d/%d) ")
+(global-set-key (kbd "C-s") 'swiper) (global-set-key (kbd "M-x") 'counsel-M-x) (global-set-key (kbd "C-x C-f") 'counsel-find-file) (global-set-key (kbd "<f1> f") 'counsel-describe-function) (global-set-key (kbd "<f1> v") 'counsel-describe-variable) (global-set-key (kbd "<f1> l") 'counsel-find-library) (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol) (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+
+;; fuzzy matching
+;(setq ivy-re-builders-alist
+;      '((t . ivy--regex-fuzzy)))
+#+end_src
+** GUI
+#+begin_src emacs-lisp :tangle yes
+(setq default-frame-alist
+      '((font . "Inconsolata")
+	(vertical-scroll-bars . nil)
+	(horizontal-scroll-bars . nil)
+	(tool-bar-lines . 0)
+	(menu-bar-lines . 0)
+	(left-fringe . 0)
+	(right-fringe . 0)))
+
+(set-face-attribute 'default nil :height 110)
+#+end_src
+** Theme
+#+begin_src emacs-lisp :tangle yes
+;; mark theme as safe
+(custom-set-variables
+  '(org-agenda-files (quote ("~/life.org")))
+  '(custom-safe-themes
+    (quote
+     ("d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "2cf7f9d1d8e4d735ba53facdc3c6f3271086b6906c4165b12e4fd8e3865469a6" default))))
+;; load it
+(load-theme 'plan9)
+#+end_src
+** SSH
+#+begin_src emacs-lisp :tangle yes
+;; tramp for sudo access
+(require 'tramp)
+(setq tramp-default-method "ssh")
+(set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+(defun sudo-edit-current-file ()
+  (interactive)
+  (let ((position (point)))
+    (find-alternate-file
+     (if (file-remote-p (buffer-file-name))
+         (let ((vec (tramp-dissect-file-name (buffer-file-name))))
+           (tramp-make-tramp-file-name
+            "sudo"
+            (tramp-file-name-user vec)
+            (tramp-file-name-host vec)
+            (tramp-file-name-localname vec)))
+       (concat "/sudo:root@localhost:" (buffer-file-name))))
+    (goto-char position)))
+#+end_src
+** Eshell
+#+begin_src emacs-lisp :tangle yes
+(require 'em-smart)
+(setq eshell-where-to-jump 'begin)
+(setq eshell-review-quick-commands nil)
+(setq eshell-smart-space-goes-to-end t)
+#+end_src
+** Misc.
+#+begin_src emacs-lisp :tangle yes
+;(exec-path-from-shell-initialize)
+(setq epa-pinentry-mode 'loopback)
+(pinentry-start)
+#+end_src
+* Editing modes
+** General Programming
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'prog-mode-hook
+	  (lambda ()
+	    (progn
+	      (rainbow-delimiters-mode t))))
+#+end_src
+** Common Lisp
+#+begin_src emacs-lisp :tangle yes
+;; cl mode
+(require 'paredit)
+(add-hook 'lisp-mode-hook
+	  (lambda ()
+	    (progn
+	      (paredit-mode t)
+	      (slime-mode))))
+
+;; SLIME
+(require 'slime)
+(setq slime-contribs '(slime-fancy))
+(add-hook 'slime-repl-mode-hook 
+	  (lambda () (progn
+		       (rainbow-delimiters-mode t)
+		       (paredit-mode t))))
+(setq inferior-lisp-program "sbcl")
+(slime-setup '(slime-fancy))
+#+end_src
+** Emacs  Lisp
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda ()
+	    (paredit-mode t)))
+#+end_src
+** Go
+#+begin_src emacs-lisp :tangle no
+(require 'go-autocomplete)
+(setenv "GOPATH" "/home/jaykru/go")
+(add-hook 'go-mode-hook
+	  (lambda ()
+	    (progn
+	      (flycheck-mode)
+	      (add-hook 'before-save-hook 'gofmt-before-save)
+	      (auto-complete-mode 1))))
+#+end_src
+** x86_*
+#+begin_src emacs-lisp :tangle yes
+(defun my-asm-mode-hook ()
+  ;; you can use `comment-dwim' (M-;) for this kind of behaviour anyway
+  (local-unset-key (vector asm-comment-char))
+  ;; asm-mode sets it locally to nil, to "stay closer to the old TAB behaviour".
+  (setq tab-always-indent (default-value 'tab-always-indent)))
+
+(add-hook 'asm-mode-hook #'my-asm-mode-hook)
+#+end_src
+** org
+#+begin_src emacs-lisp :tangle yes
+;; unicode bullets
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;; todo keywords
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "|" "DONE(d)")
+        (sequence "|" "CANCELED(c)")
+        (sequence "WAIT(w)" "|")))
+
+;; todo keyword faces
+(setq org-todo-keyword-faces
+       '(("TODO". (:foreground "red" :background "#fedfe1" :box '(:line-width 1 :style released-button)))
+        ("DONE". (:foreground "#40883f" :background "#A8D8B9" :box '(:line-width 1 :style released-button)))
+        ("WAIT" . (:foreground "orange" :background "#FFF689" :box '(:line-width 1 :style released-button)))
+        ("CANCELED" . (:foreground "black" :strike-through t :background "#d8d7da" :box '(:line-width 1 :style released-button)))))
+#+end_src
+** TeX
+#+begin_src emacs-lisp :tangle yes
+;(setq pdf-latex-command "lualatex") ; ab fontes :'(
+#+end_src
+* Emacs as an OS
+** Mail 
+*** Receiving mail
+#+begin_src emacs-lisp :tangle yes
+(add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+
+;; default
+(setq mu4e-maildir (expand-file-name "~/Maildir"))
+
+(setq mu4e-maildir-shortcuts
+   '(("/Reed/INBOX" . ?r)
+     ("/iCloud/INBOX" . ?i)))
+
+(setq mu4e-get-mail-command "offlineimap")
+#+end_src
+*** Sending mail
+#+begin_src emacs-lisp :tangle yes
+(require 'smtpmail)
+
+(setq message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials
+      '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials
+      (expand-file-name "~/.authinfo.gpg")
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-debug-info t)
+#+end_src
+*** Dired attachments
+#+begin_src emacs-lisp :tangle no
+(require 'gnus-dired)
+;; make the `gnus-dired-mail-buffers' function also work on
+;; message-mode derived modes, such as mu4e-compose-mode
+(defun gnus-dired-mail-buffers ()
+  "Return a list of active message buffers."
+  (let (buffers)
+    (save-current-buffer
+      (dolist (buffer (buffer-list t))
+        (set-buffer buffer)
+        (when (and (derived-mode-p 'message-mode)
+                (null message-sent-message-via))
+          (push (buffer-name buffer) buffers))))
+    (nreverse buffers)))
+
+(setq gnus-dired-mail-mode 'mu4e-user-agent)
+(add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+#+end_src
+*** Contexts
+#+begin_src emacs-lisp :tangle yes
+(setq mu4e-contexts
+ `( ,(make-mu4e-context
+     :name "Reed"
+     :match-func (lambda (msg) (when msg
+       (string-prefix-p "/Reed" (mu4e-message-field msg :maildir))))
+     :vars '(
+       (mu4e-sent-folder . "/Reed/[Gmail].Sent Mail")
+       (mu4e-drafts-folder . "/Reed/[Gmail].Drafts")
+       (mu4e-trash-folder . "/Reed/[Gmail].Trash")
+       (mu4e-refile-folder . "/Gmail/[Gmail].Archive")
+       ( user-mail-address      . "kruerj@reed.edu"  )
+       ( user-full-name         . "Jay Kruer" )
+       ( mu4e-compose-signature .
+              (concat
+                 "\n"
+                 "-jay"))
+       ))
+   ,(make-mu4e-context
+     :name "iCloud"
+     :match-func (lambda (msg) (when msg
+       (string-prefix-p "/iCloud" (mu4e-message-field msg :maildir))))
+     :vars '(
+       (mu4e-sent-folder . "/iCloud/Sent")
+       (mu4e-drafts-folder . "/iCloud/Drafts")
+       (mu4e-trash-folder . "/iCloud/Deleted Messages")
+       (mu4e-refile-folder . "/iCloud/Archive")
+       (user-mail-address      . "jaykru@me.com"  )
+                   ( user-full-name         . "Jay Kruer" )
+                   ( mu4e-compose-signature .
+                     (concat
+                       "\n"
+                       "-jay"))
+       ))
+   ))
+#+end_src
+** Twitter
+#+begin_src emacs-lisp :tangle yes
+(setq twittering-use-master-password t)
+#end_src
+* Autotangle
+# Local variables
+# eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
+# End:

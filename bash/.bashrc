@@ -1,0 +1,3 @@
+ed () {
+	rlwrap ed
+}

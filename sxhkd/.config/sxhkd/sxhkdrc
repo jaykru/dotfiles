@@ -24,6 +24,9 @@ XF86MonBrightnessUp
 super + Return
 	termite -c .config/termite/termite.black
 
+super + l
+      i3lock
+
 # program launcher
 super + space
 	rofi -show run

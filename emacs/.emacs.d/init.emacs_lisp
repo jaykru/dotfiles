@@ -1,6 +1,0 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> a27dfe93902eabb50d2edddcdd0c845fe0deb2df
-(require 'haskell-mode)
-(add-hook ’haskell-mode-hook ’interactive-haskell-mode)

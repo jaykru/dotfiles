@@ -1,4 +1,4 @@
-yes#+TITLE: init.org
+#+TITLE: init.org
 #+AUTHOR: Jay Kruer
 #+EMAIL: kruerj@reed.edu
 * Editor
@@ -50,7 +50,6 @@ yes#+TITLE: init.org
 #+end_src
 ** GUI
 #+begin_src emacs-lisp :tangle yes
-<<<<<<< HEAD
   (unicode-fonts-setup)
   (set-frame-font "Menlo")
   (setq default-frame-alist
@@ -62,32 +61,14 @@ yes#+TITLE: init.org
 	  ;(left-fringe . 1)
 	  ;(right-fringe . 1)
 	  ))
-=======
-(setq default-frame-alist
-      '((font . "Inconsolata")
-	(vertical-scroll-bars . nil)
-	(horizontal-scroll-bars . nil)
-	(tool-bar-lines . 0)
-	(menu-bar-lines . 0)
-	(left-fringe . 1)
-	(right-fringe . 1)))
->>>>>>> a27dfe93902eabb50d2edddcdd0c845fe0deb2df
-
-  (set-face-attribute 'default nil :height 120)
 #+end_src
 ** Theme
 #+begin_src emacs-lisp :tangle yes
-<<<<<<< HEAD
 ;; load theme
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
 (load-theme 'plan9 t)
-=======
-;; mark theme as safe
-;; load it
-(load-theme 'plan9)
->>>>>>> a27dfe93902eabb50d2edddcdd0c845fe0deb2df
 #+end_src
 ** SSH
 #+begin_src emacs-lisp :tangle yes
@@ -118,13 +99,9 @@ yes#+TITLE: init.org
 #+end_src
 ** Misc.
 #+begin_src emacs-lisp :tangle yes
-<<<<<<< HEAD
 (exec-path-from-shell-initialize)
-=======
-;(exec-path-from-shell-initialize)
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
->>>>>>> a27dfe93902eabb50d2edddcdd0c845fe0deb2df
 #+end_src
 * Editing modes
 ** Agda
@@ -226,7 +203,6 @@ yes#+TITLE: init.org
 #+end_src
 ** TeX
 #+begin_src emacs-lisp :tangle yes
-<<<<<<< HEAD
 (setq pdf-latex-command "luatex") ; ad fontes! :)
 #+end_src
 ** Coq
@@ -237,14 +213,11 @@ yes#+TITLE: init.org
 	    (progn
 	    (company-coq-mode t)
 	      (rainbow-delimiters-mode t))))
-=======
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
 #+end_src
 ** Coq
 #+begin_src emacs-lisp :tangle yes
 (load "~/.emacs.d/lisp/PG/generic/proof-site")
-;(add-hook 'coq-mode-hook (lambda () (proof-unicode-tokens-enable)))
->>>>>>> a27dfe93902eabb50d2edddcdd0c845fe0deb2df
 #+end_src
 * Emacs as an OS
 ** Mail
@@ -357,14 +330,11 @@ yes#+TITLE: init.org
 #+begin_src emacs-lisp :tangle yes
 (setq mac-command-modifier 'meta)
 #+end_src
-<<<<<<< HEAD
 *** 
-=======
 ** As a status bar
 #+begin_src emacs-lisp :tangle yes
 (display-battery-mode)
 #+end_src
->>>>>>> a27dfe93902eabb50d2edddcdd0c845fe0deb2df
 * Autotangle
 # Local variables
 # eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)

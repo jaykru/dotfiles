@@ -25,7 +25,7 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 #+end_src
-** Line editing
+** General editing
 #+begin_src emacs-lisp :tangle yes
 ;; highlight delims
 (setq show-paren-delay 0)
@@ -38,37 +38,36 @@
 (setq ring-bell-function 'ignore)
 
 ;; ivy
-(ivy-mode 1)
+(ivy-mode t)
 (setq ivy-use-virtual-buffers t) (setq ivy-count-format "(%d/%d) ")
-(global-set-key (kbd "C-s") 'swiper) (global-set-key (kbd "M-x") 'counsel-M-x) (global-set-key (kbd "C-x C-f") 'counsel-find-file) (global-set-key (kbd "<f1> f") 'counsel-describe-function) (global-set-key (kbd "<f1> v") 'counsel-describe-variable) (global-set-key (kbd "<f1> l") 'counsel-find-library) (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol) (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
 
-;; fuzzy matching
-;(setq ivy-re-builders-alist
-;      '((t . ivy--regex-fuzzy)))
+;; column numbers
+(column-number-mode t)
+
 #+end_src
 ** GUI
 #+begin_src emacs-lisp :tangle yes
-(setq default-frame-alist
-      '((font . "Inconsolata")
-	(vertical-scroll-bars . nil)
-	(horizontal-scroll-bars . nil)
-	(tool-bar-lines . 0)
-	(menu-bar-lines . 0)
-	(left-fringe . 0)
-	(right-fringe . 0)))
+  (unicode-fonts-setup)
+  (set-frame-font "Menlo")
+  (setq default-frame-alist
+	'((font . "Menlo")
+	  (vertical-scroll-bars . nil)
+	  (horizontal-scroll-bars . nil)
+	  (tool-bar-lines . 0)
+	  (menu-bar-lines . 0)
+	  ;(left-fringe . 1)
+	  ;(right-fringe . 1)
+	  ))
 
-(set-face-attribute 'default nil :height 110)
+  (set-face-attribute 'default nil :height 120)
 #+end_src
 ** Theme
 #+begin_src emacs-lisp :tangle yes
-;; mark theme as safe
-(custom-set-variables
-  '(org-agenda-files (quote ("~/life.org")))
-  '(custom-safe-themes
-    (quote
-     ("d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "2cf7f9d1d8e4d735ba53facdc3c6f3271086b6906c4165b12e4fd8e3865469a6" default))))
-;; load it
-(load-theme 'plan9)
+;; load theme
+(setq tao-theme-use-sepia t)
+(setq tao-theme-sepia-depth 3)
+(setq tao-theme-sepia-saturation 1.10)
+(load-theme 'plan9 t)
 #+end_src
 ** SSH
 #+begin_src emacs-lisp :tangle yes
@@ -99,40 +98,21 @@
 #+end_src
 ** Misc.
 #+begin_src emacs-lisp :tangle yes
-;(exec-path-from-shell-initialize)
-(setq epa-pinentry-mode 'loopback)
-(pinentry-start)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(TeX-view-program-list (quote (("Zathura" "zathura %o"))))
- '(TeX-view-program-selection
-   (quote
-    (((output-dvi has-no-display-manager)
-      "dvi2tty")
-     ((output-dvi style-pstricks)
-      "dvips and gv")
-     (output-dvi "xdvi")
-     (output-pdf "Zathura")
-     (output-html "xdg-open"))))
- '(custom-safe-themes
-   (quote
-    ("ef1e992ef341e86397b39ee6b41c1368e1b33d45b0848feac6a8e8d5753daa67" "4f2ede02b3324c2f788f4e0bad77f7ebc1874eff7971d2a2c9b9724a50fb3f65" "d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "2cf7f9d1d8e4d735ba53facdc3c6f3271086b6906c4165b12e4fd8e3865469a6" default)))
- '(org-agenda-files (quote ("~/life.org")))
- '(package-selected-packages
-   (quote
-    (rust-mode multi-term hledger-mode org-alert visual-regexp znc wolfram w3m w3 undo-tree typing-game twittering-mode turing-machine threes tao-theme solidity-mode sml-mode smex slime scratches rainbow-mode rainbow-delimiters plan9-theme paredit org-bullets nixos-options nix-sandbox nix-mode moe-theme mingus memoize math-symbol-lists magit-annex latex-pretty-symbols japanlaw ix heroku-theme haskell-mode hacker-typer golden-ratio go-guru go-eldoc go-complete go-autocomplete go gnugo flx fireplace find-file-in-project figlet expand-region deft cyberpunk-theme counsel ciel chess buffer-sets buffer-move basic-mode autotetris-mode auctex 0xc)))
- '(preview-TeX-style-dir "/home/j/.emacs.d/elpa/auctex-12.1.0/latex" t))
+(exec-path-from-shell-initialize)
 #+end_src
 * Editing modes
+** Agda
+   #+begin_src emacs-lisp :tangle yes
+   (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/agda")
+   (require 'agda2-mode)
+   #+end_src
 ** General Programming
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'prog-mode-hook
 	  (lambda ()
 	    (progn
-	      (rainbow-delimiters-mode t))))
+	      (rainbow-delimiters-mode t)
+	      (global-undo-tree-mode t))))
 #+end_src
 ** Common Lisp
 #+begin_src emacs-lisp :tangle yes
@@ -159,7 +139,7 @@
    (require 'haskell-mode)
    (add-hook ’haskell-mode-hook ’interactive-haskell-mode)
 #+end_src
-** Emacs  Lisp
+** Emacs Lisp
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
@@ -208,23 +188,33 @@
 ;; alerts
 (require 'org-alert)
 (require 'alert)
-(setq alert-default-style 'notifications)
+(setq alert-default-style 'notifier)
 (org-alert-enable)
+(setq org-alert-interval 21600)
 
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+;; preserve clocks between sessions
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
 #+end_src
 ** TeX
 #+begin_src emacs-lisp :tangle yes
-;(setq pdf-latex-command "lualatex") ; ab fontes :'(
+(setq pdf-latex-command "luatex") ; ad fontes! :)
 #+end_src
 ** Coq
 #+begin_src emacs-lisp :tangle yes
-(load "~/.emacs.d/lisp/PG/generic/proof-site")
+(setq coq-prog-name "coqtop")
+(add-hook 'coq-mode-hook
+	  (lambda ()
+	    (progn
+	    (company-coq-mode t)
+	      (rainbow-delimiters-mode t))))
 #+end_src
 * Emacs as an OS
-** Mail 
+** Mail
 *** Receiving mail
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e")
 (require 'mu4e)
 
@@ -238,7 +228,7 @@
 (setq mu4e-get-mail-command "offlineimap")
 #+end_src
 *** Sending mail
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (require 'smtpmail)
 
 (setq message-send-mail-function 'smtpmail-send-it
@@ -277,7 +267,7 @@
 (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 #+end_src
 *** Contexts
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq mu4e-contexts
  `( ,(make-mu4e-context
      :name "Reed"
@@ -314,18 +304,25 @@
    ))
 #+end_src
 ** Twitter
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq twittering-use-master-password t)
 #+end_src
 ** Terminal emulation
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
    (setq multi-term-program "/run/current-system/sw/bin/bash")
    #+end_src
-** default browser
+** Default browser
 #+begin_src emacs-lisp :tangle yes
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "chromium-browser")
+;(setq browse-url-browser-function 'browse-url-generic
+;     browse-url-generic-program "Google\ Chrome.app")
 #+end_src
+* OS specific stuff
+** macOS things
+*** Command as meta
+#+begin_src emacs-lisp :tangle yes
+(setq mac-command-modifier 'meta)
+#+end_src
+*** 
 * Autotangle
 # Local variables
 # eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)

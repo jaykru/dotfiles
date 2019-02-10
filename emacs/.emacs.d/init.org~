@@ -40,22 +40,19 @@
 ;; ivy
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t) (setq ivy-count-format "(%d/%d) ")
-(global-set-key (kbd "C-s") 'swiper) (global-set-key (kbd "M-x") 'counsel-M-x) (global-set-key (kbd "C-x C-f") 'counsel-find-file) (global-set-key (kbd "<f1> f") 'counsel-describe-function) (global-set-key (kbd "<f1> v") 'counsel-describe-variable) (global-set-key (kbd "<f1> l") 'counsel-find-library) (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol) (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
 
-;; fuzzy matching
-;(setq ivy-re-builders-alist
-;      '((t . ivy--regex-fuzzy)))
 #+end_src
 ** GUI
 #+begin_src emacs-lisp :tangle yes
 (setq default-frame-alist
-      '((font . "Inconsolata")
+      '((font . "Menlo")
 	(vertical-scroll-bars . nil)
 	(horizontal-scroll-bars . nil)
 	(tool-bar-lines . 0)
 	(menu-bar-lines . 0)
-	(left-fringe . 0)
-	(right-fringe . 0)))
+	;(left-fringe . 1)
+	;(right-fringe . 1)
+	))
 
 (set-face-attribute 'default nil :height 110)
 #+end_src
@@ -63,10 +60,13 @@
 #+begin_src emacs-lisp :tangle yes
 ;; mark theme as safe
 (custom-set-variables
-  '(org-agenda-files (quote ("~/life.org")))
-  '(custom-safe-themes
-    (quote
-     ("d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "2cf7f9d1d8e4d735ba53facdc3c6f3271086b6906c4165b12e4fd8e3865469a6" default))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("0e0c37ee89f0213ce31205e9ae8bce1f93c9bcd81b1bcda0233061bb02c357a8" default))))
 ;; load it
 (load-theme 'plan9)
 #+end_src
@@ -99,9 +99,7 @@
 #+end_src
 ** Misc.
 #+begin_src emacs-lisp :tangle yes
-;(exec-path-from-shell-initialize)
-(setq epa-pinentry-mode 'loopback)
-(pinentry-start)
+(exec-path-from-shell-initialize)
 #+end_src
 * Editing modes
 ** General Programming
@@ -130,6 +128,11 @@
 		       (paredit-mode t))))
 (setq inferior-lisp-program "sbcl")
 (slime-setup '(slime-fancy))
+#+end_src
+** Haskell
+#+begin_src emacs_lisp :tangle yes
+   (require 'haskell-mode)
+   (add-hook ’haskell-mode-hook ’interactive-haskell-mode)
 #+end_src
 ** Emacs  Lisp
 #+begin_src emacs-lisp :tangle yes
@@ -176,15 +179,27 @@
         ("DONE". (:foreground "#40883f" :background "#A8D8B9" :box '(:line-width 1 :style released-button)))
         ("WAIT" . (:foreground "orange" :background "#FFF689" :box '(:line-width 1 :style released-button)))
         ("CANCELED" . (:foreground "black" :strike-through t :background "#d8d7da" :box '(:line-width 1 :style released-button)))))
+
+;; alerts
+(require 'org-alert)
+(require 'alert)
+(setq alert-default-style 'notifier)
+(org-alert-enable)
+
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
 #+end_src
 ** TeX
 #+begin_src emacs-lisp :tangle yes
-;(setq pdf-latex-command "lualatex") ; ab fontes :'(
+(setq pdf-latex-command "luatex") ; ad fontes! :)
+#+end_src
+** Coq
+#+begin_src emacs-lisp :tangle yes
+(setq coq-prog-name "/Users/j/.opam/system/bin/coqtop")
 #+end_src
 * Emacs as an OS
-** Mail 
+** Mail
 *** Receiving mail
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e")
 (require 'mu4e)
 
@@ -198,7 +213,7 @@
 (setq mu4e-get-mail-command "offlineimap")
 #+end_src
 *** Sending mail
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (require 'smtpmail)
 
 (setq message-send-mail-function 'smtpmail-send-it
@@ -211,6 +226,11 @@
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
       smtpmail-debug-info t)
+
+(add-hook 'mu4e-compose-mode-hook
+          (defun cpb-compose-setup ()
+            "Use hard newlines, so outgoing mails will have format=flowed."
+            (use-hard-newlines t 'guess)))
 #+end_src
 *** Dired attachments
 #+begin_src emacs-lisp :tangle no
@@ -232,7 +252,7 @@
 (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 #+end_src
 *** Contexts
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq mu4e-contexts
  `( ,(make-mu4e-context
      :name "Reed"
@@ -269,9 +289,24 @@
    ))
 #+end_src
 ** Twitter
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq twittering-use-master-password t)
-#end_src
+#+end_src
+** Terminal emulation
+   #+begin_src emacs-lisp :tangle no
+   (setq multi-term-program "/run/current-system/sw/bin/bash")
+   #+end_src
+** Default browser
+#+begin_src emacs-lisp :tangle yes
+;(setq browse-url-browser-function 'browse-url-generic
+;     browse-url-generic-program "Google\ Chrome.app")
+#+end_src
+* OS specific stuff
+** macOS things
+*** Command as meta
+#+begin_src emacs-lisp :tangle yes
+(setq mac-command-modifier 'meta)
+#+end_src
 * Autotangle
 # Local variables
 # eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)

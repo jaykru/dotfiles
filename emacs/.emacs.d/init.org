@@ -330,7 +330,6 @@
 #+begin_src emacs-lisp :tangle yes
 (setq mac-command-modifier 'meta)
 #+end_src
-*** 
 ** As a status bar
 #+begin_src emacs-lisp :tangle yes
 (display-battery-mode)

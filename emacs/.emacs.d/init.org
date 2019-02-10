@@ -320,19 +320,19 @@
    (setq multi-term-program "/run/current-system/sw/bin/bash")
    #+end_src
 ** Default browser
+#+begin_src emacs-lisp :tangle no
+(setq browse-url-browser-function 'browse-url-generic
+     browse-url-generic-program "Google\ Chrome.app")
+#+end_src
+** As a status bar
 #+begin_src emacs-lisp :tangle yes
-;(setq browse-url-browser-function 'browse-url-generic
-;     browse-url-generic-program "Google\ Chrome.app")
+(display-battery-mode)
 #+end_src
 * OS specific stuff
 ** macOS things
 *** Command as meta
 #+begin_src emacs-lisp :tangle yes
 (setq mac-command-modifier 'meta)
-#+end_src
-** As a status bar
-#+begin_src emacs-lisp :tangle yes
-(display-battery-mode)
 #+end_src
 * Autotangle
 # Local variables

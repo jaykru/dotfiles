@@ -40,13 +40,11 @@
 (unicode-fonts-setup)
 (set-frame-font "Menlo")
 (setq default-frame-alist
-      '((font . "Menlo")
+      '((font . "Menlo-13")
 	(vertical-scroll-bars . nil)
 	(horizontal-scroll-bars . nil)
 	(tool-bar-lines . 0)
 	(menu-bar-lines . 0)
-	;(left-fringe . 1)
-	;(right-fringe . 1)
 	))
 
 ;; load theme
@@ -152,6 +150,7 @@
 (org-clock-persistence-insinuate)
 
 (setq pdf-latex-command "luatex") ; ad fontes! :)
+(setq preview-scale-function 2.0)
 
 (setq coq-prog-name "coqtop")
 (add-hook 'coq-mode-hook

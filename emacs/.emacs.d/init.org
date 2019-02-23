@@ -138,7 +138,10 @@
 ** Haskell
 #+begin_src emacs_lisp :tangle yes
    (require 'haskell-mode)
-   (add-hook ’haskell-mode-hook ’interactive-haskell-mode)
+   (require 'haskell-interactive-mode)
+   (require 'haskell-process)
+   ;; can't use add-hook for some reason, but this works.
+   (setq haskell-mode-hook (list 'interactive-haskell-mode 'haskell-indentation mode))
 #+end_src
 ** Emacs Lisp
 #+begin_src emacs-lisp :tangle yes
@@ -326,6 +329,13 @@
 ** As a status bar
 #+begin_src emacs-lisp :tangle yes
 (display-battery-mode)
+#+end_src
+** As a Matrix client
+#+begin_src emacs-lisp :tangle yes
+(require 'quelpa-use-package)
+   (use-package matrix-client
+   :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+   :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
 #+end_src
 * OS specific stuff
 ** macOS things

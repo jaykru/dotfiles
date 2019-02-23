@@ -165,3 +165,17 @@
 (display-battery-mode)
 
 (setq mac-command-modifier 'meta)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (matrix-client frame-purpose rainbow-identifiers ht esxml tracking ov a request dash-functional anaphora quelpa quelpa-use-package unicode-fonts undo-tree tuareg tao-theme sml-mode slime rustic rust-mode rainbow-delimiters racket-mode quasi-monochrome-theme proof-general plan9-theme pinentry paredit org-pomodoro org-bullets org-alert moe-theme latex-preview-pane ivy haskell-mode go-mode forge flycheck expand-region exec-path-from-shell eglot company-coq color-theme-sanityinc-tomorrow autotetris-mode auto-complete))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

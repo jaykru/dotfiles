@@ -66,7 +66,7 @@
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
-(load-theme 'plan9 t)
+(load-theme 'tao-yin t)
 #+end_src
 ** SSH
 #+begin_src emacs-lisp :tangle yes
@@ -104,7 +104,7 @@
 * Editing modes
 ** Agda
    #+begin_src emacs-lisp :tangle yes
-   (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/agda")
+   (add-to-list 'load-path "/usr/local/Cellar/agda/HEAD-45d584d/share/x86_64-osx-ghc-8.6.4/Agda-2.6.0/emacs-mode/")
    (require 'agda2-mode)
    #+end_src
 ** General Programming
@@ -209,6 +209,7 @@
 #+end_src
 ** Coq
 #+begin_src emacs-lisp :tangle yes
+(load "~/.emacs.d/lisp/PG/generic/proof-site")
 (setq coq-prog-name "coqtop")
 (add-hook 'coq-mode-hook
 	  (lambda ()
@@ -217,9 +218,17 @@
 	      (rainbow-delimiters-mode t))))
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
 #+end_src
-** Coq
+** Agda
 #+begin_src emacs-lisp :tangle yes
-(load "~/.emacs.d/lisp/PG/generic/proof-site")
+(load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
+#+end_src
+** Racket
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'racket-mode-hook
+  (lambda ()
+    (progn
+       (paredit-mode t))))
 #+end_src
 * Emacs as an OS
 ** Mail

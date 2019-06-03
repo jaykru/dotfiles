@@ -51,7 +51,7 @@
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
-(load-theme 'plan9 t)
+(load-theme 'tao-yin t)
 
 ;; tramp for sudo access
 (require 'tramp)
@@ -80,7 +80,7 @@
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
 
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/agda")
+(add-to-list 'load-path "/usr/local/Cellar/agda/HEAD-45d584d/share/x86_64-osx-ghc-8.6.4/Agda-2.6.0/emacs-mode/")
 (require 'agda2-mode)
 
 (add-hook 'prog-mode-hook
@@ -152,6 +152,7 @@
 (setq pdf-latex-command "luatex") ; ad fontes! :)
 (setq preview-scale-function 2.0)
 
+(load "~/.emacs.d/lisp/PG/generic/proof-site")
 (setq coq-prog-name "coqtop")
 (add-hook 'coq-mode-hook
 	  (lambda ()
@@ -160,22 +161,19 @@
 	      (rainbow-delimiters-mode t))))
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
 
-(load "~/.emacs.d/lisp/PG/generic/proof-site")
+(load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
+
+(add-hook 'racket-mode-hook
+  (lambda ()
+    (progn
+       (paredit-mode t))))
 
 (display-battery-mode)
 
+(require 'quelpa-use-package)
+   (use-package matrix-client
+   :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+   :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
+
 (setq mac-command-modifier 'meta)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (matrix-client frame-purpose rainbow-identifiers ht esxml tracking ov a request dash-functional anaphora quelpa quelpa-use-package unicode-fonts undo-tree tuareg tao-theme sml-mode slime rustic rust-mode rainbow-delimiters racket-mode quasi-monochrome-theme proof-general plan9-theme pinentry paredit org-pomodoro org-bullets org-alert moe-theme latex-preview-pane ivy haskell-mode go-mode forge flycheck expand-region exec-path-from-shell eglot company-coq color-theme-sanityinc-tomorrow autotetris-mode auto-complete))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

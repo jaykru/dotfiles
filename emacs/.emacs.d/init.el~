@@ -32,23 +32,21 @@
 ;; column numbers
 (column-number-mode t)
 
-;  (unicode-fonts-setup)
-  (set-frame-font "Inconsolata")
-  (setq default-frame-alist
-	'((font . "Inconsolata")
-	  (vertical-scroll-bars . nil)
-	  (horizontal-scroll-bars . nil)
-	  (tool-bar-lines . 0)
-	  (menu-bar-lines . 0)
-	  ))
-(set-fontset-font t 'unicode (font-spec :name "Free Symbola") nil 'prepend)
-(set-fontset-font t 'greek (font-spec :name "Inconsolata") nil 'prepend)
+(unicode-fonts-setup)
+(set-frame-font "Liberation Mono")
+(setq default-frame-alist
+      '((font . "Liberation Mono")
+	(vertical-scroll-bars . nil)
+	(horizontal-scroll-bars . nil)
+	(tool-bar-lines . 0)
+	(menu-bar-lines . 0)
+	))
 
 ;; load theme
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
-(load-theme 'plan9 t)
+(load-theme 'tao-yin t)
 
 ;; tramp for sudo access
 (require 'tramp)
@@ -132,10 +130,8 @@
 	  (lambda ()
 	    (progn
 	    (company-coq-mode t)
-	    (rainbow-delimiters-mode t))))
+	      (rainbow-delimiters-mode t))))
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
-
-(setq sendmail-program "msmtp")
 
 (display-battery-mode)
 
@@ -145,19 +141,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("30289fa8d502f71a392f40a0941a83842152a68c54ad69e0638ef52f04777a4c" "dbade2e946597b9cda3e61978b5fcc14fa3afa2d3c4391d477bdaeff8f5638c5" default)))
- '(hl-paren-background-colors (quote ("#e8fce8" "#c1e7f8" "#f8e8e8")))
- '(hl-paren-colors (quote ("#40883f" "#0287c8" "#b85c57")))
  '(package-selected-packages
    (quote
-    (scala-mode notmuch unicode-fonts undo-tree tao-theme rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert magit ivy-pass haskell-mode company-coq)))
- '(send-mail-function (quote mailclient-send-it))
- '(sml/active-background-color "#98ece8")
- '(sml/active-foreground-color "#424242")
- '(sml/inactive-background-color "#4fa8a8")
- '(sml/inactive-foreground-color "#424242"))
+    (rainbow-delimiters unicode-fonts tao-theme proof-general pinentry org-bullets org-alert ivy-pass company))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

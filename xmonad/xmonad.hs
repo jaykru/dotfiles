@@ -1,14 +1,14 @@
 import XMonad
 import XMonad.Util.EZConfig
 import XMonad.Layout.BinarySpacePartition
-import XMonad.Actions.Navigation2DP
+import XMonad.Actions.Navigation2D
 
-xmobarPath = "/path/to/xmobarbinary"
+xmobarPath = "/usr/bin/xmobar"
 
 main = do
-  xmproc <- spawnPipe $ xmobarPath ++ " /home/j/.xmobarrc"
+  xmproc <- spawnPipe $ xmobarPath ++ " /home/j/.xmonad/xmobarrc"
   xmonad $ def { modMask = mod4Mask
-               , myLayout = emptyBSP }
+               , Layout = emptyBSP }
     navigation2DP def
     ("k","h","j","l")
     [("M-", windowGo)

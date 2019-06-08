@@ -22,7 +22,7 @@
 ! font rendering
 Xft.antialias: 1
 Xft.autohint: 0
-Xft.dpi: 140
+!Xft.dpi: 120
 Xft.hinting: 1
 Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
@@ -30,15 +30,15 @@ Xft.rgba: rgb
 
 Emacs.antialias: 1
 Emacs.autohint: 0
-Emacs.dpi: 140
+!Emacs.dpi: 140
 Emacs.hinting: 1
 Emacs.hintstyle: hintfull
 Emacs.lcdfilter: lcddefault
 Emacs.rgba: rgb
 
 ! cursor
-Xcursor.theme: Breeze_Amber
-Xcursor.size: 180
+Xcursor.theme: BreezeWhite
+!Xcursor.size: 140
 
 *.foreground:   base05
 *.background:   base00
@@ -73,17 +73,9 @@ Xcursor.size: 180
 
 ! per app settings below!
 URxvt*scrollBar: false
-URxvt*font: xft:Inconsolata:size=11
+URxvt*font: xft:Liberation Mono:size=10
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 URxvt.iso14755: False
 URxvt.perl-ext-common: default,matcher,clipboard
 URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1
-
-rofi.color-enabled: true
-rofi.color-window: #0039ff, #0039ff, #4F80FF
-rofi.color-normal: #0039ff, #4f80ff, #0039ff, #4f80ff, #ffffff
-rofi.color-active: #0039ff, #68ba50, #0039ff, #4f80ff, #68ba50
-rofi.color-urgent: #0039ff, #ff7047, #0039ff, #4f80ff, #ff7047
-
-

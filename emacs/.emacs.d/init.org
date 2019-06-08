@@ -14,8 +14,6 @@
 #+end_src
 ** Keybindings
 #+begin_src emacs-lisp :tangle yes
-(require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-unset-key (kbd "C-z"))
 
@@ -30,9 +28,6 @@
 ;; highlight delims
 (setq show-paren-delay 0)
 (show-paren-mode 1)
-
-;; autocomplete
-(global-auto-complete-mode t)
 
 ;; line numbers
 (global-linum-mode)
@@ -50,15 +45,17 @@
 #+end_src
 ** GUI
 #+begin_src emacs-lisp :tangle yes
-  (unicode-fonts-setup)
-  (set-frame-font "Menlo")
+;  (unicode-fonts-setup)
+  (set-frame-font "Inconsolata")
   (setq default-frame-alist
-	'((font . "Menlo-13")
+	'((font . "Inconsolata")
 	  (vertical-scroll-bars . nil)
 	  (horizontal-scroll-bars . nil)
 	  (tool-bar-lines . 0)
 	  (menu-bar-lines . 0)
 	  ))
+(set-fontset-font t 'unicode (font-spec :name "Free Symbola") nil 'prepend)
+(set-fontset-font t 'greek (font-spec :name "Inconsolata") nil 'prepend)
 #+end_src
 ** Theme
 #+begin_src emacs-lisp :tangle yes
@@ -97,13 +94,12 @@
 #+end_src
 ** Misc.
 #+begin_src emacs-lisp :tangle yes
-(exec-path-from-shell-initialize)
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
 #+end_src
 * Editing modes
 ** Agda
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/agda")
    (require 'agda2-mode)
    #+end_src
@@ -116,7 +112,7 @@
 	      (global-undo-tree-mode t))))
 #+end_src
 ** Common Lisp
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; cl mode
 (require 'paredit)
 (add-hook 'lisp-mode-hook
@@ -214,15 +210,15 @@
 	  (lambda ()
 	    (progn
 	    (company-coq-mode t)
-	      (rainbow-delimiters-mode t))))
+	    (rainbow-delimiters-mode t))))
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
-#+end_src
-** Coq
-#+begin_src emacs-lisp :tangle yes
-(load "~/.emacs.d/lisp/PG/generic/proof-site")
 #+end_src
 * Emacs as an OS
 ** Mail
+*** msmtp
+    #+begin_src emacs-lisp :tangle yes
+(setq sendmail-program "msmtp")
+#+end_src
 *** Receiving mail
 #+begin_src emacs-lisp :tangle no
 (add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e")
@@ -331,7 +327,7 @@
 (display-battery-mode)
 #+end_src
 ** As a Matrix client
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (require 'quelpa-use-package)
    (use-package matrix-client
    :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"

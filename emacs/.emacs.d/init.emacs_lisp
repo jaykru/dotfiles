@@ -1,0 +1,5 @@
+(require 'haskell-mode)
+(require 'haskell-interactive-mode)
+(require 'haskell-process)
+;; can't use add-hook for some reason, but this works.
+(setq haskell-mode-hook (list 'interactive-haskell-mode 'haskell-indentation mode))

@@ -1,9 +1,3 @@
-#+TITLE: init.org
-#+AUTHOR: Jay Kruer
-#+EMAIL: kruerj@reed.edu
-* Editor
-** Package
-#+begin_src emacs-lisp :tangle yes
 ;; enable MELPA
 (require 'package)
 (add-to-list 'load-path "~/.emacs.d/elpa")
@@ -11,9 +5,7 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
-#+end_src
-** Keybindings
-#+begin_src emacs-lisp :tangle yes
+
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-unset-key (kbd "C-z"))
 
@@ -22,9 +14,7 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
-#+end_src
-** General editing
-#+begin_src emacs-lisp :tangle yes
+
 ;; highlight delims
 (setq show-paren-delay 0)
 (show-paren-mode 1)
@@ -42,9 +32,6 @@
 ;; column numbers
 (column-number-mode t)
 
-#+end_src
-** GUI
-#+begin_src emacs-lisp :tangle yes
 ;  (unicode-fonts-setup)
   (set-frame-font "Inconsolata")
   (setq default-frame-alist
@@ -56,17 +43,13 @@
 	  ))
 (set-fontset-font t 'unicode (font-spec :name "Free Symbola") nil 'prepend)
 (set-fontset-font t 'greek (font-spec :name "Inconsolata") nil 'prepend)
-#+end_src
-** Theme
-#+begin_src emacs-lisp :tangle yes
+
 ;; load theme
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
 (load-theme 'plan9 t)
-#+end_src
-** SSH
-#+begin_src emacs-lisp :tangle yes
+
 ;; tramp for sudo access
 (require 'tramp)
 (setq tramp-default-method "ssh")
@@ -84,80 +67,25 @@
             (tramp-file-name-localname vec)))
        (concat "/sudo:root@localhost:" (buffer-file-name))))
     (goto-char position)))
-#+end_src
-** Eshell
-#+begin_src emacs-lisp :tangle yes
+
 (require 'em-smart)
 (setq eshell-where-to-jump 'begin)
 (setq eshell-review-quick-commands nil)
 (setq eshell-smart-space-goes-to-end t)
-#+end_src
-** Misc.
-#+begin_src emacs-lisp :tangle yes
+
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
-#+end_src
-* Editing modes
-** Agda
-   #+begin_src emacs-lisp :tangle no
-   (add-to-list 'load-path "/usr/local/Cellar/agda/HEAD-45d584d/share/x86_64-osx-ghc-8.6.4/Agda-2.6.0/emacs-mode/")
-   (require 'agda2-mode)
-   #+end_src
-** General Programming
-#+begin_src emacs-lisp :tangle yes
+
 (add-hook 'prog-mode-hook
 	  (lambda ()
 	    (progn
 	      (rainbow-delimiters-mode t)
 	      (global-undo-tree-mode t))))
-#+end_src
-** Common Lisp
-#+begin_src emacs-lisp :tangle no
-;; cl mode
-(require 'paredit)
-(add-hook 'lisp-mode-hook
-	  (lambda ()
-	    (progn
-	      (paredit-mode t)
-	      (slime-mode))))
 
-;; SLIME
-(require 'slime)
-(setq slime-contribs '(slime-fancy))
-(add-hook 'slime-repl-mode-hook 
-	  (lambda () (progn
-		       (rainbow-delimiters-mode t)
-		       (paredit-mode t))))
-(setq inferior-lisp-program "sbcl")
-(slime-setup '(slime-fancy))
-#+end_src
-** Haskell
-#+begin_src emacs_lisp :tangle yes
-   (require 'haskell-mode)
-   (require 'haskell-interactive-mode)
-   (require 'haskell-process)
-   ;; can't use add-hook for some reason, but this works.
-   (setq haskell-mode-hook (list 'interactive-haskell-mode 'haskell-indentation mode))
-#+end_src
-** Emacs Lisp
-#+begin_src emacs-lisp :tangle yes
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
 	    (paredit-mode t)))
-#+end_src
-** Go
-#+begin_src emacs-lisp :tangle no
-(require 'go-autocomplete)
-(setenv "GOPATH" "/home/jaykru/go")
-(add-hook 'go-mode-hook
-	  (lambda ()
-	    (progn
-	      (flycheck-mode)
-	      (add-hook 'before-save-hook 'gofmt-before-save)
-	      (auto-complete-mode 1))))
-#+end_src
-** x86_*
-#+begin_src emacs-lisp :tangle yes
+
 (defun my-asm-mode-hook ()
   ;; you can use `comment-dwim' (M-;) for this kind of behaviour anyway
   (local-unset-key (vector asm-comment-char))
@@ -165,9 +93,7 @@
   (setq tab-always-indent (default-value 'tab-always-indent)))
 
 (add-hook 'asm-mode-hook #'my-asm-mode-hook)
-#+end_src
-** org
-#+begin_src emacs-lisp :tangle yes
+
 ;; unicode bullets
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -197,14 +123,10 @@
 ;; preserve clocks between sessions
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
-#+end_src
-** TeX
-#+begin_src emacs-lisp :tangle yes
+
 (setq pdf-latex-command "luatex") ; ad fontes! :)
 (setq preview-scale-function 2.0)
-#+end_src
-** Coq
-#+begin_src emacs-lisp :tangle yes
+
 (setq coq-prog-name "coqtop")
 (add-hook 'coq-mode-hook
 	  (lambda ()
@@ -212,57 +134,21 @@
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
-#+end_src
-** Agda
-#+begin_src emacs-lisp :tangle no
-(load-file (let ((coding-system-for-read 'utf-8))
-                (shell-command-to-string "agda-mode locate")))
-#+end_src
-** Racket
-#+begin_src emacs-lisp :tangle no
-(add-hook 'racket-mode-hook
-  (lambda ()
-    (progn
-       (paredit-mode t))))
-#+end_src
-* Emacs as an OS
-** Mail
-    #+begin_src emacs-lisp :tangle yes
-      ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
-      (setq sendmail-program "msmtp")
-    #+end_src
-#+end_src
-** Twitter
-#+begin_src emacs-lisp :tangle no
-(setq twittering-use-master-password t)
-#+end_src
-** Terminal emulation
-   #+begin_src emacs-lisp :tangle no
-   (setq multi-term-program "/run/current-system/sw/bin/bash")
-   #+end_src
-** Default browser
-#+begin_src emacs-lisp :tangle no
-(setq browse-url-browser-function 'browse-url-generic
-     browse-url-generic-program "Google\ Chrome.app")
-#+end_src
-** As a status bar
-#+begin_src emacs-lisp :tangle yes
+
+(setq sendmail-program (concat (getenv "HOME") "/bin/msmptq"))
+
 (display-battery-mode)
-#+end_src
-** As a Matrix client
-#+begin_src emacs-lisp :tangle no
-(require 'quelpa-use-package)
-   (use-package matrix-client
-   :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
-   :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
-#+end_src
-* OS specific stuff
-** macOS things
-*** Command as meta
-#+begin_src emacs-lisp :tangle yes
+
 (setq mac-command-modifier 'meta)
-#+end_src
-* Autotangle
-# Local variables
-# eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
-# End:
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(send-mail-function (quote mailclient-send-it)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

@@ -33,7 +33,7 @@ main = do
                    "M-S-q",
                    "M-S-<Return>"]
     `additionalKeysP` [ ("M-p", spawn "rofi -show run")
-                      , ("M-<Return>", spawn "konsole")
+                      , ("M-<Return>", spawn "termite")
                       , ("M-f", withFocused (sendMessage . maximizeRestore))
                       , ("<XF86Tools>", spawn "i3lock -c 111111")
                       , ("<XF86AudioMute>", spawn "pactl set-sink-mute 0 toggle")

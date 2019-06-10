@@ -46,16 +46,14 @@
 ** GUI
 #+begin_src emacs-lisp :tangle yes
 ;  (unicode-fonts-setup)
-  (set-frame-font "Inconsolata")
+  (set-frame-font "Iosevka")
   (setq default-frame-alist
-	'((font . "Inconsolata")
+	'((font . "Iosevka")
 	  (vertical-scroll-bars . nil)
 	  (horizontal-scroll-bars . nil)
 	  (tool-bar-lines . 0)
 	  (menu-bar-lines . 0)
 	  ))
-(set-fontset-font t 'unicode (font-spec :name "Free Symbola") nil 'prepend)
-(set-fontset-font t 'greek (font-spec :name "Inconsolata") nil 'prepend)
 #+end_src
 ** Theme
 #+begin_src emacs-lisp :tangle yes

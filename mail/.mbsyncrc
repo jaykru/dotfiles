@@ -20,3 +20,45 @@ Master :jay.kruer@sifive.com-remote:
 Slave :jay.kruer@sifive.com-local:
 Patterns *
 Sync PullNew PullFlags
+
+# josefkruer@gmail.com
+
+# MaildirStore josefkruer@gmail.com-local
+# Subfolders Verbatim
+# Path ~/mail/josefkruer@gmail.com/
+# Inbox ~/mail/josefkruer@gmail.com/INBOX
+
+# IMAPStore josefkruer@gmail.com-remote
+# Host imap.gmail.com
+# User josefkruer@gmail.com
+# SSLVersions TLSv1.2
+# SSLType IMAPS
+# PassCmd "pass show google"
+
+# Channel josefkruer@gmail.com
+# Master :josefkruer@gmail.com-remote:
+# Slave :josefkruer@gmail.com-local:
+# Patterns *
+# Sync PullNew PullFlags
+
+# posteo
+# MaildirStore jaykruer@posteo.de-local
+# Subfolders Verbatim
+# Path ~/mail/jaykruer@posteo.de/
+# Inbox ~/mail/jaykruer@posteo.de/INBOX
+
+# IMAPStore jaykruer@posteo.de-remote
+# Host posteo.de
+# User jaykruer@posteo.de
+# Port 993
+# # SSLVersions TLSv1.2
+# SSLType IMAPS
+# AuthMechs Login
+# CertificateFile /etc/ssl/certs/ca-certificates.crt
+# PassCmd "pass show posteo"
+
+# Channel jaykruer@posteo.de
+# Master :jaykruer@posteo.de-remote:
+# Slave :jaykruer@posteo.de-local:
+# Patterns *
+# Sync PullNew PullFlags

@@ -33,16 +33,14 @@
 (column-number-mode t)
 
 ;  (unicode-fonts-setup)
-  (set-frame-font "Inconsolata")
+  (set-frame-font "Iosevka")
   (setq default-frame-alist
-	'((font . "Inconsolata")
+	'((font . "Iosevka")
 	  (vertical-scroll-bars . nil)
 	  (horizontal-scroll-bars . nil)
 	  (tool-bar-lines . 0)
 	  (menu-bar-lines . 0)
 	  ))
-(set-fontset-font t 'unicode (font-spec :name "Free Symbola") nil 'prepend)
-(set-fontset-font t 'greek (font-spec :name "Inconsolata") nil 'prepend)
 
 ;; load theme
 (setq tao-theme-use-sepia t)
@@ -135,7 +133,8 @@
 	    (rainbow-delimiters-mode t))))
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
 
-(setq sendmail-program (concat (getenv "HOME") "/bin/msmptq"))
+;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
+(setq sendmail-program "msmtp")
 
 (display-battery-mode)
 
@@ -145,7 +144,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(send-mail-function (quote mailclient-send-it)))
+ '(package-selected-packages
+   (quote
+    (notmuch unicode-fonts undo-tree tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert magit ivy-pass haskell-mode company-coq))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

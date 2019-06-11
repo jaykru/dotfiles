@@ -23,42 +23,60 @@ Sync PullNew PullFlags
 
 # josefkruer@gmail.com
 
-# MaildirStore josefkruer@gmail.com-local
-# Subfolders Verbatim
-# Path ~/mail/josefkruer@gmail.com/
-# Inbox ~/mail/josefkruer@gmail.com/INBOX
+MaildirStore josefkruer@gmail.com-local
+Subfolders Verbatim
+Path ~/mail/josefkruer@gmail.com/
+Inbox ~/mail/josefkruer@gmail.com/INBOX
 
-# IMAPStore josefkruer@gmail.com-remote
-# Host imap.gmail.com
-# User josefkruer@gmail.com
-# SSLVersions TLSv1.2
-# SSLType IMAPS
-# PassCmd "pass show google"
+IMAPStore josefkruer@gmail.com-remote
+Host imap.gmail.com
+User josefkruer@gmail.com
+SSLVersions TLSv1.2
+SSLType IMAPS
+PassCmd "pass show google-app"
 
-# Channel josefkruer@gmail.com
-# Master :josefkruer@gmail.com-remote:
-# Slave :josefkruer@gmail.com-local:
-# Patterns *
-# Sync PullNew PullFlags
+Channel josefkruer@gmail.com
+Master :josefkruer@gmail.com-remote:
+Slave :josefkruer@gmail.com-local:
+Patterns *
+Sync PullNew PullFlags
+
+# reed
+MaildirStore kruerj@reed.edu-local
+Subfolders Verbatim
+Path ~/mail/kruerj@reed.edu/
+Inbox ~/mail/kruerj@reed.edu/INBOX
+
+IMAPStore kruerj@reed.edu-remote
+Host imap.gmail.com
+User kruerj@reed.edu
+SSLVersions TLSv1.2
+SSLType IMAPS
+PassCmd "pass show reed-app"
+
+Channel kruerj@reed.edu
+Master :kruerj@reed.edu-remote:
+Slave :kruerj@reed.edu-local:
+Patterns *
+Sync PullNew PullFlags
 
 # posteo
-# MaildirStore jaykruer@posteo.de-local
-# Subfolders Verbatim
-# Path ~/mail/jaykruer@posteo.de/
-# Inbox ~/mail/jaykruer@posteo.de/INBOX
+MaildirStore jaykruer@posteo.de-local
+Subfolders Verbatim
+Path ~/mail/jaykruer@posteo.de/
+Inbox ~/mail/jaykruer@posteo.de/INBOX
 
-# IMAPStore jaykruer@posteo.de-remote
-# Host posteo.de
-# User jaykruer@posteo.de
-# Port 993
-# # SSLVersions TLSv1.2
-# SSLType IMAPS
-# AuthMechs Login
-# CertificateFile /etc/ssl/certs/ca-certificates.crt
-# PassCmd "pass show posteo"
+IMAPStore jaykruer@posteo.de-remote
+Host posteo.de
+User jaykruer@posteo.net
+Port 143
+SSLVersions TLSv1.2
+SSLType STARTTLS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+PassCmd "pass show posteo"
 
-# Channel jaykruer@posteo.de
-# Master :jaykruer@posteo.de-remote:
-# Slave :jaykruer@posteo.de-local:
-# Patterns *
-# Sync PullNew PullFlags
+Channel jaykruer@posteo.de
+Master :jaykruer@posteo.de-remote:
+Slave :jaykruer@posteo.de-local:
+Patterns *
+Sync PullNew PullFlags

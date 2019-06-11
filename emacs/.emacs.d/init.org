@@ -227,7 +227,12 @@
 ** Mail
     #+begin_src emacs-lisp :tangle yes
       ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
-      (setq sendmail-program "msmtp")
+      (setq send-mail-function 'sendmail-send-it
+            sendmail-program "msmtp"
+	    mail-specify-envelope-from t
+	    message-sendmail-envelope-from 'header
+	    mail-envelope-from 'header
+	    mail-host-address "kamisama")
     #+end_src
 #+end_src
 ** Twitter

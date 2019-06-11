@@ -134,22 +134,12 @@
 (setq pdf-latex-command "lualatex") ; ab fontes :'(
 
 ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
-(setq sendmail-program "msmtp")
+(setq send-mail-function 'sendmail-send-it
+      sendmail-program "msmtp"
+      mail-specify-envelope-from t
+      message-sendmail-envelope-from 'header
+      mail-envelope-from 'header)
 
 (display-battery-mode)
 
 (setq mac-command-modifier 'meta)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (notmuch unicode-fonts undo-tree tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert magit ivy-pass haskell-mode company-coq))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

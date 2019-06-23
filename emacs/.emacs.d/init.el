@@ -131,14 +131,38 @@
 	    (progn
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
-(setq pdf-latex-command "lualatex") ; ab fontes :'(
 
 ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
 (setq send-mail-function 'sendmail-send-it
       sendmail-program "msmtp"
       mail-specify-envelope-from t
       message-sendmail-envelope-from 'header
-      mail-envelope-from 'header)
+      mail-envelope-from 'header
+      mail-host-address "kamisama")
+
+;; company address completion
+(add-hook 'notmuch-mode-hook
+   (lambda ()
+      (progn
+	(company-mode t))))
+
+;; notmuch saved queries
+(setq notmuch-saved-searches
+'(
+  (:name "inbox" :query "(date:month.. and not to:jay.kruer@sifive.com) or (date:month.. and to:jay.kruer@sifive.com and not [JIRA]) and (not tag:sent)" :key "i")
+  (:name "work" :query "(to:jay.kruer@sifive.com)" :key "w")
+  (:name "banking"
+   :query "(from:Chase or from:PNC or from:\"Discover Card\")"
+   :key "b")
+  (:name "unread" :query "tag:unread" :key "u")
+  (:name "flagged" :query "tag:flagged" :key "f")
+  (:name "sent" :query "tag:sent" :key "t")
+  (:name "drafts" :query "tag:draft" :key "d")
+  (:name "all mail" :query "*" :key "a")
+ ))
+
+(setq browse-url-browser-function 'browse-url-generic
+     browse-url-generic-program "brave")
 
 (display-battery-mode)
 

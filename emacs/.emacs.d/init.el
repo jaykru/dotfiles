@@ -131,14 +131,14 @@
 	    (progn
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
-(setq pdf-latex-command "lualatex") ; ab fontes :'(
 
-;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
-(setq send-mail-function 'sendmail-send-it
-      sendmail-program "msmtp"
-      mail-specify-envelope-from t
-      message-sendmail-envelope-from 'header
-      mail-envelope-from 'header)
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'(lambda ()
+                                 (progn
+				   (eldoc-mode t)
+				   (company-mode t))))
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
 
 (display-battery-mode)
 

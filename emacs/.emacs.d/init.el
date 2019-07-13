@@ -3,8 +3,20 @@
 (add-to-list 'load-path "~/.emacs.d/elpa")
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+			 ("melpa" . "http://melpa.milkbox.net/packages/")))
+(setq package-selected-packages '(cargo racer magit-topgit
+				  magit-todos geiser visual-regexp unicode-fonts undo-tree
+				  tuareg tao-theme sml-mode slime rustic rust-mode
+				  rainbow-delimiters racket-mode quelpa-use-package
+				  quasi-monochrome-theme proof-general plan9-theme pinentry
+				  paredit org-pomodoro org-bullets org-alert moe-theme
+				  matrix-client magit-popup latex-preview-pane ivy
+				  haskell-mode go-mode forge flycheck expand-region
+				  exec-path-from-shell eglot company-coq
+				  color-theme-sanityinc-tomorrow autotetris-mode
+				  auto-complete))
 (package-initialize)
+(package-install-selected-packages)
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-unset-key (kbd "C-z"))

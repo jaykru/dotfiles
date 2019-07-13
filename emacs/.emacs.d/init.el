@@ -140,6 +140,9 @@
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
 
+(setq browse-url-browser-function 'browse-url-generic
+     browse-url-generic-program "brave")
+
 (display-battery-mode)
 
 (setq mac-command-modifier 'meta)

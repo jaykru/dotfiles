@@ -151,7 +151,10 @@
 #+end_src
 ** Rust
 #+begin_src emacs_lisp :tangle yes
-(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'rust-mode-hook #'(lambda ()
+                             (progn 
+			      (racer-mode)
+			      (cargo-minor-mode))))
 (add-hook 'racer-mode-hook #'(lambda ()
                               (progn
 			        (eldoc-mode t)
@@ -244,15 +247,6 @@
     (progn
        (paredit-mode t))))
 #+end_src
-** Rust
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'(lambda ()
-                                 (progn
-				   (eldoc-mode t)
-				   (company-mode t))))
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-(setq company-tooltip-align-annotations t)
 #+end_src
 * Emacs as an OS
 ** Mail

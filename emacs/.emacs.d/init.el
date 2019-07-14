@@ -144,14 +144,6 @@
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
 
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'(lambda ()
-                                 (progn
-				   (eldoc-mode t)
-				   (company-mode t))))
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-(setq company-tooltip-align-annotations t)
-
 (setq browse-url-browser-function 'browse-url-generic
      browse-url-generic-program "brave")
 

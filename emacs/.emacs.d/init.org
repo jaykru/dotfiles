@@ -142,7 +142,7 @@
 (slime-setup '(slime-fancy))
 #+end_src
 ** Haskell
-#+begin_src emacs_lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
    (require 'haskell-mode)
    (require 'haskell-interactive-mode)
    (require 'haskell-process)
@@ -150,7 +150,7 @@
    (setq haskell-mode-hook (list 'interactive-haskell-mode 'haskell-indentation mode))
 #+end_src
 ** Rust
-#+begin_src emacs_lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 (add-hook 'rust-mode-hook #'(lambda ()
                              (progn 
 			      (racer-mode)

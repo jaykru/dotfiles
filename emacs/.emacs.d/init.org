@@ -184,7 +184,9 @@
    (require 'haskell-interactive-mode)
    (require 'haskell-process)
    ;; can't use add-hook for some reason, but this works.
-   (setq haskell-mode-hook (list 'interactive-haskell-mode 'haskell-indentation mode))
+   (add-hook 'haskell-mode-hook #'(lambda ()
+                                   (progn (interactive-haskell-mode)
+				          (haskell-indentation mode))))
 #+end_src
 ** Rust
 #+begin_src emacs-lisp :tangle yes
@@ -196,7 +198,7 @@
                               (progn
 			        (eldoc-mode t)
 				(company-mode t))))
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+;(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
 #+end_src
 ** Emacs Lisp

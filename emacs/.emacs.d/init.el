@@ -1,22 +1,59 @@
 ;; enable MELPA
 (require 'package)
-(add-to-list 'load-path "~/.emacs.d/elpa")
-(add-to-list 'load-path "~/.emacs.d/lisp")
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "http://melpa.milkbox.net/packages/")))
-(setq package-selected-packages '(cargo racer magit-topgit
-				  magit-todos geiser visual-regexp unicode-fonts undo-tree
-				  tuareg tao-theme sml-mode slime rustic rust-mode
-				  rainbow-delimiters racket-mode quelpa-use-package
-				  quasi-monochrome-theme proof-general plan9-theme pinentry
-				  paredit org-pomodoro org-bullets org-alert moe-theme
-				  matrix-client magit-popup latex-preview-pane ivy
-				  haskell-mode go-mode forge flycheck expand-region
-				  exec-path-from-shell eglot company-coq
-				  color-theme-sanityinc-tomorrow autotetris-mode
-				  auto-complete))
-(package-initialize)
-(package-install-selected-packages)
+  (add-to-list 'load-path "~/.emacs.d/elpa")
+  (add-to-list 'load-path "~/.emacs.d/lisp")
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+			   ("melpa" . "http://melpa.milkbox.net/packages/")))
+  (setq package-selected-packages '(cargo
+				    racer
+				    magit-topgit
+				    unicode-fonts
+				    undo-tree
+				    tuareg
+				    tao-theme
+				    scala-mode
+				    rainbow-delimiters
+				    proof-general
+				    plan9-theme
+				    pinentry
+				    pareditq
+				    org-bullets
+				    org-alert
+				    notmuch
+				    nix-mode
+				    markdown-mode
+				    magit
+				    ivy-pass
+				    haskell-mode
+				    edit-indirect
+				    company-coq
+				    magit-todos
+				    geiser
+				    visual-regexp
+				    sml-mode
+				    slime
+				    rustic
+				    rust-mode
+				    racket-mode
+				    quelpa-use-package
+				    quasi-monochrome-theme
+				    org-pomodoro
+				    moe-theme
+				    matrix-client
+				    magit-popup
+				    latex-preview-pane
+				    ivy
+				    go-mode
+				    forge
+				    flycheck
+				    expand-region
+				    exec-path-from-shell
+				    eglot
+				    color-theme-sanityinc-tomorrow
+				    autotetris-mode
+				    auto-complete))
+  (package-initialize)
+  (package-install-selected-packages)
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-unset-key (kbd "C-z"))
@@ -161,38 +198,6 @@
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
 
-<<<<<<< HEAD
-;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
-(setq send-mail-function 'sendmail-send-it
-      sendmail-program "msmtp"
-      mail-specify-envelope-from t
-      message-sendmail-envelope-from 'header
-      mail-envelope-from 'header
-      mail-host-address "kamisama")
-
-;; company address completion
-(add-hook 'notmuch-mode-hook
-   (lambda ()
-      (progn
-	(company-mode t))))
-
-;; notmuch saved queries
-(setq notmuch-saved-searches
-'(
-  (:name "inbox" :query "(date:month.. and not to:@sifive.com and not tag:sent) and (not tag:sent)" :key "i")
-  (:name "work" :query "to:sifive.com and not [JIRA]" :key "w")
-  (:name "banking"
-   :query "(from:Chase or from:PNC or from:\"Discover Card\")"
-   :key "b")
-  (:name "unread" :query "tag:unread" :key "u")
-  (:name "flagged" :query "tag:flagged" :key "f")
-  (:name "sent" :query "tag:sent" :key "t")
-  (:name "drafts" :query "tag:draft" :key "d")
-  (:name "all mail" :query "*" :key "a")
- ))
-
-=======
->>>>>>> 2ebda568b0ec5adf646d5bc10d95df7d87768c97
 (setq browse-url-browser-function 'browse-url-generic
      browse-url-generic-program "brave")
 

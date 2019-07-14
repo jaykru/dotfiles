@@ -78,7 +78,7 @@
 	  (lambda ()
 	    (progn
 	      (rainbow-delimiters-mode t)
-	      (global-undo-tree-mode t))))
+	      (electric-indent-mode 'f))))
 
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
@@ -149,8 +149,8 @@
 ;; notmuch saved queries
 (setq notmuch-saved-searches
 '(
-  (:name "inbox" :query "(date:month.. and not to:jay.kruer@sifive.com) or (date:month.. and to:jay.kruer@sifive.com and not [JIRA]) and (not tag:sent)" :key "i")
-  (:name "work" :query "(to:jay.kruer@sifive.com)" :key "w")
+  (:name "inbox" :query "(date:month.. and not to:@sifive.com and not tag:sent) and (not tag:sent)" :key "i")
+  (:name "work" :query "to:sifive.com and not [JIRA]" :key "w")
   (:name "banking"
    :query "(from:Chase or from:PNC or from:\"Discover Card\")"
    :key "b")

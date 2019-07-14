@@ -80,3 +80,24 @@ Master :jaykruer@posteo.de-remote:
 Slave :jaykruer@posteo.de-local:
 Patterns *
 Sync PullNew PullFlags
+
+# dank.systems
+MaildirStore j@dank.systems-local
+Subfolders Verbatim
+Path ~/mail/j@dank.systems/
+Inbox ~/mail/j@dank.systems/INBOX
+
+IMAPStore j@dank.systems-remote
+Host imap.mailbox.org
+User j@dank.systems
+Port 993
+SSLVersions TLSv1.2
+# SSLType STARTTLS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+PassCmd "pass show mailbox"
+
+Channel j@dank.systems
+Master :j@dank.systems-remote:
+Slave :j@dank.systems-local:
+Patterns *
+Sync PullNew PullFlags

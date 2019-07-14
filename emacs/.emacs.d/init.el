@@ -3,8 +3,20 @@
 (add-to-list 'load-path "~/.emacs.d/elpa")
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+			 ("melpa" . "http://melpa.milkbox.net/packages/")))
+(setq package-selected-packages '(cargo racer magit-topgit
+				  magit-todos geiser visual-regexp unicode-fonts undo-tree
+				  tuareg tao-theme sml-mode slime rustic rust-mode
+				  rainbow-delimiters racket-mode quelpa-use-package
+				  quasi-monochrome-theme proof-general plan9-theme pinentry
+				  paredit org-pomodoro org-bullets org-alert moe-theme
+				  matrix-client magit-popup latex-preview-pane ivy
+				  haskell-mode go-mode forge flycheck expand-region
+				  exec-path-from-shell eglot company-coq
+				  color-theme-sanityinc-tomorrow autotetris-mode
+				  auto-complete))
 (package-initialize)
+(package-install-selected-packages)
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-unset-key (kbd "C-z"))
@@ -80,6 +92,23 @@
 	      (rainbow-delimiters-mode t)
 	      (electric-indent-mode 'f))))
 
+(require 'haskell-mode)
+(require 'haskell-interactive-mode)
+(require 'haskell-process)
+;; can't use add-hook for some reason, but this works.
+(setq haskell-mode-hook (list 'interactive-haskell-mode 'haskell-indentation mode))
+
+(add-hook 'rust-mode-hook #'(lambda ()
+                             (progn 
+			      (racer-mode)
+			      (cargo-minor-mode))))
+(add-hook 'racer-mode-hook #'(lambda ()
+                              (progn
+			        (eldoc-mode t)
+				(company-mode t))))
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
+
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda ()
 	    (paredit-mode t)))
@@ -132,6 +161,7 @@
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
 
+<<<<<<< HEAD
 ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
 (setq send-mail-function 'sendmail-send-it
       sendmail-program "msmtp"
@@ -161,6 +191,8 @@
   (:name "all mail" :query "*" :key "a")
  ))
 
+=======
+>>>>>>> 2ebda568b0ec5adf646d5bc10d95df7d87768c97
 (setq browse-url-browser-function 'browse-url-generic
      browse-url-generic-program "brave")
 

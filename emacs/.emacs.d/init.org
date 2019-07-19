@@ -289,7 +289,7 @@
 #+end_src
 * Emacs as an OS
 ** Mail
-    #+begin_src emacs-lisp :tangle no
+    #+begin_src emacs-lisp :tangle yes
       ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
       (setq send-mail-function 'sendmail-send-it
             sendmail-program "msmtp"
@@ -325,7 +325,7 @@
 (setq twittering-use-master-password t)
 #+end_src
 ** Terminal emulation
-   #+begin_src emacs-lisp :tangle no
+   #+begin_src emacs-lisp :tangle yes
    (setq multi-term-program "/run/current-system/sw/bin/bash")
    #+end_src
 ** Default browser

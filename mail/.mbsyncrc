@@ -92,7 +92,7 @@ Host imap.mailbox.org
 User j@dank.systems
 Port 993
 SSLVersions TLSv1.2
-# SSLType STARTTLS
+SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 PassCmd "pass show mailbox"
 

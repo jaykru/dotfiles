@@ -24,6 +24,9 @@ set $term termite
 # Note: it's recommended that you pass the final command to sway
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
+# Lock command
+set $lock 'swaylock -c 111111 --indicator-radius 75'
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
@@ -46,10 +49,10 @@ exec mako
 # Example configuration:
 #
 exec swayidle -w \
-         timeout 300 'swaylock -c 111111 --indicator-radius 75' \
+         timeout 300 $lock \
          timeout 600 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -c 111111 --indicator-radius 75'
+         before-sleep $lock \
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -91,6 +94,9 @@ exec swayidle -w \
 
     # Reload the configuration file
     bindsym $mod+q reload
+ 
+    # Lock
+    bindsym $mod+Shift+q exec $lock
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -207,6 +213,10 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+### misc keybindings
+bindsym XF86MonBrightnessDown exec light -U 10
+bindsym XF86MonBrightnessUp exec light -A 10
+
 #
 # Status Bar:
 #
@@ -224,5 +234,7 @@ bar {
         inactive_workspace #32323200 #32323200 #5c5c5c
     }
 }
+
+exec xrdb -load $HOME/.Xresources
 
 include @sysconfdir@/sway/config.d/*

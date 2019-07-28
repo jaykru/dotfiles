@@ -82,14 +82,16 @@
 (column-number-mode t)
 
 ;  (unicode-fonts-setup)
-  (set-frame-font "Iosevka")
-  (setq default-frame-alist
-	'((font . "Iosevka")
-	  (vertical-scroll-bars . nil)
-	  (horizontal-scroll-bars . nil)
-	  (tool-bar-lines . 0)
-	  (menu-bar-lines . 0)
-	  ))
+(let ((my-frame-font
+      (if (eq system-type 'darwin)
+            "Menlo"
+	    "Iosevka")))
+     (setq default-frame-alist
+           '((font . my-frame-font)
+             (vertical-scroll-bars . nil)
+   	     (horizontal-scroll-bars . nil)
+	     (tool-bar-lines . 0)
+	     (menu-bar-lines . 0))))
 
 ;; load theme
 (setq tao-theme-use-sepia t)
@@ -236,4 +238,6 @@
 
 (display-battery-mode)
 
-(setq mac-command-modifier 'meta)
+(when (eq system-type 'darwin)
+    (exec-path-from-shell-initialize)
+    (setq mac-command-modifier 'meta))

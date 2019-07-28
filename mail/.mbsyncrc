@@ -72,7 +72,6 @@ User jaykruer@posteo.net
 Port 143
 SSLVersions TLSv1.2
 SSLType STARTTLS
-CertificateFile /etc/ssl/certs/ca-certificates.crt
 PassCmd "pass show posteo"
 
 Channel jaykruer@posteo.de
@@ -93,7 +92,7 @@ User j@dank.systems
 Port 993
 SSLVersions TLSv1.2
 SSLType IMAPS
-CertificateFile /etc/ssl/certs/ca-certificates.crt
+#CertificateFile /etc/ssl/certs/ca-certificates.crt
 PassCmd "pass show mailbox"
 
 Channel j@dank.systems

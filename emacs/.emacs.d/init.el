@@ -87,7 +87,7 @@
             "Menlo"
 	    "Iosevka")))
      (setq default-frame-alist
-           '((font . my-frame-font)
+           `((font . ,my-frame-font)
              (vertical-scroll-bars . nil)
    	     (horizontal-scroll-bars . nil)
 	     (tool-bar-lines . 0)

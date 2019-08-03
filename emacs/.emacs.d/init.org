@@ -1,6 +1,6 @@
 #+TITLE: init.org
 #+AUTHOR: Jay Kruer
-#+EMAIL: kruerj@reed.edu
+#+EMAIL: j@dank.systems
 * Editor
 ** Package
 #+begin_src emacs-lisp :tangle yes
@@ -146,10 +146,21 @@
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
 #+end_src
+* OS specific stuff
+** macOS things
+*** Command as meta
+#+begin_src emacs-lisp :tangle yes
+  ;; this needs to happen early because other part of the config depend
+  ;; on PATH being set correctly.
+  (when (eq system-type 'darwin)
+      (exec-path-from-shell-initialize)
+      (setq mac-command-modifier 'meta))
+#+end_src
 * Editing modes
 ** Agda
-   #+begin_src emacs-lisp :tangle no
-   (add-to-list 'load-path "/usr/local/Cellar/agda/HEAD-45d584d/share/x86_64-osx-ghc-8.6.4/Agda-2.6.0/emacs-mode/")
+   #+begin_src emacs-lisp :tangle yes
+   (load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
    (require 'agda2-mode)
    #+end_src
 ** General Programming
@@ -333,7 +344,9 @@
 ** Default browser
 #+begin_src emacs-lisp :tangle yes
 (setq browse-url-browser-function 'browse-url-generic
-     browse-url-generic-program "brave")
+      browse-url-generic-program (if (eq system-type 'darwin)
+                                     "open"
+				     "brave"))
 #+end_src
 ** As a status bar
 #+begin_src emacs-lisp :tangle yes
@@ -346,14 +359,7 @@
    :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
    :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
 #+end_src
-* OS specific stuff
-** macOS things
-*** Command as meta
-#+begin_src emacs-lisp :tangle yes
-(when (eq system-type 'darwin)
-    (exec-path-from-shell-initialize)
-    (setq mac-command-modifier 'meta))
-#+end_src
+
 * Autotangle
 # Local variables
 # eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)

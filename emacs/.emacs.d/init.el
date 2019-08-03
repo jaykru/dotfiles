@@ -125,6 +125,16 @@
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
 
+;; this needs to happen early because other part of the config depend
+;; on PATH being set correctly.
+(when (eq system-type 'darwin)
+    (exec-path-from-shell-initialize)
+    (setq mac-command-modifier 'meta))
+
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
+(require 'agda2-mode)
+
 (add-hook 'prog-mode-hook
 	  (lambda ()
 	    (progn
@@ -234,10 +244,8 @@
 (setq multi-term-program "/run/current-system/sw/bin/bash")
 
 (setq browse-url-browser-function 'browse-url-generic
-     browse-url-generic-program "brave")
+      browse-url-generic-program (if (eq system-type 'darwin)
+                                     "open"
+				     "brave"))
 
 (display-battery-mode)
-
-(when (eq system-type 'darwin)
-    (exec-path-from-shell-initialize)
-    (setq mac-command-modifier 'meta))

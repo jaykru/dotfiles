@@ -22,7 +22,7 @@
 ! font rendering
 Xft.antialias: 1
 Xft.autohint: 0
-Xft.dpi: 100
+Xft.dpi: 190
 Xft.hinting: 1
 Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
@@ -38,7 +38,7 @@ Emacs.rgba: rgb
 
 ! cursor
 Xcursor.theme: BreezeWhite
-!Xcursor.size: 140
+Xcursor.size: 140
 
 *.foreground:   base05
 *.background:   base00

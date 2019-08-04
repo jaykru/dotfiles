@@ -97,7 +97,7 @@
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
-(load-theme 'plan9 t)
+(load-theme 'tao-yin t)
 
 ;; tramp for sudo access
 (require 'tramp)

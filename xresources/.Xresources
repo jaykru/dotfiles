@@ -37,7 +37,7 @@ Emacs.lcdfilter: lcddefault
 Emacs.rgba: rgb
 
 ! cursor
-Xcursor.theme: BreezeWhite
+Xcursor.theme: Capitaine Cursors
 Xcursor.size: 140
 
 *.foreground:   base05

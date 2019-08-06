@@ -16,7 +16,7 @@
 				    proof-general
 				    plan9-theme
 				    pinentry
-				    pareditq
+				    paredit
 				    org-bullets
 				    org-alert
 				    notmuch
@@ -97,7 +97,7 @@
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
-(load-theme 'tao-yin t)
+(load-theme 'plan9 t)
 
 ;; tramp for sudo access
 (require 'tramp)
@@ -130,10 +130,6 @@
 (when (eq system-type 'darwin)
     (exec-path-from-shell-initialize)
     (setq mac-command-modifier 'meta))
-
-(load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
-(require 'agda2-mode)
 
 (add-hook 'prog-mode-hook
 	  (lambda ()
@@ -229,7 +225,7 @@
 ;; notmuch saved queries
 (setq notmuch-saved-searches
 '(
-  (:name "inbox" :query "(date:month.. and not to:@sifive.com and not tag:sent) and (not tag:sent)" :key "i")
+  (:name "inbox" :query "date:month.. and not tag:sent" :key "i")
   (:name "work" :query "to:sifive.com and not [JIRA]" :key "w")
   (:name "banking"
    :query "(from:Chase or from:PNC or from:\"Discover Card\")"

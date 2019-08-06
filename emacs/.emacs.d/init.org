@@ -22,7 +22,7 @@
 				      proof-general
 				      plan9-theme
 				      pinentry
-				      pareditq
+				      paredit
 				      org-bullets
 				      org-alert
 				      notmuch
@@ -38,6 +38,7 @@
 				      visual-regexp
 				      sml-mode
 				      slime
+				      rg
 				      rustic
 				      rust-mode
 				      racket-mode
@@ -158,7 +159,7 @@
 #+end_src
 * Editing modes
 ** Agda
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
    (load-file (let ((coding-system-for-read 'utf-8))
                 (shell-command-to-string "agda-mode locate")))
    (require 'agda2-mode)
@@ -169,7 +170,7 @@
 	  (lambda ()
 	    (progn
 	      (rainbow-delimiters-mode t)
-	      (electric-indent-mode 'f))))
+	      (electric-indent-mode nil))))
 #+end_src
 ** Common Lisp
 #+begin_src emacs-lisp :tangle no

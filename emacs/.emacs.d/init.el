@@ -202,6 +202,7 @@
 (setq preview-scale-function 2.0)
 
 (setq coq-prog-name "coqtop")
+(setq coq-unicode-tokens-enable nil)
 (add-hook 'coq-mode-hook
 	  (lambda ()
 	    (progn

@@ -283,6 +283,7 @@
 #+begin_src emacs-lisp :tangle yes
 (setq coq-prog-name "coqtop")
 (setq coq-unicode-tokens-enable nil)
+(setq company-coq-disabled-features '(prettify-symbols))
 (add-hook 'coq-mode-hook
 	  (lambda ()
 	    (progn

@@ -32,6 +32,7 @@
 				    visual-regexp
 				    sml-mode
 				    slime
+				    rg
 				    rustic
 				    rust-mode
 				    racket-mode
@@ -135,7 +136,7 @@
 	  (lambda ()
 	    (progn
 	      (rainbow-delimiters-mode t)
-	      (electric-indent-mode 'f))))
+	      (electric-indent-mode nil))))
 
 (require 'haskell-mode)
 (require 'haskell-interactive-mode)
@@ -203,6 +204,7 @@
 
 (setq coq-prog-name "coqtop")
 (setq coq-unicode-tokens-enable nil)
+(setq company-coq-disabled-features '(prettify-symbols))
 (add-hook 'coq-mode-hook
 	  (lambda ()
 	    (progn

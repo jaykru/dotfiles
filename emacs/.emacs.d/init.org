@@ -323,7 +323,7 @@
       ;; notmuch saved queries
       (setq notmuch-saved-searches
       '(
-        (:name "inbox" :query "date:month.. and not tag:sent" :key "i")
+        (:name "inbox" :query "date:month..today and not tag:sent" :key "i")
 	(:name "work" :query "to:sifive.com and not [JIRA]" :key "w")
         (:name "banking"
 	 :query "(from:Chase or from:PNC or from:\"Discover Card\")"

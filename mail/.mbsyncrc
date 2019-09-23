@@ -1,6 +1,26 @@
 Create Slave
 SyncState *
 
+# jay.kruer@sifive.com
+
+MaildirStore jay.kruer@sifive.com-local
+Subfolders Verbatim
+Path ~/mail/jay.kruer@sifive.com/
+Inbox ~/mail/jay.kruer@sifive.com/INBOX
+
+IMAPStore jay.kruer@sifive.com-remote
+Host imap.gmail.com
+User jay.kruer@sifive.com
+SSLVersions TLSv1.2
+SSLType IMAPS
+PassCmd "pass show sifive/mbsync"
+
+Channel jay.kruer@sifive.com
+Master :jay.kruer@sifive.com-remote:
+Slave :jay.kruer@sifive.com-local:
+Patterns *
+Sync PullNew PullFlags
+
 # josefkruer@gmail.com
 
 MaildirStore josefkruer@gmail.com-local

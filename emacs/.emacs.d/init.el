@@ -65,6 +65,9 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 
+;; ugh
+(electric-indent-mode -1)
+
 ;; highlight delims
 (setq show-paren-delay 0)
 (show-paren-mode 1)
@@ -135,8 +138,7 @@
 (add-hook 'prog-mode-hook
 	  (lambda ()
 	    (progn
-	      (rainbow-delimiters-mode t)
-	      (electric-indent-mode nil))))
+	      (rainbow-delimiters-mode t))))
 
 (require 'haskell-mode)
 (require 'haskell-interactive-mode)

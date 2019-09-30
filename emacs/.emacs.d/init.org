@@ -75,6 +75,9 @@
 #+end_src
 ** General editing
 #+begin_src emacs-lisp :tangle yes
+;; ugh
+(electric-indent-mode -1)
+
 ;; highlight delims
 (setq show-paren-delay 0)
 (show-paren-mode 1)
@@ -169,8 +172,7 @@
 (add-hook 'prog-mode-hook
 	  (lambda ()
 	    (progn
-	      (rainbow-delimiters-mode t)
-	      (electric-indent-mode nil))))
+	      (rainbow-delimiters-mode t))))
 #+end_src
 ** Common Lisp
 #+begin_src emacs-lisp :tangle no

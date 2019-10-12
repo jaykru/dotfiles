@@ -75,6 +75,10 @@ exec udiskie
 input "1:1:AT_Translated_Set_2_keyboard" {
 	xkb_options ctrl:nocaps
 }
+
+input "2:10:TPPS/2_Elan_TrackPoint" {
+	pointer_accel 0.75
+}
 ### Key bindings
 #
 # Basics:

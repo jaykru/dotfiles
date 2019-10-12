@@ -1,4 +1,5 @@
-xrandr --dpi 120
+xmodmap ~/.xmodmap
+#xrandr --dpi 120
 
 #fcitx-autostart
 #export XMODIFIERS="@im=fcitx"
@@ -10,10 +11,14 @@ eval `dbus-launch --auto-syntax`
 #xflux -z 97202 # turn down the lights
 #export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
 xrdb -load $HOME/.Xresources
+xsetroot -cursor_name left_ptr
+
+feh --bg-scale pics/wall.jpg
 
 # font stuff
 xset +fp /home/j/.local/share/fonts
 xset fp rehash
 
-sxhkd &
+#sxhkd &
+zoom &
 exec i3

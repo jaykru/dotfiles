@@ -32,7 +32,6 @@ font pango:Iosevka 10
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-#output * bg /home/j/frog.jpg fill
 #
 # Example configuration:
 #

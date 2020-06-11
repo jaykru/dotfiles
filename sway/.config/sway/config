@@ -4,6 +4,8 @@
 #
 # Read `man 5 sway` for a complete reference.
 
+default_border pixel
+# hide_edge_borders both
 
 ### Gaps
 gaps outer 5
@@ -76,9 +78,9 @@ input "1:1:AT_Translated_Set_2_keyboard" {
 	xkb_options ctrl:nocaps
 }
 
-input "2:10:TPPS/2_Elan_TrackPoint" {
-	pointer_accel 0.75
-}
+#input "2:10:TPPS/2_Elan_TrackPoint" {
+#	pointer_accel 0.75
+#}
 ### Key bindings
 #
 # Basics:

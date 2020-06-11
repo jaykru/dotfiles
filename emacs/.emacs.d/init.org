@@ -25,7 +25,6 @@
 				      paredit
 				      org-bullets
 				      org-alert
-				      notmuch
 				      nix-mode
 				      markdown-mode
 				      magit
@@ -283,14 +282,13 @@
 #+end_src
 ** Coq
 #+begin_src emacs-lisp :tangle yes
-(setq coq-prog-name "coqtop")
-(setq coq-unicode-tokens-enable nil)
-(setq company-coq-disabled-features '(prettify-symbols))
-(add-hook 'coq-mode-hook
-	  (lambda ()
-	    (progn
-	    (company-coq-mode t)
-	    (rainbow-delimiters-mode t))))
+  (setq coq-prog-name "coqtop")
+  ;; (setq company-coq-disabled-features '(prettify-symbols))
+  (add-hook 'coq-mode-hook
+	    (lambda ()
+	      (progn
+	      (company-coq-mode t)
+	      (rainbow-delimiters-mode t))))
 #+end_src
 ** Agda
 #+begin_src emacs-lisp :tangle no
@@ -308,13 +306,14 @@
 * Emacs as an OS
 ** Mail
     #+begin_src emacs-lisp :tangle yes
+    (require 'notmuch)
       ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
       (setq send-mail-function 'sendmail-send-it
             sendmail-program "msmtp"
 	    mail-specify-envelope-from t
 	    message-sendmail-envelope-from 'header
 	    mail-envelope-from 'header
-	    mail-host-address "kamisama")
+	    mail-host-address "onisama")
 
       ;; company address completion
       (add-hook 'notmuch-mode-hook
@@ -325,8 +324,7 @@
       ;; notmuch saved queries
       (setq notmuch-saved-searches
       '(
-        (:name "inbox" :query "date:month..today and not tag:sent" :key "i")
-	(:name "work" :query "to:sifive.com and not [JIRA]" :key "w")
+        (:name "inbox" :query "date:month..today and not tag:sent and tag:inbox and not tag:spam and not tag:bogospam" :key "i")
         (:name "banking"
 	 :query "(from:Chase or from:PNC or from:\"Discover Card\")"
 	 :key "b")
@@ -336,7 +334,77 @@
         (:name "drafts" :query "tag:draft" :key "d")
         (:name "all mail" :query "*" :key "a")
        ))
+
+(define-key notmuch-search-mode-map "u"
+			(lambda ()
+			  "mark read"
+			  (interactive)
+			  (notmuch-search-tag (list "-new" "+inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-search-mode-map "a"
+			(lambda ()
+			  "archive message"
+			  (interactive)
+			  (notmuch-search-tag (list "+ham" "-spam" "-inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-show-mode-map "a"
+			(lambda ()
+			  "archive message"
+			  (interactive)
+			  (notmuch-show-tag (list "+ham" "-spam" "-inbox"))
+			  (unless (notmuch-show-next-open-message)
+				(notmuch-show-next-thread t))))
+(define-key notmuch-show-mode-map "A"
+			(lambda ()
+			  "archive thread"
+			  (interactive)
+			  (notmuch-show-tag-all (list "+ham" "-spam" "-inbox"))
+			  (notmuch-show-next-thread t)))
+
+(define-key notmuch-search-mode-map "s"
+			(lambda ()
+			  "mark message as spam"
+			  (interactive)
+			  (notmuch-search-tag (list "-ham" "+spam" "-inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-show-mode-map "s"
+			(lambda ()
+			  "mark message as spam"
+			  (interactive)
+			  (notmuch-show-tag (list "-ham" "+spam" "-inbox"))
+			  (unless (notmuch-show-next-open-message)
+				(notmuch-show-next-thread t))))
+(define-key notmuch-show-mode-map "S"
+			(lambda ()
+			  "mark thread as spam"
+			  (interactive)
+			  (notmuch-show-tag-all (list "-ham" "+spam" "-inbox"))
+			  (notmuch-show-next-thread t)))
+
+(define-key notmuch-search-mode-map "k"
+			(lambda ()
+			  "mute thread"
+			  (interactive)
+			  (notmuch-search-tag (list "+muted-directly" "+muted" "+ham" "-spam" "-inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-show-mode-map "k"
+			(lambda ()
+			  "mute thread"
+			  (interactive)
+			  (notmuch-show-tag (list "+muted-directly"))
+			  (notmuch-show-tag-all (list "+muted" "+ham" "-spam" "-inbox"))
+			  (notmuch-show-next-thread t)))
+(define-key notmuch-show-mode-map "o"
+			(lambda () "open url" (interactive) (browse-url-at-point)))
     #+end_src
+
+    #+RESULTS:
+    | lambda | nil | open url | (interactive) | (browse-url-at-point) |
+
 #+end_src
 ** Twitter
 #+begin_src emacs-lisp :tangle no

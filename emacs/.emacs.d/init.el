@@ -19,7 +19,6 @@
 				    paredit
 				    org-bullets
 				    org-alert
-				    notmuch
 				    nix-mode
 				    markdown-mode
 				    magit
@@ -205,42 +204,107 @@
 (setq preview-scale-function 2.0)
 
 (setq coq-prog-name "coqtop")
-(setq coq-unicode-tokens-enable nil)
-(setq company-coq-disabled-features '(prettify-symbols))
+;; (setq company-coq-disabled-features '(prettify-symbols))
 (add-hook 'coq-mode-hook
 	  (lambda ()
 	    (progn
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
 
-;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
-(setq send-mail-function 'sendmail-send-it
-      sendmail-program "msmtp"
-      mail-specify-envelope-from t
-      message-sendmail-envelope-from 'header
-      mail-envelope-from 'header
-      mail-host-address "kamisama")
+(require 'notmuch)
+      ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
+      (setq send-mail-function 'sendmail-send-it
+            sendmail-program "msmtp"
+	    mail-specify-envelope-from t
+	    message-sendmail-envelope-from 'header
+	    mail-envelope-from 'header
+	    mail-host-address "onisama")
 
-;; company address completion
-(add-hook 'notmuch-mode-hook
-   (lambda ()
-      (progn
-	(company-mode t))))
+      ;; company address completion
+      (add-hook 'notmuch-mode-hook
+         (lambda ()
+	    (progn
+	      (company-mode t))))
 
-;; notmuch saved queries
-(setq notmuch-saved-searches
-'(
-  (:name "inbox" :query "date:month..today and not tag:sent" :key "i")
-  (:name "work" :query "to:sifive.com and not [JIRA]" :key "w")
-  (:name "banking"
-   :query "(from:Chase or from:PNC or from:\"Discover Card\")"
-   :key "b")
-  (:name "unread" :query "tag:unread" :key "u")
-  (:name "flagged" :query "tag:flagged" :key "f")
-  (:name "sent" :query "tag:sent" :key "t")
-  (:name "drafts" :query "tag:draft" :key "d")
-  (:name "all mail" :query "*" :key "a")
- ))
+      ;; notmuch saved queries
+      (setq notmuch-saved-searches
+      '(
+        (:name "inbox" :query "date:month..today and not tag:sent and tag:inbox and not tag:spam and not tag:bogospam" :key "i")
+        (:name "banking"
+	 :query "(from:Chase or from:PNC or from:\"Discover Card\")"
+	 :key "b")
+        (:name "unread" :query "tag:unread" :key "u")
+        (:name "flagged" :query "tag:flagged" :key "f")
+        (:name "sent" :query "tag:sent" :key "t")
+        (:name "drafts" :query "tag:draft" :key "d")
+        (:name "all mail" :query "*" :key "a")
+       ))
+
+(define-key notmuch-search-mode-map "u"
+			(lambda ()
+			  "mark read"
+			  (interactive)
+			  (notmuch-search-tag (list "-new" "+inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-search-mode-map "a"
+			(lambda ()
+			  "archive message"
+			  (interactive)
+			  (notmuch-search-tag (list "+ham" "-spam" "-inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-show-mode-map "a"
+			(lambda ()
+			  "archive message"
+			  (interactive)
+			  (notmuch-show-tag (list "+ham" "-spam" "-inbox"))
+			  (unless (notmuch-show-next-open-message)
+				(notmuch-show-next-thread t))))
+(define-key notmuch-show-mode-map "A"
+			(lambda ()
+			  "archive thread"
+			  (interactive)
+			  (notmuch-show-tag-all (list "+ham" "-spam" "-inbox"))
+			  (notmuch-show-next-thread t)))
+
+(define-key notmuch-search-mode-map "s"
+			(lambda ()
+			  "mark message as spam"
+			  (interactive)
+			  (notmuch-search-tag (list "-ham" "+spam" "-inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-show-mode-map "s"
+			(lambda ()
+			  "mark message as spam"
+			  (interactive)
+			  (notmuch-show-tag (list "-ham" "+spam" "-inbox"))
+			  (unless (notmuch-show-next-open-message)
+				(notmuch-show-next-thread t))))
+(define-key notmuch-show-mode-map "S"
+			(lambda ()
+			  "mark thread as spam"
+			  (interactive)
+			  (notmuch-show-tag-all (list "-ham" "+spam" "-inbox"))
+			  (notmuch-show-next-thread t)))
+
+(define-key notmuch-search-mode-map "k"
+			(lambda ()
+			  "mute thread"
+			  (interactive)
+			  (notmuch-search-tag (list "+muted-directly" "+muted" "+ham" "-spam" "-inbox"))
+			  (when (notmuch-search-get-result)
+				(goto-char (notmuch-search-result-end)))))
+(define-key notmuch-show-mode-map "k"
+			(lambda ()
+			  "mute thread"
+			  (interactive)
+			  (notmuch-show-tag (list "+muted-directly"))
+			  (notmuch-show-tag-all (list "+muted" "+ham" "-spam" "-inbox"))
+			  (notmuch-show-next-thread t)))
+(define-key notmuch-show-mode-map "o"
+			(lambda () "open url" (interactive) (browse-url-at-point)))
 
 (setq multi-term-program "/run/current-system/sw/bin/bash")
 
@@ -250,3 +314,18 @@
 				     "brave"))
 
 (display-battery-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("dbade2e946597b9cda3e61978b5fcc14fa3afa2d3c4391d477bdaeff8f5638c5" default))
+ '(package-selected-packages
+   '(web-beautify highlight-indent-guides cargo racer magit-topgit unicode-fonts undo-tree tuareg tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert nix-mode markdown-mode magit ivy-pass haskell-mode edit-indirect company-coq magit-todos geiser visual-regexp sml-mode slime rg rustic rust-mode racket-mode quelpa-use-package quasi-monochrome-theme org-pomodoro moe-theme matrix-client magit-popup latex-preview-pane ivy go-mode forge flycheck expand-region exec-path-from-shell eglot color-theme-sanityinc-tomorrow autotetris-mode auto-complete)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

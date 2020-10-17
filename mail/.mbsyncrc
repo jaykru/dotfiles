@@ -2,7 +2,6 @@ Create Slave
 SyncState *
 
 # josefkruer@gmail.com
-
 MaildirStore josefkruer@gmail.com-local
 Subfolders Verbatim
 Path ~/mail/josefkruer@gmail.com/

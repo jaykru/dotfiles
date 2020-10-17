@@ -12,7 +12,7 @@ xmodmap ~/.xmodmap
 ibus-daemon -x -d
 
 # launch dbus
-eval `dbus-launch --auto-syntax`
+export $(dbus-launch)
 #xflux -z 97202 # turn down the lights
 #export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
 xrdb -load $HOME/.Xresources
@@ -24,4 +24,6 @@ xset +fp /home/j/.local/share/fonts
 xset fp rehash
 
 #sxhkd &
-exec i3
+export DESKTOP=plasma
+exec startplasma-x11
+termite -e 'bash -c /watchall.sh'

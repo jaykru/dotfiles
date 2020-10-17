@@ -3,7 +3,7 @@
   (add-to-list 'load-path "~/.emacs.d/elpa")
   (add-to-list 'load-path "~/.emacs.d/lisp")
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			   ("melpa" . "http://melpa.milkbox.net/packages/")))
+			   ("melpa" . "https://melpa.org/packages/")))
   (setq package-selected-packages '(cargo
 				    racer
 				    magit-topgit
@@ -84,6 +84,11 @@
 ;; column numbers
 (column-number-mode t)
 
+;; semantic editing
+(require 'change-inner)
+(global-set-key (kbd "M-i") 'change-inner)
+(global-set-key (kbd "M-o") 'change-outer)
+
 ;  (unicode-fonts-setup)
 (let ((my-frame-font
       (if (eq system-type 'darwin)
@@ -133,6 +138,10 @@
 (when (eq system-type 'darwin)
     (exec-path-from-shell-initialize)
     (setq mac-command-modifier 'meta))
+
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
+(require 'agda2-mode)
 
 (add-hook 'prog-mode-hook
 	  (lambda ()
@@ -200,8 +209,14 @@
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
 
+(setq org-default-notes-file (concat "~/org" "/notes.org.gpg"))
+
 (setq pdf-latex-command "luatex") ; ad fontes! :)
 (setq preview-scale-function 2.0)
+(add-hook 'latex-mode-hook
+	    (lambda ()
+	      (progn
+	      (prettify-symbols-mode t))))
 
 (setq coq-prog-name "coqtop")
 ;; (setq company-coq-disabled-features '(prettify-symbols))
@@ -210,6 +225,8 @@
 	    (progn
 	    (company-coq-mode t)
 	    (rainbow-delimiters-mode t))))
+
+(elpy-enable) ; mostly for running unit tests the lazy way
 
 (require 'notmuch)
       ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
@@ -238,6 +255,9 @@
         (:name "sent" :query "tag:sent" :key "t")
         (:name "drafts" :query "tag:draft" :key "d")
         (:name "all mail" :query "*" :key "a")
+	(:name "lists"
+	 :query "(from:coq-club@inria.fr)" ; TODO: use autotagging to do this?
+	 :key "l")
        ))
 
 (define-key notmuch-search-mode-map "u"
@@ -314,18 +334,3 @@
 				     "brave"))
 
 (display-battery-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("dbade2e946597b9cda3e61978b5fcc14fa3afa2d3c4391d477bdaeff8f5638c5" default))
- '(package-selected-packages
-   '(web-beautify highlight-indent-guides cargo racer magit-topgit unicode-fonts undo-tree tuareg tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert nix-mode markdown-mode magit ivy-pass haskell-mode edit-indirect company-coq magit-todos geiser visual-regexp sml-mode slime rg rustic rust-mode racket-mode quelpa-use-package quasi-monochrome-theme org-pomodoro moe-theme matrix-client magit-popup latex-preview-pane ivy go-mode forge flycheck expand-region exec-path-from-shell eglot color-theme-sanityinc-tomorrow autotetris-mode auto-complete)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

@@ -4,54 +4,7 @@
   (add-to-list 'load-path "~/.emacs.d/lisp")
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			   ("melpa" . "https://melpa.org/packages/")))
-  (setq package-selected-packages '(cargo
-				    racer
-				    magit-topgit
-				    unicode-fonts
-				    undo-tree
-				    tuareg
-				    tao-theme
-				    scala-mode
-				    rainbow-delimiters
-				    proof-general
-				    plan9-theme
-				    pinentry
-				    paredit
-				    org-bullets
-				    org-alert
-				    nix-mode
-				    markdown-mode
-				    magit
-				    ivy-pass
-				    haskell-mode
-				    edit-indirect
-				    company-coq
-				    magit-todos
-				    geiser
-				    visual-regexp
-				    sml-mode
-				    slime
-				    rg
-				    rustic
-				    rust-mode
-				    racket-mode
-				    quelpa-use-package
-				    quasi-monochrome-theme
-				    org-pomodoro
-				    moe-theme
-				    matrix-client
-				    magit-popup
-				    latex-preview-pane
-				    ivy
-				    go-mode
-				    forge
-				    flycheck
-				    expand-region
-				    exec-path-from-shell
-				    eglot
-				    color-theme-sanityinc-tomorrow
-				    autotetris-mode
-				    auto-complete))
+  (setq package-selected-packages '(cargo change-inner racer magit-topgit unicode-fonts undo-tree tuareg tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert nix-mode markdown-mode magit ivy-pass haskell-mode edit-indirect company-coq magit-todos geiser visual-regexp sml-mode slime rg rustic rust-mode racket-mode quelpa-use-package quasi-monochrome-theme org-pomodoro moe-theme matrix-client magit-popup latex-preview-pane ivy go-mode forge flycheck expand-region exec-path-from-shell eglot color-theme-sanityinc-tomorrow autotetris-mode auto-complete))
   (package-initialize)
   (package-install-selected-packages)
 
@@ -138,10 +91,6 @@
 (when (eq system-type 'darwin)
     (exec-path-from-shell-initialize)
     (setq mac-command-modifier 'meta))
-
-(load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
-(require 'agda2-mode)
 
 (add-hook 'prog-mode-hook
 	  (lambda ()

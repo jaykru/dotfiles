@@ -4,54 +4,7 @@
   (add-to-list 'load-path "~/.emacs.d/lisp")
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			   ("melpa" . "https://melpa.org/packages/")))
-  (setq package-selected-packages '(cargo
-				    racer
-				    magit-topgit
-				    unicode-fonts
-				    undo-tree
-				    tuareg
-				    tao-theme
-				    scala-mode
-				    rainbow-delimiters
-				    proof-general
-				    plan9-theme
-				    pinentry
-				    paredit
-				    org-bullets
-				    org-alert
-				    nix-mode
-				    markdown-mode
-				    magit
-				    ivy-pass
-				    haskell-mode
-				    edit-indirect
-				    company-coq
-				    magit-todos
-				    geiser
-				    visual-regexp
-				    sml-mode
-				    slime
-				    rg
-				    rustic
-				    rust-mode
-				    racket-mode
-				    quelpa-use-package
-				    quasi-monochrome-theme
-				    org-pomodoro
-				    moe-theme
-				    matrix-client
-				    magit-popup
-				    latex-preview-pane
-				    ivy
-				    go-mode
-				    forge
-				    flycheck
-				    expand-region
-				    exec-path-from-shell
-				    eglot
-				    color-theme-sanityinc-tomorrow
-				    autotetris-mode
-				    auto-complete))
+  (setq package-selected-packages '(cargo racer magit-topgit unicode-fonts undo-tree tuareg tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert nix-mode markdown-mode magit ivy-pass haskell-mode edit-indirect company-coq magit-todos geiser visual-regexp sml-mode slime rg rustic rust-mode racket-mode quelpa-use-package quasi-monochrome-theme org-pomodoro moe-theme matrix-client magit-popup ivy go-mode forge flycheck expand-region exec-path-from-shell eglot color-theme-sanityinc-tomorrow autotetris-mode auto-complete change-inner elpy))
   (package-initialize)
   (package-install-selected-packages)
 
@@ -66,6 +19,7 @@
 
 ;; ugh
 (electric-indent-mode -1)
+(electric-pair-mode 0)
 
 ;; highlight delims
 (setq show-paren-delay 0)
@@ -91,21 +45,25 @@
 
 ;  (unicode-fonts-setup)
 (let ((my-frame-font
-      (if (eq system-type 'darwin)
-            "Menlo"
-	    "Iosevka")))
-     (setq default-frame-alist
-           `((font . ,my-frame-font)
-             (vertical-scroll-bars . nil)
-   	     (horizontal-scroll-bars . nil)
-	     (tool-bar-lines . 0)
-	     (menu-bar-lines . 0))))
+       (if (eq system-type 'darwin)
+	   "Menlo"
+	 "Iosevka")))
+  (setq default-frame-alist
+	`((font . ,my-frame-font)
+	  (vertical-scroll-bars . nil)
+	  (horizontal-scroll-bars . nil)
+	  (tool-bar-lines . 0)
+      	  ; formerly set to 0, which broke full-screen
+	  ; on mitsuharu's emacs 27 build for macos.
+	  ; unsure why it was zero in the first place,
+	  ; so whatever.	      
+	  (menu-bar-lines . 1))))
 
 ;; load theme
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
-(load-theme 'plan9 t)
+(load-theme 'sanityinc-tomorrow-blue t)
 
 ;; tramp for sudo access
 (require 'tramp)
@@ -133,11 +91,18 @@
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
 
+;; no backups
+(setq make-backup-files nil)
+
 ;; this needs to happen early because other part of the config depend
 ;; on PATH being set correctly.
 (when (eq system-type 'darwin)
     (exec-path-from-shell-initialize)
-    (setq mac-command-modifier 'meta))
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'meta)
+    ; fixes a bug(?) in emacs 27
+    (setq default-directory "~/")
+    (setq command-line-default-directory "~/"))
 
 (load-file (let ((coding-system-for-read 'utf-8))
              (shell-command-to-string "agda-mode locate")))
@@ -148,23 +113,55 @@
 	    (progn
 	      (rainbow-delimiters-mode t))))
 
+;; cl mode
+(require 'paredit)
+(add-hook 'lisp-mode-hook
+	  (lambda ()
+	    (progn
+	      (paredit-mode t)
+	      (slime-mode))))
+
+;; SLIME
+(require 'slime)
+(setq slime-contribs '(slime-fancy))
+(add-hook 'slime-repl-mode-hook 
+	  (lambda () (progn
+		       (rainbow-delimiters-mode t)
+		       (paredit-mode t))))
+(setq inferior-lisp-program "sbcl")
+(slime-setup '(slime-fancy))
+
 (require 'haskell-mode)
-(require 'haskell-interactive-mode)
-(require 'haskell-process)
-;; can't use add-hook for some reason, but this works.
-(add-hook 'haskell-mode-hook #'(lambda ()
-                                (progn (interactive-haskell-mode)
-				       (haskell-indentation mode))))
+  (require 'haskell-interactive-mode)
+  (require 'haskell-process)
+  ;; can't use add-hook for some reason, but this works.
+  (add-hook 'haskell-mode-hook #'(lambda ()
+				  (progn (interactive-haskell-mode)
+					 (haskell-indentation mode))))
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; OR for flymake support:
+  (add-hook 'haskell-mode-hook 'flymake-mode)
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+
+  (add-hook 'haskell-mode-hook 'dante-mode)
+  )
 
 (add-hook 'rust-mode-hook #'(lambda ()
-                             (progn 
+			     (progn 
 			      (racer-mode)
-			      (cargo-minor-mode))))
+			      (cargo-minor-mode)
+			      (flycheck-mode))))
 (add-hook 'racer-mode-hook #'(lambda ()
-                              (progn
-			        (eldoc-mode t)
+			      (progn
+				(eldoc-mode t)
 				(company-mode t))))
-;(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+
+;; (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)a
 (setq company-tooltip-align-annotations t)
 
 (add-hook 'emacs-lisp-mode-hook
@@ -196,6 +193,9 @@
         ("WAIT" . (:foreground "orange" :background "#FFF689" :box '(:line-width 1 :style released-button)))
         ("CANCELED" . (:foreground "black" :strike-through t :background "#d8d7da" :box '(:line-width 1 :style released-button)))))
 
+;; encrypted note archives
+(setq org-archive-location "~/org/archive.org.gpg::")
+
 ;; alerts
 (require 'org-alert)
 (require 'alert)
@@ -203,7 +203,7 @@
 (org-alert-enable)
 (setq org-alert-interval 21600)
 
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
 ;; preserve clocks between sessions
 (setq org-clock-persist 'history)
@@ -212,8 +212,7 @@
 (setq org-default-notes-file (concat "~/org" "/notes.org.gpg"))
 
 (setq pdf-latex-command "luatex") ; ad fontes! :)
-(setq preview-scale-function 2.0)
-(add-hook 'latex-mode-hook
+(add-hook 'auctex-mode-hook
 	    (lambda ()
 	      (progn
 	      (prettify-symbols-mode t))))
@@ -227,104 +226,24 @@
 	    (rainbow-delimiters-mode t))))
 
 (elpy-enable) ; mostly for running unit tests the lazy way
+(set-variable 'python-shell-interpreter "python3")
 
-(require 'notmuch)
-      ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
-      (setq send-mail-function 'sendmail-send-it
-            sendmail-program "msmtp"
-	    mail-specify-envelope-from t
-	    message-sendmail-envelope-from 'header
-	    mail-envelope-from 'header
-	    mail-host-address "onisama")
+(let ((opam-share (ignore-errors (car (process-lines "opam" "config" "var" "share")))))
+      (when (and opam-share (file-directory-p opam-share))
+       ;; Register Merlin
+       (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+       (autoload 'merlin-mode "merlin" nil t nil)
+       ;; Automatically start it in OCaml buffers
+       (add-hook 'tuareg-mode-hook 'merlin-mode t)
+       (add-hook 'caml-mode-hook 'merlin-mode t)
+       ;; Use opam switch to lookup ocamlmerlin binary
+       (setq merlin-command 'opam)))
+       
+;; use dune utop
+(setq utop-command "opam config exec -- dune utop . -- -emacs")
 
-      ;; company address completion
-      (add-hook 'notmuch-mode-hook
-         (lambda ()
-	    (progn
-	      (company-mode t))))
-
-      ;; notmuch saved queries
-      (setq notmuch-saved-searches
-      '(
-        (:name "inbox" :query "date:month..today and not tag:sent and tag:inbox and not tag:spam and not tag:bogospam" :key "i")
-        (:name "banking"
-	 :query "(from:Chase or from:PNC or from:\"Discover Card\")"
-	 :key "b")
-        (:name "unread" :query "tag:unread" :key "u")
-        (:name "flagged" :query "tag:flagged" :key "f")
-        (:name "sent" :query "tag:sent" :key "t")
-        (:name "drafts" :query "tag:draft" :key "d")
-        (:name "all mail" :query "*" :key "a")
-	(:name "lists"
-	 :query "(from:coq-club@inria.fr)" ; TODO: use autotagging to do this?
-	 :key "l")
-       ))
-
-(define-key notmuch-search-mode-map "u"
-			(lambda ()
-			  "mark read"
-			  (interactive)
-			  (notmuch-search-tag (list "-new" "+inbox"))
-			  (when (notmuch-search-get-result)
-				(goto-char (notmuch-search-result-end)))))
-(define-key notmuch-search-mode-map "a"
-			(lambda ()
-			  "archive message"
-			  (interactive)
-			  (notmuch-search-tag (list "+ham" "-spam" "-inbox"))
-			  (when (notmuch-search-get-result)
-				(goto-char (notmuch-search-result-end)))))
-(define-key notmuch-show-mode-map "a"
-			(lambda ()
-			  "archive message"
-			  (interactive)
-			  (notmuch-show-tag (list "+ham" "-spam" "-inbox"))
-			  (unless (notmuch-show-next-open-message)
-				(notmuch-show-next-thread t))))
-(define-key notmuch-show-mode-map "A"
-			(lambda ()
-			  "archive thread"
-			  (interactive)
-			  (notmuch-show-tag-all (list "+ham" "-spam" "-inbox"))
-			  (notmuch-show-next-thread t)))
-
-(define-key notmuch-search-mode-map "s"
-			(lambda ()
-			  "mark message as spam"
-			  (interactive)
-			  (notmuch-search-tag (list "-ham" "+spam" "-inbox"))
-			  (when (notmuch-search-get-result)
-				(goto-char (notmuch-search-result-end)))))
-(define-key notmuch-show-mode-map "s"
-			(lambda ()
-			  "mark message as spam"
-			  (interactive)
-			  (notmuch-show-tag (list "-ham" "+spam" "-inbox"))
-			  (unless (notmuch-show-next-open-message)
-				(notmuch-show-next-thread t))))
-(define-key notmuch-show-mode-map "S"
-			(lambda ()
-			  "mark thread as spam"
-			  (interactive)
-			  (notmuch-show-tag-all (list "-ham" "+spam" "-inbox"))
-			  (notmuch-show-next-thread t)))
-
-(define-key notmuch-search-mode-map "k"
-			(lambda ()
-			  "mute thread"
-			  (interactive)
-			  (notmuch-search-tag (list "+muted-directly" "+muted" "+ham" "-spam" "-inbox"))
-			  (when (notmuch-search-get-result)
-				(goto-char (notmuch-search-result-end)))))
-(define-key notmuch-show-mode-map "k"
-			(lambda ()
-			  "mute thread"
-			  (interactive)
-			  (notmuch-show-tag (list "+muted-directly"))
-			  (notmuch-show-tag-all (list "+muted" "+ham" "-spam" "-inbox"))
-			  (notmuch-show-next-thread t)))
-(define-key notmuch-show-mode-map "o"
-			(lambda () "open url" (interactive) (browse-url-at-point)))
+(autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
+(add-hook 'tuareg-mode-hook 'utop-minor-mode)
 
 (setq multi-term-program "/run/current-system/sw/bin/bash")
 
@@ -334,3 +253,6 @@
 				     "brave"))
 
 (display-battery-mode)
+
+(require 'org-drill)
+(defun org-drill-entry-empty-p () nil)

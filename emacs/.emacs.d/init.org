@@ -10,7 +10,7 @@
     (add-to-list 'load-path "~/.emacs.d/lisp")
     (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			     ("melpa" . "https://melpa.org/packages/")))
-    (setq package-selected-packages '(cargo racer magit-topgit unicode-fonts undo-tree tuareg tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert nix-mode markdown-mode magit ivy-pass haskell-mode edit-indirect company-coq magit-todos geiser visual-regexp sml-mode slime rg rustic rust-mode racket-mode quelpa-use-package quasi-monochrome-theme org-pomodoro moe-theme matrix-client magit-popup latex-preview-pane ivy go-mode forge flycheck expand-region exec-path-from-shell eglot color-theme-sanityinc-tomorrow autotetris-mode auto-complete))
+    (setq package-selected-packages '(cargo racer magit-topgit unicode-fonts undo-tree tuareg tao-theme scala-mode rainbow-delimiters proof-general plan9-theme pinentry paredit org-bullets org-alert nix-mode markdown-mode magit ivy-pass haskell-mode edit-indirect company-coq magit-todos geiser visual-regexp sml-mode slime rg rustic rust-mode racket-mode quelpa-use-package quasi-monochrome-theme org-pomodoro moe-theme matrix-client magit-popup ivy go-mode forge flycheck expand-region exec-path-from-shell eglot color-theme-sanityinc-tomorrow autotetris-mode auto-complete change-inner elpy))
     (package-initialize)
     (package-install-selected-packages)
 #+end_src
@@ -29,6 +29,7 @@
 #+begin_src emacs-lisp :tangle yes
 ;; ugh
 (electric-indent-mode -1)
+(electric-pair-mode 0)
 
 ;; highlight delims
 (setq show-paren-delay 0)
@@ -55,17 +56,21 @@
 #+end_src
 ** GUI
 #+begin_src emacs-lisp :tangle yes
-;  (unicode-fonts-setup)
-(let ((my-frame-font
-      (if (eq system-type 'darwin)
-            "Menlo"
-	    "Iosevka")))
-     (setq default-frame-alist
-           `((font . ,my-frame-font)
-             (vertical-scroll-bars . nil)
-   	     (horizontal-scroll-bars . nil)
-	     (tool-bar-lines . 0)
-	     (menu-bar-lines . 0))))
+  ;  (unicode-fonts-setup)
+  (let ((my-frame-font
+	 (if (eq system-type 'darwin)
+	     "Menlo"
+	   "Iosevka")))
+    (setq default-frame-alist
+	  `((font . ,my-frame-font)
+	    (vertical-scroll-bars . nil)
+	    (horizontal-scroll-bars . nil)
+	    (tool-bar-lines . 0)
+      	    ; formerly set to 0, which broke full-screen
+	    ; on mitsuharu's emacs 27 build for macos.
+	    ; unsure why it was zero in the first place,
+	    ; so whatever.	      
+	    (menu-bar-lines . 1))))
 #+end_src
 ** Theme
 #+begin_src emacs-lisp :tangle yes
@@ -73,7 +78,7 @@
 (setq tao-theme-use-sepia t)
 (setq tao-theme-sepia-depth 3)
 (setq tao-theme-sepia-saturation 1.10)
-(load-theme 'plan9 t)
+(load-theme 'sanityinc-tomorrow-blue t)
 #+end_src
 ** SSH
 #+begin_src emacs-lisp :tangle yes
@@ -106,16 +111,22 @@
 #+begin_src emacs-lisp :tangle yes
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
+
+;; no backups
+(setq make-backup-files nil)
 #+end_src
 * OS specific stuff
 ** macOS things
-*** Command as meta
 #+begin_src emacs-lisp :tangle yes
   ;; this needs to happen early because other part of the config depend
   ;; on PATH being set correctly.
   (when (eq system-type 'darwin)
       (exec-path-from-shell-initialize)
-      (setq mac-command-modifier 'meta))
+      (setq mac-command-modifier 'meta)
+      (setq mac-option-modifier 'meta)
+      ; fixes a bug(?) in emacs 27
+      (setq default-directory "~/")
+      (setq command-line-default-directory "~/"))
 #+end_src
 * Editing modes
 ** Agda
@@ -132,7 +143,7 @@
 	      (rainbow-delimiters-mode t))))
 #+end_src
 ** Common Lisp
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 ;; cl mode
 (require 'paredit)
 (add-hook 'lisp-mode-hook
@@ -153,26 +164,40 @@
 #+end_src
 ** Haskell
 #+begin_src emacs-lisp :tangle yes
-   (require 'haskell-mode)
-   (require 'haskell-interactive-mode)
-   (require 'haskell-process)
-   ;; can't use add-hook for some reason, but this works.
-   (add-hook 'haskell-mode-hook #'(lambda ()
-                                   (progn (interactive-haskell-mode)
-				          (haskell-indentation mode))))
+  (require 'haskell-mode)
+  (require 'haskell-interactive-mode)
+  (require 'haskell-process)
+  ;; can't use add-hook for some reason, but this works.
+  (add-hook 'haskell-mode-hook #'(lambda ()
+				  (progn (interactive-haskell-mode)
+					 (haskell-indentation mode))))
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; OR for flymake support:
+  (add-hook 'haskell-mode-hook 'flymake-mode)
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+
+  (add-hook 'haskell-mode-hook 'dante-mode)
+  )
 #+end_src
 ** Rust
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'rust-mode-hook #'(lambda ()
-                             (progn 
-			      (racer-mode)
-			      (cargo-minor-mode))))
-(add-hook 'racer-mode-hook #'(lambda ()
-                              (progn
-			        (eldoc-mode t)
-				(company-mode t))))
-;(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-(setq company-tooltip-align-annotations t)
+  (add-hook 'rust-mode-hook #'(lambda ()
+			       (progn 
+				(racer-mode)
+				(cargo-minor-mode)
+				(flycheck-mode))))
+  (add-hook 'racer-mode-hook #'(lambda ()
+				(progn
+				  (eldoc-mode t)
+				  (company-mode t))))
+				
+  ;; (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)a
+  (setq company-tooltip-align-annotations t)
 #+end_src
 ** Emacs Lisp
 #+begin_src emacs-lisp :tangle yes
@@ -183,7 +208,7 @@
 ** Go
 #+begin_src emacs-lisp :tangle no
 (require 'go-autocomplete)
-(setenv "GOPATH" "/home/jaykru/go")
+(setenv "GOPATH" "/Users/j/go")
 (add-hook 'go-mode-hook
 	  (lambda ()
 	    (progn
@@ -220,6 +245,9 @@
         ("WAIT" . (:foreground "orange" :background "#FFF689" :box '(:line-width 1 :style released-button)))
         ("CANCELED" . (:foreground "black" :strike-through t :background "#d8d7da" :box '(:line-width 1 :style released-button)))))
 
+;; encrypted note archives
+(setq org-archive-location "~/org/archive.org.gpg::")
+
 ;; alerts
 (require 'org-alert)
 (require 'alert)
@@ -227,7 +255,7 @@
 (org-alert-enable)
 (setq org-alert-interval 21600)
 
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
 ;; preserve clocks between sessions
 (setq org-clock-persist 'history)
@@ -238,8 +266,7 @@
 ** TeX
 #+begin_src emacs-lisp :tangle yes
 (setq pdf-latex-command "luatex") ; ad fontes! :)
-(setq preview-scale-function 2.0)
-(add-hook 'latex-mode-hook
+(add-hook 'auctex-mode-hook
 	    (lambda ()
 	      (progn
 	      (prettify-symbols-mode t))))
@@ -269,11 +296,31 @@
 ** Python
 #+begin_src emacs-lisp :tangle yes
 (elpy-enable) ; mostly for running unit tests the lazy way
+(set-variable 'python-shell-interpreter "python3")
+#+end_src
+** OCaml
+#+begin_src emacs-lisp :tangle yes
+(let ((opam-share (ignore-errors (car (process-lines "opam" "config" "var" "share")))))
+      (when (and opam-share (file-directory-p opam-share))
+       ;; Register Merlin
+       (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+       (autoload 'merlin-mode "merlin" nil t nil)
+       ;; Automatically start it in OCaml buffers
+       (add-hook 'tuareg-mode-hook 'merlin-mode t)
+       (add-hook 'caml-mode-hook 'merlin-mode t)
+       ;; Use opam switch to lookup ocamlmerlin binary
+       (setq merlin-command 'opam)))
+       
+;; use dune utop
+(setq utop-command "opam config exec -- dune utop . -- -emacs")
+
+(autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
+(add-hook 'tuareg-mode-hook 'utop-minor-mode)
 #+end_src
 
 * Emacs as an OS
 ** Mail
-    #+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle no
     (require 'notmuch)
       ;; (setq sendmail-program (concat (getenv "HOME") "/bin/msmtpq"))
       (setq send-mail-function 'sendmail-send-it
@@ -403,7 +450,11 @@
    :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
    :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
 #+end_src
-
+** As a flashcard program
+   #+begin_src emacs-lisp :tangle yes
+   (require 'org-drill)
+   (defun org-drill-entry-empty-p () nil)
+   #+end_src
 * Autotangle
 # Local variables
 # eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)

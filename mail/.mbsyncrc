@@ -1,4 +1,4 @@
-Create Slave
+Create Near
 SyncState *
 
 # josefkruer@gmail.com
@@ -15,8 +15,8 @@ SSLType IMAPS
 PassCmd "pass show google-app"
 
 Channel josefkruer@gmail.com
-Master :josefkruer@gmail.com-remote:
-Slave :josefkruer@gmail.com-local:
+Far :josefkruer@gmail.com-remote:
+Near :josefkruer@gmail.com-local:
 Patterns *
 Sync PullNew PullFlags
 
@@ -34,8 +34,8 @@ SSLType IMAPS
 PassCmd "pass show reed-app"
 
 Channel kruerj@reed.edu
-Master :kruerj@reed.edu-remote:
-Slave :kruerj@reed.edu-local:
+Far :kruerj@reed.edu-remote:
+Near :kruerj@reed.edu-local:
 Patterns *
 Sync PullNew PullFlags
 
@@ -54,8 +54,8 @@ SSLType STARTTLS
 PassCmd "pass show posteo"
 
 Channel jaykruer@posteo.de
-Master :jaykruer@posteo.de-remote:
-Slave :jaykruer@posteo.de-local:
+Far :jaykruer@posteo.de-remote:
+Near :jaykruer@posteo.de-local:
 Patterns *
 Sync PullNew PullFlags
 
@@ -75,7 +75,7 @@ SSLType IMAPS
 PassCmd "pass show mailbox"
 
 Channel j@dank.systems
-Master :j@dank.systems-remote:
-Slave :j@dank.systems-local:
+Far :j@dank.systems-remote:
+Near :j@dank.systems-local:
 Patterns *
 Sync PullNew PullFlags

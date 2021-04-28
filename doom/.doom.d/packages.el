@@ -49,3 +49,6 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 (package! org-edit-latex)
+(package! org-noter)
+(package! org-roam)
+(package! org-pomodoro)

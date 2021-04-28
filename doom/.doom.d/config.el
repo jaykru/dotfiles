@@ -52,3 +52,9 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+(require 'agda-input)
+(add-hook 'evil-insert-state-entry-hook (lambda ()
+                                          (set-input-method "Agda")))
+(add-hook 'evil-insert-state-exit-hook (lambda ()
+                                          (set-input-method nil)))
+(setq enable-local-variables t)

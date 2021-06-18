@@ -1,0 +1,128 @@
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cd ..
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cd reed/parandcon/
+ls
+cd project/
+ls
+cargo repl
+cabal repl
+cd ..
+cargo run
+cabal run
+cd ..
+cabal run
+cabal run
+cabal run
+cabal run
+cabal build
+cabal run
+cabal run
+cd ..
+cabal run
+cd ..
+cargo build
+cabal build
+cabal build
+cabal build
+cabal build
+cabal build
+cabal build
+cabal build
+cabal build
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+brew install qmk
+brew cask install qmk
+brew install --cask qmk
+brew install qmk/qmk/qmk
+qmk json2c preonic_rev3_layout_ortho_5x12_mine\(1\).json
+qmk setup
+qmk setup
+qmk json2c preonic_rev3_layout_ortho_5x12_mine\(1\).json
+qmk json2c preonic_rev3_layout_ortho_5x12_mine\(1\).json > keymap.c
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compileMaking preonic/rev3 with keymap jaykru
+hello world!!!!
+hello world!!!!
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+ls
+cd ~/reed/parandcon/project/
+ls
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+cabal run
+ls
+stow emacs
+cd emacs/
+ls
+ls -la
+cd .emacs.d/
+ls
+exit
+echo "hello zoomer"

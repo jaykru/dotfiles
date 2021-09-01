@@ -53,8 +53,13 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 (require 'agda-input)
-(add-hook 'evil-insert-state-entry-hook (lambda ()
-                                          (set-input-method "Agda")))
-(add-hook 'evil-insert-state-exit-hook (lambda ()
-                                          (set-input-method nil)))
+;; (add-hook 'evil-insert-state-entry-hook (lambda ()
+;;                                           (set-input-method "Agda")))
+;; (add-hook 'evil-insert-state-exit-hook (lambda ()
+;;                                           (set-input-method nil)))
 (setq enable-local-variables t)
+
+(add-hook 'LaTeX-mode-hook #'outline-minor-mode)
+
+(global-unset-key "\C-o")
+(setq outline-minor-mode-prefix "\C-o")

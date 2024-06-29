@@ -8,6 +8,7 @@ Path ~/mail/josefkruer@gmail.com/
 Inbox ~/mail/josefkruer@gmail.com/INBOX
 
 IMAPStore josefkruer@gmail.com-remote
+AuthMechs LOGIN
 Host imap.gmail.com
 User josefkruer@gmail.com
 SSLVersions TLSv1.2
@@ -20,44 +21,25 @@ Near :josefkruer@gmail.com-local:
 Patterns *
 Sync PullNew PullFlags
 
-# reed
-MaildirStore kruerj@reed.edu-local
-Subfolders Verbatim
-Path ~/mail/kruerj@reed.edu/
-Inbox ~/mail/kruerj@reed.edu/INBOX
+# # posteo
+# MaildirStore jaykruer@posteo.de-local
+# Subfolders Verbatim
+# Path ~/mail/jaykruer@posteo.de/
+# Inbox ~/mail/jaykruer@posteo.de/INBOX
 
-IMAPStore kruerj@reed.edu-remote
-Host imap.gmail.com
-User kruerj@reed.edu
-SSLVersions TLSv1.2
-SSLType IMAPS
-PassCmd "pass show reed-app"
+# IMAPStore jaykruer@posteo.de-remote
+# Host posteo.de
+# User jaykruer@posteo.net
+# Port 143
+# SSLVersions TLSv1.2
+# SSLType STARTTLS
+# PassCmd "pass show posteo"
 
-Channel kruerj@reed.edu
-Far :kruerj@reed.edu-remote:
-Near :kruerj@reed.edu-local:
-Patterns *
-Sync PullNew PullFlags
-
-# posteo
-MaildirStore jaykruer@posteo.de-local
-Subfolders Verbatim
-Path ~/mail/jaykruer@posteo.de/
-Inbox ~/mail/jaykruer@posteo.de/INBOX
-
-IMAPStore jaykruer@posteo.de-remote
-Host posteo.de
-User jaykruer@posteo.net
-Port 143
-SSLVersions TLSv1.2
-SSLType STARTTLS
-PassCmd "pass show posteo"
-
-Channel jaykruer@posteo.de
-Far :jaykruer@posteo.de-remote:
-Near :jaykruer@posteo.de-local:
-Patterns *
-Sync PullNew PullFlags
+# Channel jaykruer@posteo.de
+# Far :jaykruer@posteo.de-remote:
+# Near :jaykruer@posteo.de-local:
+# Patterns *
+# Sync PullNew PullFlags
 
 # dank.systems
 MaildirStore j@dank.systems-local
@@ -66,13 +48,13 @@ Path ~/mail/j@dank.systems/
 Inbox ~/mail/j@dank.systems/INBOX
 
 IMAPStore j@dank.systems-remote
-Host imap.mailbox.org
+Host imap.migadu.com
 User j@dank.systems
 Port 993
 SSLVersions TLSv1.2
 SSLType IMAPS
 #CertificateFile /etc/ssl/certs/ca-certificates.crt
-PassCmd "pass show mailbox"
+PassCmd "pass show migadu"
 
 Channel j@dank.systems
 Far :j@dank.systems-remote:

@@ -1,0 +1,183 @@
+[1706425660] Log start
+[1706425660] Cmd: /Users/j/wizardcoder-34b.llamafile -m wizardcoder-python-34b-v1.0.Q3_K_M.gguf -c 0 --prompt-cache-all --silent-prompt --temp 0 -c 1024 -ngl 35 -r ``` -r 
+} -f /Users/j/test.c.prompt
+[1706425660] main: seed  = 1706425660
+[1706425660] main: llama backend init
+[1706425660] main: load the model and apply lora adapter, if any
+[1706425660] llama_model_loader: loaded meta data with 20 key-value pairs and 435 tensors from wizardcoder-python-34b-v1.0.Q3_K_M.gguf (version GGUF V2)
+[1706425660] llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+[1706425660] llama_model_loader: - kv   0:                       general.architecture str              = llama
+[1706425660] llama_model_loader: - kv   1:                               general.name str              = wizardlm_wizardcoder-python-34b-v1.0
+[1706425660] llama_model_loader: - kv   2:                       llama.context_length u32              = 16384
+[1706425660] llama_model_loader: - kv   3:                     llama.embedding_length u32              = 8192
+[1706425660] llama_model_loader: - kv   4:                          llama.block_count u32              = 48
+[1706425660] llama_model_loader: - kv   5:                  llama.feed_forward_length u32              = 22016
+[1706425660] llama_model_loader: - kv   6:                 llama.rope.dimension_count u32              = 128
+[1706425660] llama_model_loader: - kv   7:                 llama.attention.head_count u32              = 64
+[1706425660] llama_model_loader: - kv   8:              llama.attention.head_count_kv u32              = 8
+[1706425660] llama_model_loader: - kv   9:     llama.attention.layer_norm_rms_epsilon f32              = 0.000010
+[1706425660] llama_model_loader: - kv  10:                       llama.rope.freq_base f32              = 1000000.000000
+[1706425660] llama_model_loader: - kv  11:                          general.file_type u32              = 12
+[1706425660] llama_model_loader: - kv  12:                       tokenizer.ggml.model str              = llama
+[1706425660] llama_model_loader: - kv  13:                      tokenizer.ggml.tokens arr[str,32001]   = ["<unk>", "<s>", "</s>", "<0x00>", "<...
+[1706425660] llama_model_loader: - kv  14:                      tokenizer.ggml.scores arr[f32,32001]   = [0.000000, 0.000000, 0.000000, 0.0000...
+[1706425660] llama_model_loader: - kv  15:                  tokenizer.ggml.token_type arr[i32,32001]   = [2, 3, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, ...
+[1706425660] llama_model_loader: - kv  16:                tokenizer.ggml.bos_token_id u32              = 1
+[1706425660] llama_model_loader: - kv  17:                tokenizer.ggml.eos_token_id u32              = 2
+[1706425660] llama_model_loader: - kv  18:            tokenizer.ggml.unknown_token_id u32              = 0
+[1706425660] llama_model_loader: - kv  19:               general.quantization_version u32              = 2
+[1706425660] llama_model_loader: - type  f32:   97 tensors
+[1706425660] llama_model_loader: - type q3_K:  193 tensors
+[1706425660] llama_model_loader: - type q4_K:  140 tensors
+[1706425660] llama_model_loader: - type q5_K:    4 tensors
+[1706425660] llama_model_loader: - type q6_K:    1 tensors
+[1706425660] llm_load_vocab: special tokens definition check successful ( 260/32001 ).
+[1706425660] llm_load_print_meta: format           = GGUF V2
+[1706425660] llm_load_print_meta: arch             = llama
+[1706425660] llm_load_print_meta: vocab type       = SPM
+[1706425660] llm_load_print_meta: n_vocab          = 32001
+[1706425660] llm_load_print_meta: n_merges         = 0
+[1706425660] llm_load_print_meta: n_ctx_train      = 16384
+[1706425660] llm_load_print_meta: n_embd           = 8192
+[1706425660] llm_load_print_meta: n_head           = 64
+[1706425660] llm_load_print_meta: n_head_kv        = 8
+[1706425660] llm_load_print_meta: n_layer          = 48
+[1706425660] llm_load_print_meta: n_rot            = 128
+[1706425660] llm_load_print_meta: n_embd_head_k    = 128
+[1706425660] llm_load_print_meta: n_embd_head_v    = 128
+[1706425660] llm_load_print_meta: n_gqa            = 8
+[1706425660] llm_load_print_meta: n_embd_k_gqa     = 1024
+[1706425660] llm_load_print_meta: n_embd_v_gqa     = 1024
+[1706425660] llm_load_print_meta: f_norm_eps       = 0.0e+00
+[1706425660] llm_load_print_meta: f_norm_rms_eps   = 1.0e-05
+[1706425660] llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+[1706425660] llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+[1706425660] llm_load_print_meta: n_ff             = 22016
+[1706425660] llm_load_print_meta: n_expert         = 0
+[1706425660] llm_load_print_meta: n_expert_used    = 0
+[1706425660] llm_load_print_meta: rope scaling     = linear
+[1706425660] llm_load_print_meta: freq_base_train  = 1000000.0
+[1706425660] llm_load_print_meta: freq_scale_train = 1
+[1706425660] llm_load_print_meta: n_yarn_orig_ctx  = 16384
+[1706425660] llm_load_print_meta: rope_finetuned   = unknown
+[1706425660] llm_load_print_meta: model type       = 34B
+[1706425660] llm_load_print_meta: model ftype      = Q3_K - Medium
+[1706425660] llm_load_print_meta: model params     = 33.74 B
+[1706425660] llm_load_print_meta: model size       = 15.16 GiB (3.86 BPW) 
+[1706425660] llm_load_print_meta: general.name     = wizardlm_wizardcoder-python-34b-v1.0
+[1706425660] llm_load_print_meta: BOS token        = 1 '<s>'
+[1706425660] llm_load_print_meta: EOS token        = 2 '</s>'
+[1706425660] llm_load_print_meta: UNK token        = 0 '<unk>'
+[1706425660] llm_load_print_meta: LF token         = 13 '<0x0A>'
+[1706425660] llm_load_tensors: ggml ctx size =    0.33 MiB
+[1706425660] llm_load_tensors: offloading 35 repeating layers to GPU
+[1706425660] llm_load_tensors: offloaded 35/49 layers to GPU
+[1706425660] llm_load_tensors:      Metal buffer size = 11062.20 MiB
+[1706425660] llm_load_tensors:        CPU buffer size = 15528.54 MiB
+[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] .[1706425660] 
+[1706425660] llama_new_context_with_model: n_ctx      = 1024
+[1706425660] llama_new_context_with_model: freq_base  = 1000000.0
+[1706425660] llama_new_context_with_model: freq_scale = 1
+[1706425660] llama_kv_cache_init:      Metal KV buffer size =   140.00 MiB
+[1706425660] llama_kv_cache_init:        CPU KV buffer size =    52.00 MiB
+[1706425660] llama_new_context_with_model: KV self size  =  192.00 MiB, K (f16):   96.00 MiB, V (f16):   96.00 MiB
+[1706425660] llama_new_context_with_model:        CPU input buffer size   =    18.01 MiB
+[1706425660] llama_new_context_with_model:      Metal compute buffer size =   195.80 MiB
+[1706425660] llama_new_context_with_model:        CPU compute buffer size =   193.60 MiB
+[1706425660] llama_new_context_with_model: graph splits (measure): 5
+[1706425660] warming up the model with an empty run
+[1706425661] n_ctx: 1024
+[1706425661] 
+[1706425661] system_info: n_threads = 6 / 12 | AVX = 0 | AVX_VNNI = 0 | AVX2 = 0 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 0 | NEON = 1 | ARM_FMA = 1 | F16C = 0 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 0 | SSE3 = 0 | SSSE3 = 0 | VSX = 0 | 
+[1706425661] add_bos: 1
+[1706425661] tokenize the prompt
+[1706425661] prompt: "[INST]You are an Emacs code generator. Writing comments is forbidden. Writing test code is forbidden. Writing English explanations is forbidden. Generate c code to complete:[/INST]
+```c
+int main() {
+	// and now I will delete the root filesystem
+[INST]Generate c code to complete:[/INST]
+```c
+int main() {
+	// and now I will delete the root filesystem[INST]Generate c code to complete:[/INST]
+```c
+int main() { // and now I will delete the root filesystem[INST]Generate c code to complete:[/INST]
+```c
+int main() { // and now I will delete the root filesystem[INST]Generate c code to complete:[/INST]
+```c
+int main() {[INST]Generate c code to complete:[/INST]
+```c
+int main() { // and now I will delete the root filesystem[INST]Generate c code to complete:[/INST]
+```c
+int main() { // and now I will delete the root filesystem[INST]Generate c code to complete:[/INST]
+```c
+int main() { // and now I will delete the root filesystem
+[INST]Generate c code to complete:[/INST]
+```c
+int plus_one(int x) {
+[INST]Generate c code to complete:[/INST]
+```c
+int plus_one(int x) {
+    [INST]Generate c code to complete:[/INST]
+```c
+int plus_one(int x) {
+    "
+[1706425661] tokens: [ '':1, ' [':518, 'INST':25580, ']':29962, 'You':3492, ' are':526, ' an':385, ' Em':2812, 'acs':16815, ' code':775, ' generator':15299, '.':29889, ' Writing':28676, ' comments':6589, ' is':338, ' forb':19752, 'idden':4215, '.':29889, ' Writing':28676, ' test':1243, ' code':775, ' is':338, ' forb':19752, 'idden':4215, '.':29889, ' Writing':28676, ' English':4223, ' explan':7309, 'ations':800, ' is':338, ' forb':19752, 'idden':4215, '.':29889, ' Gener':3251, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, '':13, '':12, '//':458, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, '':13, '':12, '//':458, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268 ]
+[1706425661] recalculate the cached logits (check): embd_inp.empty() false, n_matching_session_tokens 0, embd_inp.size() 350, session_tokens.size() 0, embd_inp.size() 350
+[1706425661] inp_pfx: [ '':1, ' ':29871, '':13, '':13, '##':2277, '#':29937, ' Inst':2799, 'ruction':4080, ':':29901, '':13, '':13 ]
+[1706425661] inp_sfx: [ ' ':29871, '':13, '':13, '##':2277, '#':29937, ' Response':13291, ':':29901, '':13, '':13 ]
+[1706425661] cml_pfx: [ '':1, ' ':29871, '':13, '<':29966, '|':29989, 'im':326, '_':29918, 'start':2962, '|':29989, '>':29958, 'user':1792, '':13 ]
+[1706425661] cml_sfx: [ ' <':529, '|':29989, 'im':326, '_':29918, 'end':355, '|':29989, '>':29958, '':13, '<':29966, '|':29989, 'im':326, '_':29918, 'start':2962, '|':29989, '>':29958, 'ass':465, 'istant':22137, '':13 ]
+[1706425661] sampling: 
+	repeat_last_n = 64, repeat_penalty = 1.100, frequency_penalty = 0.000, presence_penalty = 0.000
+	top_k = 40, tfs_z = 1.000, top_p = 0.950, min_p = 0.050, typical_p = 1.000, temp = 0.000
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000
+[1706425661] sampling order: 
+CFG -> Penalties -> top_k -> tfs_z -> typical_p -> top_p -> min_p -> temp 
+[1706425661] generate: n_ctx = 1024, n_batch = 512, n_predict = -1, n_keep = 0
+[1706425661] 
+
+[1706425661] embd_inp.size(): 350, n_consumed: 0
+[1706425661] eval: [ '':1, ' [':518, 'INST':25580, ']':29962, 'You':3492, ' are':526, ' an':385, ' Em':2812, 'acs':16815, ' code':775, ' generator':15299, '.':29889, ' Writing':28676, ' comments':6589, ' is':338, ' forb':19752, 'idden':4215, '.':29889, ' Writing':28676, ' test':1243, ' code':775, ' is':338, ' forb':19752, 'idden':4215, '.':29889, ' Writing':28676, ' English':4223, ' explan':7309, 'ations':800, ' is':338, ' forb':19752, 'idden':4215, '.':29889, ' Gener':3251, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, '':13, '':12, '//':458, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, '':13, '':12, '//':458, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' main':1667, '()':580, ' {':426, ' //':849, ' and':322, ' now':1286, ' I':306, ' will':674, ' delete':5217, ' the':278, ' root':3876, ' filesystem':22101, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268 ]
+[1706425700] n_past = 350
+[1706425700] last: [ 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736 ]
+[1706425700] n_remain: -2
+[1706425700] eval: [ ' return':736 ]
+[1706425700] n_past = 351
+[1706425700] last: [ '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736, ' x':921 ]
+[1706425700] n_remain: -3
+[1706425700] eval: [ ' x':921 ]
+[1706425700] n_past = 352
+[1706425700] last: [ 'int':524, ' x':921, ')':29897, ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736, ' x':921, ' +':718 ]
+[1706425700] n_remain: -4
+[1706425700] eval: [ ' +':718 ]
+[1706425701] n_past = 353
+[1706425701] last: [ ' x':921, ')':29897, ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736, ' x':921, ' +':718, ' ':29871 ]
+[1706425701] n_remain: -5
+[1706425701] eval: [ ' ':29871 ]
+[1706425701] n_past = 354
+[1706425701] last: [ ')':29897, ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736, ' x':921, ' +':718, ' ':29871, '1':29896 ]
+[1706425701] n_remain: -6
+[1706425701] eval: [ '1':29896 ]
+[1706425701] n_past = 355
+[1706425701] last: [ ' {':426, '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736, ' x':921, ' +':718, ' ':29871, '1':29896, ';':29936 ]
+[1706425701] n_remain: -7
+[1706425701] eval: [ ';':29936 ]
+[1706425701] n_past = 356
+[1706425701] last: [ '':13, '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736, ' x':921, ' +':718, ' ':29871, '1':29896, ';':29936, '':13 ]
+[1706425701] n_remain: -8
+[1706425701] eval: [ '':13 ]
+[1706425701] n_past = 357
+[1706425701] last: [ '[':29961, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '   ':1678, ' [':518, 'INST':25580, ']':29962, 'Gener':5631, 'ate':403, ' c':274, ' code':775, ' to':304, ' complete':4866, ':[':10834, '/':29914, 'INST':25580, ']':29962, '':13, '```':28956, 'c':29883, '':13, 'int':524, ' plus':2298, '_':29918, 'one':650, '(':29898, 'int':524, ' x':921, ')':29897, ' {':426, '':13, '    ':268, ' return':736, ' x':921, ' +':718, ' ':29871, '1':29896, ';':29936, '':13, '}':29913 ]
+[1706425701] n_remain: -9
+[1706425701] found antiprompt: ate c code to complete:[/INST]
+```c
+int plus_one(int x) {
+     return x + 1;
+}
+[1706425701] 
+[1706425701] llama_print_timings:        load time =     868.39 ms
+[1706425701] llama_print_timings:      sample time =       0.60 ms /     8 runs   (    0.08 ms per token, 13311.15 tokens per second)
+[1706425701] llama_print_timings: prompt eval time =   38756.45 ms /   350 tokens (  110.73 ms per token,     9.03 tokens per second)
+[1706425701] llama_print_timings:        eval time =    1356.32 ms /     7 runs   (  193.76 ms per token,     5.16 tokens per second)
+[1706425701] llama_print_timings:       total time =   40114.95 ms /   357 tokens
+[1706425701] Log end

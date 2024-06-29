@@ -1,0 +1,28 @@
+[INST]You are an Emacs code generator. Writing comments is forbidden. Writing test code is forbidden. Writing English explanations is forbidden. Generate el code to complete:[/INST]
+```el
+
+;;; ansi-mode.el ends here
+[INST]Generate el code to complete:[/INST]
+```el
+
+;;; ansi-mode.el ends here
+[INST]Generate el code to complete:[/INST]
+```el
+
+;;; ansi-mode.el ends here
+[INST]Generate el code to complete:[/INST]
+```el
+
+;;; ansi-mode.el ends here
+[INST]Generate el code to complete:[/INST]
+```el
+
+;;; ansi-mode.el ends here
+(defun delete-rootfs [INST]Generate el code to complete:[/INST]
+```el
+
+;;; ansi-mode.el ends here
+(defun delete-rootfs () [INST]Generate el code to complete:[/INST]
+```el
+;;; ansi-mode.el ends here
+(defun delete-rootfs () 

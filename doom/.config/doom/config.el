@@ -1,5 +1,4 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
@@ -17,6 +16,7 @@
 ;;   presentations or streaming.
 ;; - `doom-unicode-font' -- for unicode glyphs
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+(setq doom-font "Berkeley Mono")
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
@@ -80,11 +80,11 @@
 (set-input-method "Agda")
 (add-hook 'agda2-mode-hook
           (local-set-key (kbd "C-c C-g") 'agda2-next-goal) )
-(load-theme 'doom-tokyo-night t)
-(set-frame-font "Berkeley Mono")
 (set-variable 'notmuch-search-oldest-first nil)
 ;; (use-package! chatgpt
 ;;   (chatgpt :type git :host github :repo "emacs-openai/chatgpt"))
 (setq doom-unreal-buffer-functions '(minibufferp))
 (set-variable '+popup-default-parameters
               (assq-delete-all 'no-other-window +popup-default-parameters))
+(set-variable 'explicit-shell-file-name "/opt/homebrew/bin/fish")
+(remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; show modeline for popup windows.

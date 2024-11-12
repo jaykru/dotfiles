@@ -60,5 +60,6 @@
 (package! exec-path-from-shell)
 (package! notmuch)
 (package! fzf)
+(package! tao-theme)
 ;; (package! chatgpt
 ;;   :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))

@@ -86,5 +86,53 @@
 (setq doom-unreal-buffer-functions '(minibufferp))
 (set-variable '+popup-default-parameters
               (assq-delete-all 'no-other-window +popup-default-parameters))
-(set-variable 'explicit-shell-file-name "/opt/homebrew/bin/fish")
 (remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; show modeline for popup windows.
+
+(defconst my-gemini-models
+  '(
+    (gemini-exp-1206
+     :description "Google does Claude"
+     :capabilities (tool json media)
+     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                  "application/pdf" "text/plain" "text/csv" "text/html")
+     :context-window 1000)
+
+    (gemini-2.0-flash-thinking-exp-1219
+     :description "Reasoning for complex problems"
+     :capabilities (tool json media)
+     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                  "application/pdf" "text/plain" "text/csv" "text/html")
+     :context-window 1000
+     )))
+
+(defvar gptel-api-key-file (expand-file-name "~/.gptel-api-key"))
+
+
+
+(defun gptel-read-api-key ()
+  (with-temp-buffer
+    (insert-file-contents gptel-api-key-file)
+    (goto-char (point-min))
+    (while (re-search-forward "[\n\t ]+$" nil t)
+      (replace-match ""))
+    (buffer-string)))
+
+(setq gptel-model 'gemini-pro
+      gptel-backend (gptel-make-gemini
+                      "Gemini"
+                      :key (gptel-read-api-key)
+                      :stream t
+                      :models my-gemini-models))
+
+(global-set-key (kbd "C-c g m") 'gptel-menu)
+(global-set-key (kbd "C-c g c") 'gptel)
+(global-set-key (kbd "C-c g r") 'gptel-rewrite-menu)
+;;  in vterm-mode, bind C-x C-j to 'vterm-copy-mode
+(add-hook 'vterm-mode-hook
+          (lambda ()
+            (define-key vterm-mode-map (kbd "C-x j") 'vterm-copy-mode)))
+
+;; also need a hook for vterm-copy-mode to invoke vterm-copy-mode-done
+(add-hook 'vterm-copy-mode-hook
+          (lambda ()
+            (define-key vterm-copy-mode-map (kbd "C-x j") 'vterm-copy-mode-done)))

@@ -18,7 +18,8 @@
      (emacs)
      (defvaralias)))
  '(warning-suppress-types
-   '(((python python-shell-completion-native-turn-on-maybe))
+   '((gptel)
+     ((python python-shell-completion-native-turn-on-maybe))
      ((python python-shell-completion-native-turn-on-maybe))
      ((python python-shell-completion-native-turn-on-maybe))
      ((python python-shell-completion-native-turn-on-maybe))

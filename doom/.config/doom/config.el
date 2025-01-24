@@ -88,26 +88,7 @@
               (assq-delete-all 'no-other-window +popup-default-parameters))
 (remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; show modeline for popup windows.
 
-(defconst my-gemini-models
-  '(
-    (gemini-exp-1206
-     :description "Google does Claude"
-     :capabilities (tool json media)
-     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                  "application/pdf" "text/plain" "text/csv" "text/html")
-     :context-window 1000)
-
-    (gemini-2.0-flash-thinking-exp-1219
-     :description "Reasoning for complex problems"
-     :capabilities (tool json media)
-     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                  "application/pdf" "text/plain" "text/csv" "text/html")
-     :context-window 1000
-     )))
-
 (defvar gptel-api-key-file (expand-file-name "~/.gptel-api-key"))
-
-
 
 (defun gptel-read-api-key ()
   (with-temp-buffer
@@ -121,8 +102,7 @@
       gptel-backend (gptel-make-gemini
                       "Gemini"
                       :key (gptel-read-api-key)
-                      :stream t
-                      :models my-gemini-models))
+                      :stream t))
 
 (global-set-key (kbd "C-c g m") 'gptel-menu)
 (global-set-key (kbd "C-c g c") 'gptel)

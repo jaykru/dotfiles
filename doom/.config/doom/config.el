@@ -98,7 +98,7 @@
       (replace-match ""))
     (buffer-string)))
 
-(setq gptel-model 'gemini-pro
+(setq gptel-model 'gemini-2.0-flash-thinking-exp
       gptel-backend (gptel-make-gemini
                       "Gemini"
                       :key (gptel-read-api-key)
@@ -106,7 +106,48 @@
 
 (global-set-key (kbd "C-c g m") 'gptel-menu)
 (global-set-key (kbd "C-c g c") 'gptel)
-(global-set-key (kbd "C-c g r") 'gptel-rewrite-menu)
+(global-set-key (kbd "C-c g r") 'gptel-rewrite)
+(global-set-key (kbd "C-c g s") 'gptel-send)
+
+(set-variable 'gptel-directives
+              '((default     . "You are a large language model living in Emacs and a helpful assistant. Do not be sycophantic.")
+                (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
+                (writing     . "You are a large language model and a writing assistant. Respond concisely.")
+                (chat        . "You are a large language model and a conversation partner. Do not be sycophantic.")))
+
+;; asks gptel a question about the current buffer; response will appear in a separate
+;; buffer
+(defvar gptel-ask--history nil)
+(defun gptel-ask ()
+  (interactive)
+  (let* ((context (if (region-active-p)
+                      (buffer-substring (region-beginning) (region-end))
+                    (buffer-string)))
+         (prompt (read-string "Ask gptel: " nil gptel-ask--history nil))
+        (prompt-with-context (concat "Here's the context: "
+                                     context
+                                     "\n"
+                                     prompt)))
+    (gptel-request
+        prompt-with-context
+      ;; :buffer resp-buffer
+      :system "Be concise, but not at the expanse of answering the query completely. When responding with code, use markdown to format your answer. If the user hasn't asked a question, just explain the lines of code or evaluate it."
+      :callback (lambda (response info)
+                  (if (not response)
+                      (message "gptel-lookup failed with message: %s" (plist-get info :status))
+                    (with-current-buffer (get-buffer-create "*gptel answer*")
+                      (let ((inhibit-read-only t))
+                        (markdown-mode)
+                        (erase-buffer)
+                        (insert response))
+                      (display-buffer (current-buffer)
+                                      `((display-buffer-in-side-window)
+                                        (side . bottom)
+                                        (window-height . ,#'fit-window-to-buffer)))))))))
+
+(global-set-key (kbd "C-c g q") 'gptel-ask)
+
+(set-variable 'gptel-max-tokens 4096)
 ;;  in vterm-mode, bind C-x C-j to 'vterm-copy-mode
 (add-hook 'vterm-mode-hook
           (lambda ()

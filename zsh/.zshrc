@@ -1,7 +1,10 @@
+source $HOME/.terminfo.sh
+
 export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000000
 export SAVEHIST=10000000
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
+export TERM=xterm-24bit
 
 if [[ "$USER" = "ubuntu" || $(hostname) =~ "n300" || $(hostname) =~ "n150" ]]; then
   source ~/.ttrc

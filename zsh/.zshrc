@@ -3,6 +3,15 @@ export HISTSIZE=10000000
 export SAVEHIST=10000000
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 
+if [[ "$USER" = "ubuntu" || $(hostname) =~ "n300" || $(hostname) =~ "n150" ]]; then
+  source ~/.ttrc
+fi
+
+GUIX_PROFILE="/var/guix/profiles/per-user/$USER/guix-profile/etc/profile"
+if [[ -f $GUIX_PROFILE ]]; then
+   . "$GUIX_PROFILE"
+fi
+
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -50,3 +59,9 @@ SPACESHIP_PROMPT_ORDER=(
 
 
 zinit light zsh-users/zsh-completions
+
+# direnv
+zinit from"gh-r" as"program" mv"direnv* -> direnv" \
+atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
+pick"direnv" src="zhook.zsh" for \
+direnv/direnv

@@ -1,0 +1,50 @@
+install_env() {
+  ln -s ~/.envrc "`git rev-parse --show-toplevel`/tt-train/.envrc"
+}
+
+cleanup() {
+  git submodule sync && \
+  git clean -fdx && \
+  git submodule foreach --recursive git clean -xfd && \
+  git submodule update --init --recursive
+}
+
+source_python_env() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  source $repo_root/python_env/bin/activate
+}
+
+build_train() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root/tt-train" || return 1
+  source_python_env || { popd; return 1; }
+  mkdir -p build
+  cmake -DCMAKE_BUILD_TYPE=Release -B build -GNinja || { popd; return 1; }
+  cmake --build build --config Release --clean-first || { popd; return 1; }
+  popd
+}
+
+init() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root" || return 1
+
+  echo "Cleaning up repository..."
+  cleanup || { popd; return 1; }
+
+  echo "Installing environment..."
+  install_env || { popd; return 1; }
+
+  echo "Building metal..."
+  ./build_metal.sh || { popd; return 1; }
+
+  echo "Creating virtual environment..."
+  ./create_venv.sh || { popd; return 1; }
+
+  source python_env/bin/activate || { popd; return 1; }
+
+  echo "Building tt-train..."
+  build_train || { popd; return 1; }
+
+  popd
+  echo "Initialization complete!"
+}

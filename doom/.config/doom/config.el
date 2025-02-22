@@ -157,3 +157,9 @@
 (add-hook 'vterm-copy-mode-hook
           (lambda ()
             (define-key vterm-copy-mode-map (kbd "C-x j") 'vterm-copy-mode-done)))
+
+;;; magit customizations
+(transient-append-suffix 'magit-submodule "u" ; add it after the "update submodule one"
+  '("a" "Update/init all submodules recursively" (lambda ()
+                       (interactive)
+                       (magit-run-git "submodule" "update" "--init" "--recursive"))))

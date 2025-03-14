@@ -1,26 +1,136 @@
+GUIX_PROFILE="/var/guix/profiles/per-user/$USER/guix-profile"
+if [[ -f "$GUIX_PROFILE/etc/profile" ]]; then
+  . "$GUIX_PROFILE/etc/profile"
+fi
+
+toolchain_path="cmake/x86_64-linux-clang-17-libcpp-toolchain.cmake"
+
 install_env() {
-  ln -s ~/.envrc "`git rev-parse --show-toplevel`/tt-train/.envrc"
+  local train_dir="`git rev-parse --show-toplevel`/tt-train"
+  ln -s $HOME/.envrc.template $train_dir/.envrc || return 1
+  pushd `git rev-parse --show-toplevel`/tt-train || return 1
+  direnv allow || { popd; return 1 }
+  popd
 }
 
 cleanup() {
   git submodule sync && \
   git clean -fdx && \
+  git submodule foreach --recursive git reset --hard && \
   git submodule foreach --recursive git clean -xfd && \
   git submodule update --init --recursive
 }
 
-source_python_env() {
+setup_python_env() {
   local repo_root="`git rev-parse --show-toplevel`"
   source $repo_root/python_env/bin/activate
+  export TT_METAL_HOME=$repo_root
+  export PYTHON_PATH=$repo_root
+}
+
+build_metal() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  local clean_build=false
+  local build_type="Release"
+  
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --clean)
+        clean_build=true
+        shift
+        ;;
+      --debug)
+        build_type="Debug"
+        shift
+        ;;
+      *)
+        echo "Unknown option: $1"
+        return 1
+        ;;
+    esac
+  done
+
+  pushd "$repo_root" || return 1
+  echo "building tt-metal in $(echo $build_type | tr '[:upper:]' '[:lower:]') mode"
+  if [[ ! -d build ]]; then
+    mkdir -p build
+    cmake -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+  fi
+
+  if [[ "$clean_build" == true ]]; then
+    rm -rf build .cpmcache || { popd; return 1; }
+    mkdir build
+    cmake -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake --build build --config $build_type --clean-first || { popd; return 1; }
+  else
+    cmake --build build --config $build_type || { popd; return 1; }
+  fi
+  popd
+  echo "tt-metal built"
 }
 
 build_train() {
   local repo_root="`git rev-parse --show-toplevel`"
+  local clean_build=false
+  local configure=false
+  local build_type="Release"
+  
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --clean)
+        clean_build=true
+        shift
+        ;;
+      --debug)
+        build_type="Debug"
+        shift
+        ;;
+      --configure)
+        configure=true
+        shift
+        ;;
+      *)
+        echo "Unknown option: $1"
+        return 1
+        ;;
+    esac
+  done
+
   pushd "$repo_root/tt-train" || return 1
-  source_python_env || { popd; return 1; }
-  mkdir -p build
-  cmake -DCMAKE_BUILD_TYPE=Release -B build -GNinja || { popd; return 1; }
-  cmake --build build --config Release --clean-first || { popd; return 1; }
+  setup_python_env || { popd; return 1; }
+  echo "building tt-train in ${build_type} mode"
+  if [[ ! -d build || "$configure" == true ]]; then
+    mkdir -p build
+    cmake -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+  fi
+
+  if [[ "$clean_build" == true ]]; then
+    rm -rf build .cpmcache || { popd; return 1; }
+    mkdir build || { popd; return 1; }
+    cmake -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake --build build --config $build_type --clean-first || { popd; return 1; }
+  else
+    cmake --build build --config $build_type || { popd; return 1; }
+  fi
+  popd
+  echo "tt-train built"
+}
+
+test_train() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  local filter="*"
+  
+  if [[ $# -eq 1 ]]; then
+    filter="*$1*"
+  elif [[ $# -gt 1 ]]; then
+    echo "Error: too many arguments"
+    return 1
+  fi
+  
+  pushd "$repo_root/tt-train" || return 1
+  setup_python_env || { popd; return 1; }
+  build_train || { popd; return 1; }
+  ./build/tests/ttml_tests --gtest_filter="$filter"
   popd
 }
 
@@ -35,7 +145,7 @@ init() {
   install_env || { popd; return 1; }
 
   echo "Building metal..."
-  ./build_metal.sh || { popd; return 1; }
+  ./build_metal.sh --debug || { popd; return 1; }
 
   echo "Creating virtual environment..."
   ./create_venv.sh || { popd; return 1; }

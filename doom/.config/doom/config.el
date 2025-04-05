@@ -145,7 +145,8 @@
                                         (side . bottom)
                                         (window-height . ,#'fit-window-to-buffer)))))))))
 
-(global-set-key (kbd "C-c g q") 'gptel-ask)
+;; karthink did it better :o
+(global-set-key (kbd "C-c g q") 'gptel-quick)
 
 (set-variable 'gptel-max-tokens 4096)
 ;;  in vterm-mode, bind C-x C-j to 'vterm-copy-mode
@@ -159,7 +160,38 @@
             (define-key vterm-copy-mode-map (kbd "C-x j") 'vterm-copy-mode-done)))
 
 ;;; magit customizations
-(transient-append-suffix 'magit-submodule "u" ; add it after the "update submodule one"
-  '("a" "Update/init all submodules recursively" (lambda ()
-                       (interactive)
-                       (magit-run-git "submodule" "update" "--init" "--recursive"))))
+;; (transient-append-suffix 'magit-submodule "u" ; add it after the "update submodule one"
+;;   '("a" "Update/init all submodules recursively" (lambda ()
+;;                        (interactive)
+;;                        (magit-run-git "submodule" "update" "--init" "--recursive"))))
+(require 'cider-storm)
+(add-to-list 'cider-jack-in-nrepl-middlewares "flow-storm.nrepl.middleware/wrap-flow-storm")
+
+;; (defmacro with-cur-buffer (body)
+;;   `(progn
+;;      (gptel-add)
+;;      ,body
+;;      (quiet!! (gptel-add))))
+
+;; (defun cursory-diff-gen ()
+;;   (with-cur-buffer
+;;    (gptel-request "Based on the current position in this text and the buffer
+;; context, propose an edit as a diff for the current file."))
+;;   )
+
+(require 'meow)
+(meow-global-mode 1)
+(meow-define-keys
+    'normal
+  '("J" . meow-page-down)
+  '("K" . meow-page-up))
+
+(setq symex--user-evil-keyspec
+      '(("j" . symex-go-up)
+        ("k" . symex-go-down)
+        ("C-j" . symex-climb-branch)
+        ("C-k" . symex-descend-branch)
+        ("M-j" . symex-goto-highest)
+        ("M-k" . symex-goto-lowest)))
+(symex-initialize)
+(global-set-key (kbd "C-c ;") 'symex-mode-interface)

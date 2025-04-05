@@ -109,12 +109,6 @@
 (global-set-key (kbd "C-c g r") 'gptel-rewrite)
 (global-set-key (kbd "C-c g s") 'gptel-send)
 
-(set-variable 'gptel-directives
-              '((default     . "You are a large language model living in Emacs and a helpful assistant. Do not be sycophantic.")
-                (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
-                (writing     . "You are a large language model and a writing assistant. Respond concisely.")
-                (chat        . "You are a large language model and a conversation partner. Do not be sycophantic.")))
-
 ;; asks gptel a question about the current buffer; response will appear in a separate
 ;; buffer
 (defvar gptel-ask--history nil)
@@ -181,6 +175,53 @@
 
 (require 'meow)
 (meow-global-mode 1)
+(require 'transient)
+(transient-define-prefix meow-goto-menu ()
+  "Goto"
+  ["goto"
+   ("g" "Beginning of buffer" beginning-of-buffer)
+   ("e" "End of buffer" end-of-buffer)
+   ("h" "Beginning of line" beginning-of-line)
+   ("l" "End of line" end-of-line)
+   ("b" "Buffer" consult-buffer)
+   ("k" "Page up" meow-page-up)
+   ("j" "Page down" meow-page-down)
+   ("d" "Definition" xref-find-definitions)
+   ("." "Jump forward" xref-go-forward)
+   (","  "Jump backward" xref-go-back)
+   ("SPC" "jump" avy-goto-char-timer)])
+
+(transient-define-prefix meow-match-menu ()
+  "Match"
+  ["match"
+   ("i" "select inside object" meow-inner-of-thing)
+   ("a" "select around object" meow-bounds-of-thing)])
+
+(transient-define-prefix meow-window-menu ()
+  "Window"
+  ["Window"
+   ("w" "go to next window" other-window)
+   ("'" "vertical split" split-window-right)
+   ("-" "horizontal split" split-window-below)
+   ("q" "kill current window" delete-window)
+   ("m" "kill all windows but current" delete-other-windows)
+
+   ("h" "go left" windmove-left)
+   ("j" "go down" windmove-down)
+   ("k" "go up" windmove-up)
+   ("l" "go right" windmove-right)
+
+   ("H" "go left" windmove-swap-states-left)
+   ("J" "go down" windmove-swap-states-down)
+   ("K" "go up" windmove-swap-states-up)
+   ("L" "go right" windmove-swap-states-right)])
+
+(map! :leader "w" 'meow-window-menu)
+(defun meow-delete-or-kill ()
+  (interactive)
+  (if (region-active-p)
+    (meow-kill)
+    (meow-delete)))
 (meow-define-keys
     'normal
   '("J" . meow-page-down)

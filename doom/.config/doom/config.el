@@ -217,15 +217,19 @@
    ("L" "go right" windmove-swap-states-right)])
 
 (map! :leader "w" 'meow-window-menu)
+
 (defun meow-delete-or-kill ()
   (interactive)
   (if (region-active-p)
     (meow-kill)
     (meow-delete)))
+
 (meow-define-keys
     'normal
-  '("J" . meow-page-down)
-  '("K" . meow-page-up))
+  '("d" . meow-delete-or-kill)
+  '("s" . isearch-forward)
+  '("g" . meow-goto-menu)
+  '("m" . meow-match-menu))
 
 (setq symex--user-evil-keyspec
       '(("j" . symex-go-up)
@@ -236,3 +240,5 @@
         ("M-k" . symex-goto-lowest)))
 (symex-initialize)
 (global-set-key (kbd "C-c ;") 'symex-mode-interface)
+
+(set-variable 'avy-all-windows t)

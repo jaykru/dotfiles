@@ -71,3 +71,4 @@
 (package! cider-storm :recipe
   (:host github
    :repo "flow-storm/cider-storm"))
+(package! lsp-pyright)

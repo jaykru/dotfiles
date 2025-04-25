@@ -76,10 +76,6 @@
 ;; they are implemented.
 
 (global-set-key (kbd "C-x b") 'switch-to-buffer)
-(require 'agda-input)
-(set-input-method "Agda")
-(add-hook 'agda2-mode-hook
-          (local-set-key (kbd "C-c C-g") 'agda2-next-goal) )
 (set-variable 'notmuch-search-oldest-first nil)
 ;; (use-package! chatgpt
 ;;   (chatgpt :type git :host github :repo "emacs-openai/chatgpt"))
@@ -92,40 +88,51 @@
 (defvar deepseek-api-key-file (expand-file-name "~/.deepseek-api-key"))
 
 (defun read-api-key (api-key-file)
-  (with-temp-buffer
-    (insert-file-contents api-key-file)
-    (goto-char (point-min))
-    (while (re-search-forward "[\n\t ]+$" nil t)
-      (replace-match ""))
-    (buffer-string)))
+  "Read API key from API-KEY-FILE, removing trailing whitespace."
+  (when (file-exists-p api-key-file)
+    (with-temp-buffer
+      (insert-file-contents api-key-file)
+      (goto-char (point-min))
+      (while (re-search-forward "[\n\t ]+$" nil t)
+        (replace-match ""))
+      (buffer-string))))
 
-(gptel-make-deepseek "DeepSeek"
-  :stream t
-  :key (read-api-key deepseek-api-key-file))
+;; Conditionally configure DeepSeek
+(if (file-exists-p deepseek-api-key-file)
+    (progn
+      (gptel-make-deepseek "DeepSeek"
+        :stream t
+        :key (read-api-key deepseek-api-key-file))
+      ;; Set default model only if DeepSeek is configured
+      (setq gptel-model 'deepseek-chat))
+  (message "DeepSeek API key file not found: %s. DeepSeek provider not configured." deepseek-api-key-file))
 
-(defconst my-gemini-models
-  '(
-    (gemini-2.5-pro-preview-03-25
-     :description "Google goes crazy"
-     :capabilities (tool-use json media)
-     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                  "application/pdf" "text/plain" "text/csv" "text/html")
-     :context-window 1000)
-    (gemini-2.0-flash
-     :description "I am speed"
-     :capabilities (tool-use json media)
-     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                  "application/pdf" "text/plain" "text/csv" "text/html")
-     :context-window 1000
-     )))
+;; Conditionally configure Gemini
+(if (file-exists-p gemini-api-key-file)
+    (progn
+      (defconst my-gemini-models
+        '(
+          (gemini-2.5-pro-preview-03-25
+           :description "Google goes crazy"
+           :capabilities (tool-use json media)
+           :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                        "application/pdf" "text/plain" "text/csv" "text/html")
+           :context-window 1000)
+          (gemini-2.0-flash
+           :description "I am speed"
+           :capabilities (tool-use json media)
+           :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                        "application/pdf" "text/plain" "text/csv" "text/html")
+           :context-window 1000
+           )))
 
-(gptel-make-gemini
-    "Gemini"
-  :key (read-api-key gemini-api-key-file)
-  :stream t
-  :models my-gemini-models)
+      (gptel-make-gemini
+          "Gemini"
+        :key (read-api-key gemini-api-key-file)
+        :stream t
+        :models my-gemini-models))
+  (message "Gemini API key file not found: %s. Gemini provider not configured." gemini-api-key-file))
 
-(setq gptel-model 'deepseek-chat)
 ;; asks gptel a question about the current buffer; response will appear in a separate
 ;; buffer
 (defvar gptel-ask--history nil)
@@ -180,8 +187,6 @@
 ;;   '("a" "Update/init all submodules recursively" (lambda ()
 ;;                        (interactive)
 ;;                        (magit-run-git "submodule" "update" "--init" "--recursive"))))
-(require 'cider-storm)
-(add-to-list 'cider-jack-in-nrepl-middlewares "flow-storm.nrepl.middleware/wrap-flow-storm")
 
 ;; (defmacro with-cur-buffer (body)
 ;;   `(progn

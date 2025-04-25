@@ -88,27 +88,44 @@
               (assq-delete-all 'no-other-window +popup-default-parameters))
 (remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; show modeline for popup windows.
 
-(defvar gptel-api-key-file (expand-file-name "~/.gptel-api-key"))
+(defvar gemini-api-key-file (expand-file-name "~/.gemini-api-key"))
+(defvar deepseek-api-key-file (expand-file-name "~/.deepseek-api-key"))
 
-(defun gptel-read-api-key ()
+(defun read-api-key (api-key-file)
   (with-temp-buffer
-    (insert-file-contents gptel-api-key-file)
+    (insert-file-contents api-key-file)
     (goto-char (point-min))
     (while (re-search-forward "[\n\t ]+$" nil t)
       (replace-match ""))
     (buffer-string)))
 
-(setq gptel-model 'gemini-2.0-flash-thinking-exp
-      gptel-backend (gptel-make-gemini
-                      "Gemini"
-                      :key (gptel-read-api-key)
-                      :stream t))
+(gptel-make-deepseek "DeepSeek"
+  :stream t
+  :key (read-api-key deepseek-api-key-file))
 
-(global-set-key (kbd "C-c g m") 'gptel-menu)
-(global-set-key (kbd "C-c g c") 'gptel)
-(global-set-key (kbd "C-c g r") 'gptel-rewrite)
-(global-set-key (kbd "C-c g s") 'gptel-send)
+(defconst my-gemini-models
+  '(
+    (gemini-2.5-pro-preview-03-25
+     :description "Google goes crazy"
+     :capabilities (tool-use json media)
+     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                  "application/pdf" "text/plain" "text/csv" "text/html")
+     :context-window 1000)
+    (gemini-2.0-flash
+     :description "I am speed"
+     :capabilities (tool-use json media)
+     :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                  "application/pdf" "text/plain" "text/csv" "text/html")
+     :context-window 1000
+     )))
 
+(gptel-make-gemini
+    "Gemini"
+  :key (read-api-key gemini-api-key-file)
+  :stream t
+  :models my-gemini-models)
+
+(setq gptel-model 'deepseek-chat)
 ;; asks gptel a question about the current buffer; response will appear in a separate
 ;; buffer
 (defvar gptel-ask--history nil)
@@ -125,7 +142,10 @@
     (gptel-request
         prompt-with-context
       ;; :buffer resp-buffer
-      :system "Be concise, but not at the expanse of answering the query completely. When responding with code, use markdown to format your answer. If the user hasn't asked a question, just explain the lines of code or evaluate it."
+      :system "Be concise, but not at the expanse of answering
+      the query completely. When responding with code, use
+      markdown to format your answer. If the user hasn't asked a
+      question, just explain the lines of code or evaluate it."
       :callback (lambda (response info)
                   (if (not response)
                       (message "gptel-lookup failed with message: %s" (plist-get info :status))
@@ -139,10 +159,12 @@
                                         (side . bottom)
                                         (window-height . ,#'fit-window-to-buffer)))))))))
 
-;; karthink did it better :o
-(global-set-key (kbd "C-c g q") 'gptel-quick)
+(global-set-key (kbd "C-c g c") 'gptel)
+(global-set-key (kbd "C-c g r") 'gptel-rewrite)
+(global-set-key (kbd "C-c g s") 'gptel-send)
+(global-set-key (kbd "C-c k") 'gptel-menu)
+(global-set-key (kbd "C-c q") 'gptel-ask)
 
-(set-variable 'gptel-max-tokens 4096)
 ;;  in vterm-mode, bind C-x C-j to 'vterm-copy-mode
 (add-hook 'vterm-mode-hook
           (lambda ()
@@ -216,7 +238,8 @@
    ("K" "go up" windmove-swap-states-up)
    ("L" "go right" windmove-swap-states-right)])
 
-(map! :leader "w" 'meow-window-menu)
+(global-unset-key (kbd "C-c w"))
+(global-set-key (kbd "C-c w") 'meow-window-menu)
 
 (defun meow-delete-or-kill ()
   (interactive)
@@ -238,7 +261,7 @@
         ("C-k" . symex-descend-branch)
         ("M-j" . symex-goto-highest)
         ("M-k" . symex-goto-lowest)))
-(symex-initialize)
+; (symex-initialize)
 (global-set-key (kbd "C-c ;") 'symex-mode-interface)
 
 (set-variable 'avy-all-windows t)

@@ -61,13 +61,15 @@
 (package! notmuch)
 (package! fzf)
 (package! tao-theme)
-(package! gptel)
+(package! gptel :recipe
+  (:host github
+   :repo "karthink/gptel"
+   :branch "master"))
 (package! gptel-quick :recipe
   (:host github
    :repo "karthink/gptel-quick"
    :files ("gptel-quick.el")))
 (package! meow)
-(package! symex)
 (package! cider-storm :recipe
   (:host github
    :repo "flow-storm/cider-storm"))

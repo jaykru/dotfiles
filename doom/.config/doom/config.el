@@ -182,7 +182,7 @@
                          tool)) tools))
 
 (add-tools
-                                        ; read_file
+ ; read_file
  (gptel-make-tool
   :function (lambda (filepath)
               (with-temp-buffer
@@ -410,6 +410,19 @@ a old-string and a new-string, new-string will replace the old-string at the spe
                 :description "The name of the buffer whose contents are to be retrieved"))
   :category "emacs")
 
+; get_buffer_path
+(gptel-make-tool
+  :function (lambda (buffer)
+              (unless (buffer-live-p (get-buffer buffer))
+                (error "Error: buffer %s is not live." buffer))
+              (with-current-buffer buffer
+                (buffer-file-name)))
+  :name "get_buffer_path"
+  :description "Return the full fs path of an Emacs buffer"
+  :args (list '(:name "buffer"
+                :type string
+                :description "The name of the buffer whose contents are to be retrieved"))
+  :category "emacs")
                                         ; append_to_buffer
  (gptel-make-tool
   :function (lambda (buffer text)
@@ -595,5 +608,8 @@ a old-string and a new-string, new-string will replace the old-string at the spe
         ("M-k" . symex-goto-lowest)))
 ; (symex-initialize)
 (global-set-key (kbd "C-c ;") 'symex-mode-interface)
+
+; FIXME: remove when meow config is ready
+(meow-global-mode -1)
 
 (set-variable 'avy-all-windows t)

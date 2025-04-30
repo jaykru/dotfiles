@@ -6,8 +6,12 @@ export SAVEHIST=10000000
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export TERM=xterm-24bit
 
-if [[ "$USER" = "ubuntu" || $(hostname) =~ "n300" || $(hostname) =~ "n150" ]]; then
-  source ~/.ttrc
+
+# source ttrc if not on a personal machine
+if [[ "$HOSTNAME" != *muon* && "$HOSTNAME" != *sachiel* ]]; then
+  if [ -f ~/.ttrc ]; then
+    source ~/.ttrc
+  fi
 fi
 
 ### Added by Zinit's installer

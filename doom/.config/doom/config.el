@@ -84,6 +84,9 @@
               (assq-delete-all 'no-other-window +popup-default-parameters))
 (remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; show modeline for popup windows.
 
+;; gptel configuration
+(require 'gptel)
+
 (defvar gemini-api-key-file (expand-file-name "~/.gemini-api-key"))
 (defvar deepseek-api-key-file (expand-file-name "~/.deepseek-api-key"))
 
@@ -169,8 +172,8 @@
 (global-set-key (kbd "C-c g c") 'gptel)
 (global-set-key (kbd "C-c g r") 'gptel-rewrite)
 (global-set-key (kbd "C-c g s") 'gptel-send)
-(global-set-key (kbd "C-c k") 'gptel-menu)
-(global-set-key (kbd "C-c q") 'gptel-ask)
+(global-set-key (kbd "C-c g m") 'gptel-menu)
+(global-set-key (kbd "C-c g a") 'gptel-ask)
 
 ;; more gptel stuff
 ;; Enable tool use

@@ -4,6 +4,7 @@ if [[ -f "$GUIX_PROFILE/etc/profile" ]]; then
 fi
 
 toolchain_path="cmake/x86_64-linux-clang-17-libcpp-toolchain.cmake"
+CMAKE_ARGS=" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 "
 
 install_env() {
   local train_dir="`git rev-parse --show-toplevel`/tt-train"
@@ -54,13 +55,13 @@ build_metal() {
   echo "building tt-metal in $(echo $build_type | tr '[:upper:]' '[:lower:]') mode"
   if [[ ! -d build ]]; then
     mkdir -p build
-    cmake -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake $CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
   fi
 
   if [[ "$clean_build" == true ]]; then
     rm -rf build .cpmcache || { popd; return 1; }
     mkdir build
-    cmake -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake $CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
     cmake --build build --config $build_type --clean-first || { popd; return 1; }
   else
     cmake --build build --config $build_type || { popd; return 1; }
@@ -101,13 +102,13 @@ build_train() {
   echo "building tt-train in ${build_type} mode"
   if [[ ! -d build || "$configure" == true ]]; then
     mkdir -p build
-    cmake -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake $CMAKE_ARGS -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
   fi
 
   if [[ "$clean_build" == true ]]; then
     rm -rf build .cpmcache || { popd; return 1; }
     mkdir build || { popd; return 1; }
-    cmake -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake $CMAKE_ARGS -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
     cmake --build build --config $build_type --clean-first || { popd; return 1; }
   else
     cmake --build build --config $build_type || { popd; return 1; }

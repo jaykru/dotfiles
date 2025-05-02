@@ -182,8 +182,9 @@
 
 (defun add-tools (&rest tools)
   (mapcar (lambda (tool)
-            (add-to-list 'gptel-tools
-                         tool)) tools))
+            (when tool
+              (add-to-list 'gptel-tools
+                           tool))) tools))
 
 (add-tools
  ; read_file
@@ -491,30 +492,27 @@ a old-string and a new-string, new-string will replace the old-string at the spe
 
 
 ; brave search
-
-
-
-(gptel-make-tool
- :function
- (let ((brave-search-api-key (read-api-key brave-search-api-key-file)))
-  "API key for accessing the Brave Search API."
- (lambda (query)
-  "Perform a web search using the Brave Search API with the given QUERY."
-  (let ((url-request-method "GET")
-        (url-request-extra-headers `(("X-Subscription-Token" . ,brave-search-api-key)))
-        (url (format "https://api.search.brave.com/res/v1/web/search?q=%s" (url-encode-url query))))
-    (with-current-buffer (url-retrieve-synchronously url)
-      (goto-char (point-min))
-      (when (re-search-forward "^$" nil 'move)
-        (let ((json-object-type 'hash-table)) ; Use hash-table for JSON parsing
-          (json-parse-string (buffer-substring-no-properties (point) (point-max)))))))))
- :name "brave_search"
- :description "Perform a web search using the Brave Search API"
- :args (list '(:name "query"
-               :type string
-               :description "The search query string"))
- :category "web")
-)
+(let ((brave-search-api-key (read-api-key brave-search-api-key-file))
+      (do-brave-search (lambda (query)
+                         "Perform a web search using the Brave Search API with the given QUERY."
+                         (let ((url-request-method "GET")
+                               (url-request-extra-headers `("X-Subscription-Token" . ,brave-search-api-key))
+                               (url (format "https://api.search.brave.com/res/v1/web/search?q=%s" (url-encode-url query))))
+                           (with-current-buffer (url-retrieve-synchronously url)
+                             (goto-char (point-min))
+                             (when (re-search-forward "^$" nil 'move)
+                               (let ((json-object-type 'hash-table)) ; Use hash-table for JSON parsing
+                                 (json-parse-string (buffer-substring-no-properties (point) (point-max))))))))))
+  (when brave-search-api-key
+    (gptel-make-tool
+     :function
+     do-brave-search
+     :name "brave_search"
+     :description "Perform a web search using the Brave Search API"
+     :args (list '(:name "query"
+                   :type string
+                   :description "The search query string"))
+     :category "web"))))
 
 ;;  in vterm-mode, bind C-x C-j to 'vterm-copy-mode
 (add-hook 'vterm-mode-hook

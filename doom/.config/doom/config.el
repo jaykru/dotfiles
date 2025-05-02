@@ -89,6 +89,7 @@
 
 (defvar gemini-api-key-file (expand-file-name "~/.gemini-api-key"))
 (defvar deepseek-api-key-file (expand-file-name "~/.deepseek-api-key"))
+(defvar brave-search-api-key-file (expand-file-name "~/.brave-search-api-key"))
 
 (defun read-api-key (api-key-file)
   "Read API key from API-KEY-FILE, removing trailing whitespace."
@@ -495,7 +496,7 @@ a old-string and a new-string, new-string will replace the old-string at the spe
 
 (gptel-make-tool
  :function
- (let ((brave-search-api-key "BSAPnFBHTPmUvb-3UPvHTqPQO0pdQZM"))
+ (let ((brave-search-api-key (read-api-key brave-search-api-key-file)))
   "API key for accessing the Brave Search API."
  (lambda (query)
   "Perform a web search using the Brave Search API with the given QUERY."

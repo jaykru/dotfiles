@@ -107,10 +107,8 @@
       (gptel-make-deepseek "DeepSeek"
         :stream t
         :key (read-api-key deepseek-api-key-file))
-      ;; Set default model only if DeepSeek is configured
-      (setq gptel-model 'deepseek-chat))
-  (message "DeepSeek API key file not found: %s. DeepSeek provider not configured." deepseek-api-key-file))
-
+      ;; Set default model only if DeepSeek is configured)
+  (message "DeepSeek API key file not found: %s. DeepSeek provider not configured." deepseek-api-key-file)))
 ;; Conditionally configure Gemini
 (if (file-exists-p gemini-api-key-file)
     (progn
@@ -134,7 +132,8 @@
           "Gemini"
         :key (read-api-key gemini-api-key-file)
         :stream t
-        :models my-gemini-models))
+        :models my-gemini-models)
+      (setq gptel-model 'gemini-2.5-pro-preview-03-25))
   (message "Gemini API key file not found: %s. Gemini provider not configured." gemini-api-key-file))
 
 ;; asks gptel a question about the current buffer; response will appear in a separate

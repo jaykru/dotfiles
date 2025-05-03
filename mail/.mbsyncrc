@@ -1,46 +1,6 @@
 Create Near
 SyncState *
 
-# josefkruer@gmail.com
-MaildirStore josefkruer@gmail.com-local
-Subfolders Verbatim
-Path ~/mail/josefkruer@gmail.com/
-Inbox ~/mail/josefkruer@gmail.com/INBOX
-
-IMAPStore josefkruer@gmail.com-remote
-AuthMechs LOGIN
-Host imap.gmail.com
-User josefkruer@gmail.com
-SSLVersions TLSv1.2
-SSLType IMAPS
-PassCmd "pass show google-app"
-
-Channel josefkruer@gmail.com
-Far :josefkruer@gmail.com-remote:
-Near :josefkruer@gmail.com-local:
-Patterns *
-Sync PullNew PullFlags
-
-# # posteo
-# MaildirStore jaykruer@posteo.de-local
-# Subfolders Verbatim
-# Path ~/mail/jaykruer@posteo.de/
-# Inbox ~/mail/jaykruer@posteo.de/INBOX
-
-# IMAPStore jaykruer@posteo.de-remote
-# Host posteo.de
-# User jaykruer@posteo.net
-# Port 143
-# SSLVersions TLSv1.2
-# SSLType STARTTLS
-# PassCmd "pass show posteo"
-
-# Channel jaykruer@posteo.de
-# Far :jaykruer@posteo.de-remote:
-# Near :jaykruer@posteo.de-local:
-# Patterns *
-# Sync PullNew PullFlags
-
 # dank.systems
 MaildirStore j@dank.systems-local
 Subfolders Verbatim

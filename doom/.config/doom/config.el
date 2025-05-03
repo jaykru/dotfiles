@@ -112,28 +112,11 @@
 ;; Conditionally configure Gemini
 (if (file-exists-p gemini-api-key-file)
     (progn
-      (defconst my-gemini-models
-        '(
-          (gemini-2.5-pro-preview-03-25
-           :description "Google goes crazy"
-           :capabilities (tool-use json media)
-           :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                        "application/pdf" "text/plain" "text/csv" "text/html")
-           :context-window 1000)
-          (gemini-2.0-flash
-           :description "I am speed"
-           :capabilities (tool-use json media)
-           :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                        "application/pdf" "text/plain" "text/csv" "text/html")
-           :context-window 1000
-           )))
-
       (gptel-make-gemini
           "Gemini"
         :key (read-api-key gemini-api-key-file)
-        :stream t
-        :models my-gemini-models)
-      (setq gptel-model 'gemini-2.5-pro-preview-03-25))
+        :stream t)
+      (setq gptel-model 'gemini))
   (message "Gemini API key file not found: %s. Gemini provider not configured." gemini-api-key-file))
 
 ;; asks gptel a question about the current buffer; response will appear in a separate

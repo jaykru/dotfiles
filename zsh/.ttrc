@@ -55,13 +55,13 @@ build_metal() {
   echo "building tt-metal in $(echo $build_type | tr '[:upper:]' '[:lower:]') mode"
   if [[ ! -d build ]]; then
     mkdir -p build
-    cmake $CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
   fi
 
   if [[ "$clean_build" == true ]]; then
     rm -rf build .cpmcache || { popd; return 1; }
     mkdir build
-    cmake $CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
     cmake --build build --config $build_type --clean-first || { popd; return 1; }
   else
     cmake --build build --config $build_type || { popd; return 1; }
@@ -102,13 +102,13 @@ build_train() {
   echo "building tt-train in ${build_type} mode"
   if [[ ! -d build || "$configure" == true ]]; then
     mkdir -p build
-    cmake $CMAKE_ARGS -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
   fi
 
   if [[ "$clean_build" == true ]]; then
     rm -rf build .cpmcache || { popd; return 1; }
     mkdir build || { popd; return 1; }
-    cmake $CMAKE_ARGS -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
+    cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
     cmake --build build --config $build_type --clean-first || { popd; return 1; }
   else
     cmake --build build --config $build_type || { popd; return 1; }
@@ -158,4 +158,37 @@ init() {
 
   popd
   echo "Initialization complete!"
+}
+
+import_model() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root/tt-train" || return 1
+
+  echo "Building tt-train..."
+  build_train || { popd; return 1; }
+
+  echo "Removing old msgpacks"
+  rm data/tinyllama_init.msgpack data/tinyllama_exported.msgpack
+
+  echo "Dumping initial msgpack"
+  ./build/sources/examples/nano_gpt/nano_gpt -s data/tinyllama_init.msgpack -w 0 -c configs/training_shakespeare_tinyllama.yaml || {popd; return 1;}
+
+  echo "Running export script"
+  uv run tools/tinyllama_convert.py -i data/tinyllama_init.msgpack -o data/tinyllama_exported.msgpack || {popd; return 1;}
+
+  popd
+  echo "Done!"
+}
+
+test_model() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root/tt-train" || return 1
+
+  echo "Building tt-train..."
+  build_train || { popd; return 1; }
+
+  echo "Running model with exported msgpack"
+  ./build/sources/examples/nano_gpt/nano_gpt -e 1 -w 0 -c configs/training_shakespeare_tinyllama.yaml || {popd; return 1;}
+
+  popd
 }

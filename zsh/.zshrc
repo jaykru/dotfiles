@@ -5,6 +5,7 @@ export HISTSIZE=10000000
 export SAVEHIST=10000000
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export TERM=xterm-24bit
+export DOCKER_DETACH_KEYS="ctrl-\\"
 
 
 # source ttrc if not on a personal machine
@@ -51,13 +52,16 @@ zi light junegunn/fzf
 autoload -Uz compinit
 compinit
 zinit load Aloxaf/fzf-tab 
-zinit light spaceship-prompt/spaceship-prompt
+# zinit light spaceship-prompt/spaceship-prompt
 
-SPACESHIP_PROMPT_ORDER=(
-  dir           # Current directory
-  git           # Git section (git_branch + git_status)
-  char          # Prompt character
-)
+# SPACESHIP_PROMPT_ASYNC=false
+# SPACESHIP_PROMPT_ORDER=(
+#   dir           # Current directory
+#   git           # Git section (git_branch + git_status)
+#   char          # Prompt character
+# )
+
+PS1="$ "
 
 
 zinit light zsh-users/zsh-completions

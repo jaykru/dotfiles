@@ -180,6 +180,40 @@ import_model() {
   echo "Done!"
 }
 
+import_meta_model() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root/tt-train" || return 1
+
+  echo "Building tt-train..."
+  build_train || { popd; return 1; }
+
+  echo "Removing old msgpacks"
+  rm data/llama3_2_1B_init.msgpack data/llama3_2_1B_exported.msgpack
+
+  echo "Dumping initial msgpack"
+  ./build/sources/examples/nano_gpt/nano_gpt -s data/llama3_2_1B_init.msgpack -w 0 -c configs/training_shakespeare_llama3_2_1B.yaml || {popd; return 1;}
+
+  echo "Running export script"
+  uv run tools/tinyllama_convert.py --hf_model "meta-llama/Llama-3.2-1B" -i data/llama3_2_1B_init.msgpack -o data/llama3_2_1B_exported.msgpack --meta_style || {popd; return 1;}
+
+  popd
+  echo "Done!"
+}
+
+test_meta_model() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root/tt-train" || return 1
+
+  echo "Building tt-train..."
+  build_train || { popd; return 1; }
+
+  echo "Running model with exported msgpack"
+  ./build/sources/examples/nano_gpt/nano_gpt -e 1 -w 0 -c configs/training_shakespeare_llama3_2_1B.yaml || {popd; return 1;}
+
+  popd
+}
+
+
 test_model() {
   local repo_root="`git rev-parse --show-toplevel`"
   pushd "$repo_root/tt-train" || return 1

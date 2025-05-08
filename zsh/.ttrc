@@ -169,6 +169,9 @@ import_model() {
   echo "Removing old msgpacks"
   rm data/tinyllama_init.msgpack data/tinyllama_exported.msgpack
 
+  echo "Dumping tokenizer"
+  uv run tools/weight-utils/llama_export.py -t data/tinyllama_tokenizer.json
+
   echo "Dumping initial msgpack"
   ./build/sources/examples/nano_gpt/nano_gpt -s data/tinyllama_init.msgpack -w 0 -c configs/training_shakespeare_tinyllama.yaml || {popd; return 1;}
 

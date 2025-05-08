@@ -153,7 +153,7 @@ init() {
   source python_env/bin/activate || { popd; return 1; }
 
   echo "Building tt-train..."
-  build_train || { popd; return 1; }
+  build_train --configure --debug || { popd; return 1; }
 
   popd
   echo "Initialization complete!"

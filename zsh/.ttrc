@@ -149,8 +149,7 @@ init() {
   ./build_metal.sh --debug || { popd; return 1; }
 
   echo "Creating virtual environment..."
-  ./create_venv.sh || { popd; return 1; }
-
+  PYTHON_ENV_DIR=$(pwd)/python_env ./create_venv.sh || { popd; return 1; }
   source python_env/bin/activate || { popd; return 1; }
 
   echo "Building tt-train..."
@@ -174,7 +173,7 @@ import_model() {
   ./build/sources/examples/nano_gpt/nano_gpt -s data/tinyllama_init.msgpack -w 0 -c configs/training_shakespeare_tinyllama.yaml || {popd; return 1;}
 
   echo "Running export script"
-  uv run tools/tinyllama_convert.py -i data/tinyllama_init.msgpack -o data/tinyllama_exported.msgpack || {popd; return 1;}
+  uv run tools/weight-utils/llama_export.py -t data/tinyllama_tokenizer.json -i data/tinyllama_init.msgpack -o data/tinyllama_exported.msgpack || {popd; return 1;}
 
   popd
   echo "Done!"

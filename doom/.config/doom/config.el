@@ -428,41 +428,6 @@ a old-string and a new-string, new-string will replace the old-string at the spe
                 :description "The text to append to the buffer."))
   :category "emacs")
 
-                                        ; edit_buffer
- (gptel-make-tool
-  :name "edit_buffer"
-  :function (lambda (buffer-name old-string new-string)
-              "In BUFFER-NAME, replace OLD-STRING with NEW-STRING."
-              (with-current-buffer buffer-name
-                (let ((case-fold-search nil))  ;; Case-sensitive search
-                  (save-excursion
-                    (goto-char (point-min))
-                    (let ((count 0))
-                      (while (search-forward old-string nil t)
-                        (setq count (1+ count)))
-                      (if (= count 0)
-                          (format "Error: Could not find text to replace in buffer %s" buffer-name)
-                        (if (> count 1)
-                            (format "Error: Found %d matches for the text to replace in buffer %s" count buffer-name)
-                          (goto-char (point-min))
-                          (search-forward old-string)
-                          (replace-match new-string t t)
-                          (format "Successfully edited buffer %s" buffer-name))))))))
-  :description "Edits Emacs buffers"
-  :args '((:name "buffer_name"
-           :type string
-           :description "Name of the buffer to modify"
-           :required t)
-          (:name "old_string"
-           :type string
-           :description "Text to replace (must match exactly)"
-           :required t)
-          (:name "new_string"
-           :type string
-           :description "Text to replace old_string with"
-           :required t))
-  :category "edit")
-
 ; list_buffers
 (gptel-make-tool
  :name "list_buffers"
@@ -494,7 +459,9 @@ a old-string and a new-string, new-string will replace the old-string at the spe
      :args (list '(:name "query"
                    :type string
                    :description "The search query string"))
-     :category "web"))))
+     :category "web")))
+
+)
 
 ;;  in vterm-mode, bind C-x C-j to 'vterm-copy-mode
 (add-hook 'vterm-mode-hook

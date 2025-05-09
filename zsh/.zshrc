@@ -60,9 +60,7 @@ zinit load Aloxaf/fzf-tab
 #   git           # Git section (git_branch + git_status)
 #   char          # Prompt character
 # )
-
-PS1="$ "
-
+PROMPT="%n@%m | %~ $ "
 
 zinit light zsh-users/zsh-completions
 

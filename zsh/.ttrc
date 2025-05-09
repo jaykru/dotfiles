@@ -182,6 +182,42 @@ import_model() {
   echo "Done!"
 }
 
+import_gpt2_model() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root/tt-train" || return 1
+
+  echo "Building tt-train..."
+  build_train || { popd; return 1; }
+
+  echo "Removing old msgpacks"
+  rm data/gpt2s_init.msgpack data/gpt2s_exported.msgpack
+
+  echo "Dumping tokenizer"
+  # uv run tools/weight-utils/gpt2s_export.py -t data/gpt2-tokenizer.json
+
+  echo "Dumping initial msgpack"
+  ./build/sources/examples/nano_gpt/nano_gpt -s data/gpt2s_init.msgpack -w 0 -c configs/training_shakespear_gpt2s.yaml || {popd; return 1;}
+
+  echo "Running export script"
+  uv run tools/weight-utils/gpt2_export.py -i data/gpt2s_init.msgpack -o data/gpt2s_exported.msgpack || {popd; return 1;}
+
+  popd
+  echo "Done!"
+}
+
+test_gpt2_model() {
+  local repo_root="`git rev-parse --show-toplevel`"
+  pushd "$repo_root/tt-train" || return 1
+
+  echo "Building tt-train..."
+  build_train || { popd; return 1; }
+
+  echo "Running model with exported msgpack"
+  ./build/sources/examples/nano_gpt/nano_gpt -e 1 -w 0 -c configs/training_shakespear_gpt2s.yaml || {popd; return 1;}
+
+  popd
+}
+
 import_meta_model() {
   local repo_root="`git rev-parse --show-toplevel`"
   pushd "$repo_root/tt-train" || return 1

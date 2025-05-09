@@ -90,6 +90,8 @@
 (defvar gemini-api-key-file (expand-file-name "~/.gemini-api-key"))
 (defvar deepseek-api-key-file (expand-file-name "~/.deepseek-api-key"))
 (defvar brave-search-api-key-file (expand-file-name "~/.brave-search-api-key"))
+(defvar litellm-api-key-file (expand-file-name "~/.litellm-api-key"))
+(defvar litellm-hostname-file (expand-file-name "~/.litellm-hostname"))
 
 (defun read-api-key (api-key-file)
   "Read API key from API-KEY-FILE, removing trailing whitespace."
@@ -614,3 +616,31 @@ preceding expression."
 (meow-global-mode -1)
 
 (set-variable 'avy-all-windows t)
+
+
+;; tt tokens
+;; OPTIONAL configuration
+(setq
+ gptel-model   'azure/gpt-4.1
+ gptel-backend (gptel-make-openai "tt"          ;Any name
+                 :stream t                             ;Stream responses
+                 :protocol "https"
+                 :endpoint "/chat/completions"
+                 :host (read-api-key litellm-hostname-file)
+                 :models '((azure/gpt-4.1
+                            :capabilities (media json url tool)
+                            :mime-types
+                            ("image/jpeg" "image/png" "image/gif" "image/webp"))
+                           (gemini/gemini-2.5-pro-preview-03-25
+                            :capabilities (media json url tool)
+                            :mime-types
+                            ("image/jpeg" "image/png" "image/gif" "image/webp")))
+                 :key (read-api-key litellm-api-key-file)))
+
+(setq lsp-clients-clangd-args '("-j=3"
+                                "--background-index"
+                                "--clang-tidy"
+                                "--completion-style=detailed"
+                                "--header-insertion=never"
+                                "--header-insertion-decorators=0"))
+(after! lsp-clangd (set-lsp-priority! 'clangd 2))

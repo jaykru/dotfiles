@@ -1,6 +1,5 @@
 [user]
 	name = Jay Kruer
     email = jkruer@tenstorrent.com
-
 [alias]
     root = rev-parse --show-toplevel

@@ -69,7 +69,8 @@
                                (gemini/gemini-2.5-pro-preview-03-25
                                 :capabilities (media json url tool)
                                 :mime-types
-                                ("image/jpeg" "image/png" "image/gif" "image/webp")))
+                                ("image/jpeg" "image/png" "image/gif" "image/webp")
+                                :request-params '(:parallel_tool_cals :json-false)))
                      :key (read-api-key litellm-api-key-file)))
   (message "LiteLLM hostname or API key files not found: %s %s. LiteLLM provider not configured." litellm-hostname-file litellm-api-key-file))
 
@@ -260,60 +261,38 @@
                              (buffer-name (window-buffer w)))
                          (window-list)
                          ", "))
-  :description "List buffers currently visible in the Emacs session"
+  :description "List buffers currently visible in the Emacs session. This is a great way to find out what the user is talking about. Use it if you're unsure about what the query."
   :args '()
   :category "emacs")
 
+(require 'diff-mode)
+(require 'ediff)
+
+(defun apply-unified-diff (diff-text buffer)
+  "Apply unified DIFF-TEXT to BUFFER.
+The patch must be standard unified format ("@@ -l,s +l,s @@" hunks).
+If a hunk fails to apply cleanly, Ediff will pop up so you can
+resolve it interactively—much nicer than blind `patch(1)` failures."
+  (let* ((target buffer)
+         (patch-buf (generate-new-buffer "*unified-diff*")))
+    (with-current-buffer patch-buf
+      (insert diff-text)
+      (diff-mode))
+    (save-excursion
+      (ediff-patch-buffer patch-buf target))
+    (kill-buffer patch-buf)))
+
 (define-tool
-  :name "subst_in_buffer"
-  :function (lambda (buffer pattern replacement-pattern)
-              (with-current-buffer (get-buffer-create buffer)
-                (goto-char 0)
-                (save-excursion
-                  (while (re-search-forward pattern nil t)
-                    (replace-match replacement-pattern nil nil)))))
-
-  :args (list '(:name "buffer"
-                :type string
-                :description "The name of the buffer to append text to.")
-              '(:name "pattern"
-                :type string
-                :description "The Emacs regexp pattern to match.")
-              '(:name "replacement-pattern"
-                :type string
-                :description "The replacement pattern by which to replace matches."))
-  :description "Applies a substitution to a buffer. The substitution is applied over the
-entire buffer beginning with the first character. The pattern is
-specified in Emacs regular expression syntax. The replacement pattern
-need not be constant; it can refer to all or part of what is matched by
-the pattern: '\&' refers to the entire match; '\d' where d is a number
-starting from 1, stands for whatever matched the dth parenthesized
-grouping in the pattern; '\#' refers to the count of replacements
-already made by this command. Here is a brief summary of the syntax:
-Emacs regular expressions use a combination of ordinary characters and
-special constructs. Ordinary characters match themselves exactly, while
-special characters ($^.*+?[\) have specific meanings. The primary
-special characters and their functions are:
-
-. matches any single character except newline * is a postfix operator
-that matches the preceding expression zero or more times (greedy) +
-matches the preceding expression one or more times (greedy) ? matches
-the preceding expression zero or one time (greedy) *?, +?, ?? are
-non-greedy variants of the above operators [...] creates a bracket
-expression matching any one of the enclosed characters [^...] creates a
-complemented bracket expression matching any character except those
-enclosed ^ matches the empty string at the beginning of a line $ matches
-the empty string at the end of a line \ quotes special characters and
-introduces additional special constructs
-
-Bracket expressions can include individual characters, character ranges
-denoted by - (like [a-z]), and character classes enclosed in [: :] (like
-[:alnum:]). Special rules apply when including ], -, or ^ within bracket
-expressions. When in case-insensitive search, ranges should use
-consistent case. The manual notes that regular expressions can be
-concatenated, and that operators apply to the smallest possible
-preceding expression."
-  :category "emacs")
+ :name "apply_unified_diff"
+ :function #'apply-unified-diff
+ :description "Apply a unified diff string to a buffer using Ediff"
+ :args (list '(:name "diff-text"
+               :type string
+               :description "The unified diff text to apply.")
+             '(:name "buffer"
+               :type string
+               :description "The buffer to apply the diff to."))
+ :category "emacs")
 
 (let ((brave-search-api-key (read-api-key brave-search-api-key-file)
                             )

@@ -39,6 +39,8 @@
                                 "--header-insertion-decorators=0"))
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
+(global-clipetty-mode 1) ; kill to system clipboard when using tmux
+
 (add-load-path! ".")
 (load "gptel-config.el")
 (load "meow-config.el")

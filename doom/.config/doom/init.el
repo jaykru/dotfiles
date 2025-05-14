@@ -42,7 +42,7 @@
        ;;nav-flash         ; blink cursor line after big motions
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints                    ; highlight the region an operation acts on
-       (popup +defaults)          ; tame sudden yet inevitable temporary windows
+       ; (popup +defaults)          ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
        unicode                  ; extended unicode support for various languages
@@ -173,7 +173,7 @@
        sh                    ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
-       (swift +lsp)                     ; who asked for emoji variables?
+       ; (swift +lsp)                     ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        ;;web               ; the tubes
        ;;yaml              ; JSON, but readable

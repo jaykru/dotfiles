@@ -30,42 +30,47 @@ setup_python_env() {
 }
 
 build_metal() {
-  local repo_root="`git rev-parse --show-toplevel`"
+  local repo_root
+  repo_root="$(git rev-parse --show-toplevel)"
   local clean_build=false
+  local enable_profiler=false
   local build_type="Release"
-  
+
+  usage() {
+    echo "Usage: build_metal [-c|--clean] [-d|--debug] [-p|--profiler] [-h|--help]"
+  }
+
+  # Parse args: -c/--clean, -d/--debug, -p/--profiler, -h/--help
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --clean)
+      -c|--clean)
         clean_build=true
         shift
         ;;
-      --debug)
+      -d|--debug)
         build_type="Debug"
         shift
         ;;
+      -p|--profiler)
+        enable_profiler=true
+        shift
+        ;;
+      -h|--help)
+        usage
+        return 0
+        ;;
       *)
         echo "Unknown option: $1"
+        usage
         return 1
         ;;
     esac
   done
 
   pushd "$repo_root" || return 1
-  echo "building tt-metal in $(echo $build_type | tr '[:upper:]' '[:lower:]') mode"
-  if [[ ! -d build ]]; then
-    mkdir -p build
-    cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
-  fi
+  echo "Building tt-metal in ${build_type} mode${enable_profiler:+ with profiler}"
 
-  if [[ "$clean_build" == true ]]; then
-    rm -rf build .cpmcache || { popd; return 1; }
-    mkdir build
-    cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCMAKE_BUILD_TYPE=$build_type -B build -GNinja || { popd; return 1; }
-    cmake --build build --config $build_type --clean-first || { popd; return 1; }
-  else
-    cmake --build build --config $build_type || { popd; return 1; }
-  fi
+  ./build_metal --enable-profiler --debug
   popd
   echo "tt-metal built"
 }
@@ -170,13 +175,14 @@ import_model() {
   rm data/tinyllama_init.msgpack data/tinyllama_exported.msgpack
 
   echo "Dumping tokenizer"
-  uv run tools/weight-utils/llama_export.py -t data/tinyllama_tokenizer.json
+  setup_python_env
+  python tools/weight-utils/llama_export.py -t data/tinyllama_tokenizer.json
 
   echo "Dumping initial msgpack"
   ./build/sources/examples/nano_gpt/nano_gpt -s data/tinyllama_init.msgpack -w 0 -c configs/training_shakespeare_tinyllama.yaml || {popd; return 1;}
 
   echo "Running export script"
-  uv run tools/weight-utils/llama_export.py -t data/tinyllama_tokenizer.json -i data/tinyllama_init.msgpack -o data/tinyllama_exported.msgpack || {popd; return 1;}
+  python tools/weight-utils/llama_export.py -t data/tinyllama_tokenizer.json -i data/tinyllama_init.msgpack -o data/tinyllama_exported.msgpack || {popd; return 1;}
 
   popd
   echo "Done!"
@@ -193,13 +199,14 @@ import_gpt2_model() {
   rm data/gpt2s_init.msgpack data/gpt2s_exported.msgpack
 
   echo "Dumping tokenizer"
-  # uv run tools/weight-utils/gpt2s_export.py -t data/gpt2-tokenizer.json
+  setup_python_env
+  python tools/weight-utils/gpt2s_export.py -t data/gpt2-tokenizer.json
 
   echo "Dumping initial msgpack"
   ./build/sources/examples/nano_gpt/nano_gpt -s data/gpt2s_init.msgpack -w 0 -c configs/training_shakespear_gpt2s.yaml || {popd; return 1;}
 
   echo "Running export script"
-  uv run tools/weight-utils/gpt2_export.py -i data/gpt2s_init.msgpack -o data/gpt2s_exported.msgpack || {popd; return 1;}
+  python tools/weight-utils/gpt2_export.py -i data/gpt2s_init.msgpack -o data/gpt2s_exported.msgpack || {popd; return 1;}
 
   popd
   echo "Done!"

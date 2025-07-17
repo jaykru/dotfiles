@@ -3,9 +3,6 @@ if [[ -f "$GUIX_PROFILE/etc/profile" ]]; then
   . "$GUIX_PROFILE/etc/profile"
 fi
 
-toolchain_path="cmake/x86_64-linux-clang-17-libcpp-toolchain.cmake"
-CMAKE_ARGS=" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 "
-
 install_env() {
   local train_dir="`git rev-parse --show-toplevel`/tt-train"
   ln -s $HOME/.envrc.template $train_dir/.envrc || return 1
@@ -69,8 +66,19 @@ build_metal() {
 
   pushd "$repo_root" || return 1
   echo "Building tt-metal in ${build_type} mode${enable_profiler:+ with profiler}"
+  local script_args="-e" # always export compile_commands.json
+  if [ "$clean_build" = true ]; then
+  script_args="$script_args --clean"
+  fi
+  if [ "$build_type" = "Debug" ]; then
+  script_args="$script_args --debug"
+  fi
+  if [ "$enable_profiler" = true ]; then
+  script_args="$script_args --enable-profiler"
+  fi
+  build_command="./build_metal.sh $script_args"
+  eval "$build_command" || {popd; return 1}
 
-  ./build_metal --enable-profiler --debug
   popd
   echo "tt-metal built"
 }
@@ -80,23 +88,32 @@ build_train() {
   local clean_build=false
   local configure=false
   local build_type="Release"
+
+  usage() {
+    echo "Usage: build_train [-C|--clean] [-d|--debug] [-c|--configure] [-h|--help]"
+  }
   
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --clean)
+      -C|--clean)
         clean_build=true
         shift
         ;;
-      --debug)
+      -d|--debug)
         build_type="Debug"
         shift
         ;;
-      --configure)
+      -c|--configure)
         configure=true
         shift
         ;;
+      -h|--help)
+        usage
+        return 0
+        ;;
       *)
         echo "Unknown option: $1"
+        usage
         return 1
         ;;
     esac
@@ -183,7 +200,6 @@ import_model() {
 
   echo "Running export script"
   python tools/weight-utils/llama_export.py -t data/tinyllama_tokenizer.json -i data/tinyllama_init.msgpack -o data/tinyllama_exported.msgpack || {popd; return 1;}
-
   popd
   echo "Done!"
 }

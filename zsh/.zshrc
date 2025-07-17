@@ -6,6 +6,7 @@ export SAVEHIST=10000000
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export TERM=xterm-24bit
 export DOCKER_DETACH_KEYS="ctrl-\\"
+export LANG="en_US.UTF-8"
 
 
 # source ttrc if not on a personal machine
@@ -61,6 +62,8 @@ zinit load Aloxaf/fzf-tab
 #   char          # Prompt character
 # )
 PROMPT="%n@%m | %~ $ "
+
+export PATH=$PATH:/home/j/.nvm/versions/node/v24.4.1/bin
 
 zinit light zsh-users/zsh-completions
 

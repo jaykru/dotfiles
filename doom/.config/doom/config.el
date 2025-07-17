@@ -17,9 +17,10 @@
 (set-variable 'notmuch-search-oldest-first nil)
 
 (setq doom-unreal-buffer-functions '(minibufferp))
-(set-variable '+popup-default-parameters
-              (assq-delete-all 'no-other-window +popup-default-parameters))
-(remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; show modeline for popup windows.
+;; (set-variable '+popup-default-parameters
+;;               (assq-delete-all 'no-other-window +popup-default-parameters))
+;; (remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h)
+                                        ; show modeline for popup windows.
 
 ;;  in vterm-mode, bind C-x C-j to 'vterm-copy-mode
 (add-hook 'vterm-mode-hook
@@ -31,12 +32,27 @@
           (lambda ()
             (define-key vterm-copy-mode-map (kbd "C-x j") 'vterm-copy-mode-done)))
 
-(setq lsp-clients-clangd-args '("-j=3"
-                                "--background-index"
-                                "--clang-tidy"
-                                "--completion-style=detailed"
-                                "--header-insertion=never"
-                                "--header-insertion-decorators=0"))
+(use-package! lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (setq lsp-clients-clangd-executable "clangd-17"
+        lsp-clients-clangd-args
+        '("--completion-style=detailed"
+          "--header-insertion=never" ; auto-add includes
+          "--pch-storage=memory"
+          ;; "--clang-tidy"
+          "--offset-encoding=utf-16" ; FIXME: what does this do?
+          "-j=4"
+          "--background-index"
+          )))
+
+(use-package! yasnippet
+  :hook (c++-mode . yas-minor-mode))
+
+;; (use-package! clang-format
+;;   :hook ((c++-mode c-mode) . clang-format-buffer-on-save))
+
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 (global-clipetty-mode 1) ; kill to system clipboard when using tmux

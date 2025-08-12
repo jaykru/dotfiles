@@ -1,0 +1,19 @@
+{
+  "apiKeyHelper": "~/.get-claude-key.sh",
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://litellm-proxy--tenstorrent.workload.tenstorrent.com",
+    "ANTHROPIC_MODEL": "anthropic/claude-sonnet-4-20250514",
+    "DISABLE_TELEMETRY": "true"
+  },
+  "includeCoAuthoredBy": false,
+  "model": "anthropic/claude-sonnet-4-20250514",
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "WebFetch"
+    ],
+    "deny": []
+  }
+}

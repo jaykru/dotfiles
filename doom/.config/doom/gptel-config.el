@@ -53,25 +53,58 @@
       (setq gptel-model 'gemini))
   (message "Gemini API key file not found: %s. Gemini provider not configured." gemini-api-key-file))
 
+(defun get-litellm-models (hostname api-key)
+  "Fetch available models from LiteLLM API."
+  (let ((url-request-method "GET")
+        (url-request-extra-headers
+         `(("Authorization" . ,(concat "Bearer " api-key))
+           ("Content-Type" . "application/json")))
+        (url (concat "https://" hostname "/models")))
+    (with-current-buffer (url-retrieve-synchronously url)
+      (goto-char (point-min))
+      (re-search-forward "^$")
+      (let ((json-object-type 'hash-table)
+            (json-array-type 'list)
+            (json-key-type 'string))
+        (json-read)))))
+
+(defun parse-litellm-models (models-response)
+  "Parse LiteLLM models response into gptel format."
+  (let ((models-data (gethash "data" models-response))
+        (parsed-models '()))
+    (dolist (model models-data)
+      (let ((model-id (gethash "id" model)))
+        (push `(,(intern model-id)
+                :capabilities (media json url tool)
+                :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp"))
+              parsed-models)))
+    (reverse parsed-models)))
+
 (if (and (file-exists-p litellm-hostname-file)
          (file-exists-p litellm-api-key-file))
-    (setq
-     gptel-model   'azure/gpt-4.1
-     gptel-backend (gptel-make-openai "tt"          ;Any name
-                     :stream t                             ;Stream responses
-                     :protocol "https"
-                     :endpoint "/chat/completions"
-                     :host (read-api-key litellm-hostname-file)
-                     :models '((azure/gpt-4.1
-                                :capabilities (media json url tool)
-                                :mime-types
-                                ("image/jpeg" "image/png" "image/gif" "image/webp"))
-                               (gemini/gemini-2.5-pro-preview-03-25
-                                :capabilities (media json url tool)
-                                :mime-types
-                                ("image/jpeg" "image/png" "image/gif" "image/webp")
-                                :request-params '(:parallel_tool_cals :json-false)))
-                     :key (read-api-key litellm-api-key-file)))
+    (let* ((hostname (read-api-key litellm-hostname-file))
+           (api-key (read-api-key litellm-api-key-file))
+           (models-response (get-litellm-models hostname api-key))
+           (parsed-models (parse-litellm-models models-response))
+           (default-model
+            (intern
+             (let ((models (gethash "data" models-response)))
+               (or (cl-find-if (lambda (model) (string-match-p "sonnet" (gethash "id" model))) models)
+                   (car models))
+               (gethash "id"
+                        (or (cl-find-if (lambda (model)
+                                          (string-match-p "sonnet" (gethash "id" model)))
+                                        models)
+                            (car models)))))))
+      (setq
+       gptel-model default-model
+       gptel-backend (gptel-make-openai "tt"
+                       :stream t
+                       :protocol "https"
+                       :endpoint "/chat/completions"
+                       :host hostname
+                       :models parsed-models
+                       :key api-key)))
   (message "LiteLLM hostname or API key files not found: %s %s. LiteLLM provider not configured." litellm-hostname-file litellm-api-key-file))
 
 (setq gptel-use-tools t)

@@ -72,3 +72,7 @@ zinit from"gh-r" as"program" mv"direnv* -> direnv" \
 atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
 pick"direnv" src="zhook.zsh" for \
 direnv/direnv
+
+# Setup NVM (Node Version Manager)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

@@ -168,14 +168,14 @@ init() {
   install_env || { popd; return 1; }
 
   echo "Building metal..."
-  ./build_metal.sh --debug || { popd; return 1; }
+  ./build_metal.sh|| { popd; return 1; }
 
   echo "Creating virtual environment..."
   PYTHON_ENV_DIR=$(pwd)/python_env ./create_venv.sh || { popd; return 1; }
   source python_env/bin/activate || { popd; return 1; }
 
   echo "Building tt-train..."
-  build_train --configure --debug || { popd; return 1; }
+  build_train --configure || { popd; return 1; }
 
   popd
   echo "Initialization complete!"
@@ -287,3 +287,7 @@ test_model() {
 
   popd
 }
+
+export ANTHROPIC_BASE_URL="https://litellm-proxy--tenstorrent.workload.tenstorrent.com"
+export ANTHROPIC_API_KEY=$(~/.get-claude-key.sh)
+export ANTHROPIC_MODEL=anthropic/claude-sonnet-4-20250514

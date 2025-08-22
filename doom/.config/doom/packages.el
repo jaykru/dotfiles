@@ -65,10 +65,6 @@
   (:host github
    :repo "karthink/gptel"
    :branch "master"))
-(package! gptel-quick :recipe
-  (:host github
-   :repo "karthink/gptel-quick"
-   :files ("gptel-quick.el")))
 (package! meow)
 (package! cider-storm :recipe
   (:host github

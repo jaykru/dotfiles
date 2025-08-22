@@ -61,10 +61,6 @@
 (package! notmuch)
 (package! fzf)
 (package! tao-theme)
-(package! gptel :recipe
-  (:host github
-   :repo "karthink/gptel"
-   :branch "master"))
 (package! meow)
 (package! cider-storm :recipe
   (:host github
